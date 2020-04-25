@@ -27,12 +27,14 @@
     },
     "devDependencies": {
         "eslint": "^6.8.0",
-        "mocha": "^7.1.1"
+        "mocha": "^7.1.1",
+        "supports-color": "^7.1.0"
     },
     "dependencies": {
-        "atob": "^2.1.2"
+        "atob": "^2.1.2",
+        "debug": "^4.1.1"
     },
     "scripts": {
-      "test": "mocha"
+        "test": "mocha"
     }
 }
