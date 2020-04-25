@@ -1,0 +1,64 @@
+@startuml Overview
+skinparam componentStyle uml2
+
+package ctrlx {
+
+  class CtrlxCore
+  {
+    -String token
+    +CtrlxCore(hostname, username, password)
+    +logIn()
+    +logOut()
+    +readDatalayer(path)
+    +readDatalayerMetadata(path)
+    +readDatalayerReferences(path)
+    +writeDatalayer(path, data)
+  }
+
+}
+
+package node-red-contrib-ctrlx-core {
+
+  class CtrlxCoreConfig << Node-RED config node >>
+  {
+    +String hostname
+    +String username
+    +String password
+    +bool debug
+    +String name
+  }
+
+  enum Method {
+    READ
+    WRITE
+    METADATA
+    REFERENCES
+    BROWSE
+  }
+
+  class CtrlxCoreDatalayerRequest << Node-RED node >>
+  {
+    +CtrlxCoreConfig device
+    +Method method
+    +String url
+    +String name
+    +onInput()
+    +onClose()
+  }
+}
+
+
+package "ctrlX CORE" <<Node>> {
+  class HttpsServer
+}
+
+
+CtrlxCoreConfig "1" *-- "1" CtrlxCore : use >
+
+CtrlxCoreDatalayerRequest --> CtrlxCoreConfig : register, unregister, use >
+
+CtrlxCoreConfig --> CtrlxCoreDatalayerRequest  : notify status >
+
+CtrlxCore --> HttpsServer
+
+@enduml
