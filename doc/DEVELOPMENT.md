@@ -21,7 +21,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [ ] Implement: Auto reconnect and more resilience for server errors
 - [ ] Implement: Node for common https requests
 - [x] Decision: How to name the datalayer path ("path" vs "url")
-- [ ] Decision: Use topic for the datalayer path?
+- [x] Decision: Use topic for the datalayer path?
 - [ ] Decision: How to name the node for common http requests? http vs. webapi
 - [x] Decision: How to name? AUTOMATION vs. CORE
 - [ ] Implement: User Documentation in the nodes
@@ -31,6 +31,9 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Allow configuration of nodes via `msg` object
 - [ ] Implement: Proper error handling. Return Problem.json on server errors.
 - [x] Implement: Add support for mustache in msg.path.
+- [ ] Implement: Add proper timeout handling
+- [ ] Implement: Add support for browsing
+- [ ] Implement: Implement correct outputs
 - [ ] Fix: [DEP0123] DeprecationWarning
 
 ### v1.1.0

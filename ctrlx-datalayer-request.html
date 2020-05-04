@@ -96,8 +96,11 @@
   <dl class="message-properties">
       <dt>payload <span class="property-type">string | object | buffer</span></dt>
       <dd>The body of the response. The node can be configured to return the data
-            as a string, attempt to parse it as a JSON string or leave it as a
-            binary buffer.</dd>
+          as a string, attempt to parse it as a JSON string or leave it as a
+          binary buffer.</dd>
+      <dt>topic <span class="property-type">string</span></dt>
+      <dd>If the <code>topic</code> property is not already set in the <code>msg</code> object as input, then it will be set to the effective
+          <code>path</code> of request.</dd>
       <dt>statusCode <span class="property-type">number</span></dt>
       <dd>The http status code of the response, or the error code if the request could not be completed.</dd>
       <dt>problem <span class="property-type">object</span></dt>

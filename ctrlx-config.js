@@ -34,7 +34,7 @@
 
 
 module.exports = function(RED) {
-  const CtrlxCore = require('node-red-contrib-ctrlx-automation/lib/CtrlxCore')
+  const CtrlxCore = require('./lib/CtrlxCore')
 
 
   /* ---------------------------------------------------------------------------
@@ -165,6 +165,14 @@ module.exports = function(RED) {
     this.readDatalayerReferences = function(path, callback) {
       if (node.connected) {
         node.ctrlX.readDatalayerReferences(path, callback)
+          .then((data) => callback(null, data))
+          .catch((err) => callback(err, null));
+      }
+    }
+
+    this.browseDatalayer = function(path, callback) {
+      if (node.connected) {
+        node.ctrlX.browseDatalayer(path, callback)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       }

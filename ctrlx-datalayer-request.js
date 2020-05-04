@@ -107,6 +107,10 @@
         }
         node.configNode.setTimeout(timeout);
 
+        // Set the topic (if msg.topic is not yet set, then we set it to the path)
+        if (msg.topic === "") {
+          msg.topic = path;
+        }
 
         if (node.method == 'READ') {
 
@@ -201,11 +205,41 @@
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
           });
 
-        }  else if (node.method == 'REFERENCES') {
+        } else if (node.method == 'REFERENCES') {
           //
           // REFERENCES
           //
           node.configNode.readDatalayerReferences(path,
+            function(err, data) {
+
+              if (err) {
+                if (done) {
+                  done(err); // Node-RED 1.0 compatible
+                } else {
+                  node.error(err, msg); // Node-RED 0.x compatible
+                }
+                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                return;
+              }
+
+              send = send || function() { node.send.apply(node, arguments) }
+
+              msg.payload = data;
+              send(msg);
+
+              if (done) {
+                done();
+              }
+
+              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+
+          });
+
+        }else if (node.method == 'BROWSE') {
+          //
+          // BROWSE
+          //
+          node.configNode.browseDatalayer(path,
             function(err, data) {
 
               if (err) {
