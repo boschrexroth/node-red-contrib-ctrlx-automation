@@ -1,28 +1,28 @@
-# Node-RED nodes for ctrlX CORE
-This package contains nodes to easily connect to ctrlX CORE devices from Bosch Rexroth.
+# Node-RED nodes for ctrlX AUTOMATION
 
-Using the nodes you can read and write to the datalayer. These nodes can be installed directly on ctrlX CORE devices as well as on third-party device which runs Node-RED.
+This package contains nodes to easily connect to ctrlX AUTOMATION devices from Bosch Rexroth.
 
-# Installation
+Using the nodes you can read and write to the datalayer. These nodes can be installed directly on ctrlX CORE devices as well as on a third-party device which runs Node-RED.
+
+## Installation
+
 Install using the managed palette from inside Node-RED.
 
-## Usage
+### Usage
+
 There are some new nodes which appear in the category 'ctrlX' in your Node-RED palette.
 
 ![nodes.png](./doc/nodes.png)
 
 #### Data Layer Request
-Allows to read or write to the datalayer.
 
+Allows to read or write to the ctrlX Data Layer.
 
-
-
-### Additional Information
-
+#### Additional Information
 
 ## History
-- 2020-Apr-14: 0.1.0 - First prototype.
 
+- 2020-Apr-14: 0.1.0 - First prototype.
 
 ## Licenses
 

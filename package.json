@@ -1,24 +1,25 @@
 {
-    "name": "node-red-contrib-ctrlx-core",
+    "name": "node-red-contrib-ctrlx-automation",
     "version": "0.1.0",
-    "description": "Node-RED nodes for ctrlX CORE.",
+    "description": "Node-RED nodes for ctrlX AUTOMATION",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/boschrexroth/node-red-contrib-ctrlx-core"
+        "url": "git+https://github.com/boschrexroth/node-red-contrib-ctrlx-automation"
     },
     "license": "BSD-3-Clause",
     "keywords": [
         "node-RED",
         "ctrlX AUTOMATION",
         "ctrlX CORE",
+        "ctrlX DRIVE",
         "Bosch Rexroth",
         "www.ctrlx-automation.com",
         "www.boschrexroth.com"
     ],
     "node-red": {
         "nodes": {
-            "ctrlx-core": "ctrlx-core.js",
-            "ctrlx-core-datalayer-request": "ctrlx-core-datalayer-request.js"
+            "ctrlx-config": "ctrlx-config.js",
+            "ctrlx-datalayer-request": "ctrlx-datalayer-request.js"
         }
     },
     "author": {
@@ -32,9 +33,11 @@
     },
     "dependencies": {
         "atob": "^2.1.2",
-        "debug": "^4.1.1"
+        "debug": "^4.1.1",
+        "mustache": "^4.0.1"
     },
     "scripts": {
-        "test": "mocha"
+        "test": "mocha",
+        "test_with_debug_log": "set DEBUG=ctrlxcore&& mocha"
     }
 }

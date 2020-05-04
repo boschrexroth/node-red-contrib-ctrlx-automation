@@ -34,13 +34,13 @@
 
 
 module.exports = function(RED) {
-  const CtrlxCore = require('node-red-contrib-ctrlx-core/lib/CtrlxCore')
+  const CtrlxCore = require('node-red-contrib-ctrlx-automation/lib/CtrlxCore')
 
 
   /* ---------------------------------------------------------------------------
    * NODE - config
    * -------------------------------------------------------------------------*/
-  function CtrlxCoreConfig(config) {
+  function CtrlxConfig(config) {
     RED.nodes.createNode(this, config);
 
     // Configuration options passed by Node Red
@@ -134,6 +134,10 @@ module.exports = function(RED) {
       }
     };
 
+    this.setTimeout = function(timeout) {
+      node.ctrlX.timeout = timeout;
+    }
+
     this.readDatalayer = function(path, callback) {
       if (node.connected) {
         node.ctrlX.readDatalayer(path)
@@ -177,7 +181,7 @@ module.exports = function(RED) {
   }
 
 
-  RED.nodes.registerType("ctrlx-core", CtrlxCoreConfig, {
+  RED.nodes.registerType("ctrlx-config", CtrlxConfig, {
     credentials: {
         username: {type:"text"},
         password: {type:"password"}

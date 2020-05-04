@@ -1,0 +1,110 @@
+<!--
+
+  ctrlx-datalayer-request -- A node to read data from the datalayer.
+
+-->
+<script type="text/javascript">
+  RED.nodes.registerType('ctrlx-datalayer-request', {
+      category: 'ctrlX',
+      color: '#C0DEED',
+      icon: 'icons/core.png',
+      defaults: {
+        device: {type: 'ctrlx-config', required: true},
+        method: {value: 'READ', required: true},
+        path: {value: '', required: false},
+        name: {value: ''}
+      },
+      inputs: 1,
+      outputs: 1,
+      paletteLabel: 'Data Layer Request',
+      label: function() {
+        if (this.name) {
+          return this.name;
+        } else if (this.path && this.method) {
+          if (this.path.length < 50) {
+            return `${this.method}: ${this.path}`;
+          } else {
+            let shortPath = this.path.substr(this.path.length - 50);
+            let shortPathStart = Math.max(shortPath.indexOf('/'), 0);
+            return `${this.method}: ...${shortPath.substr(shortPathStart)}`;
+          }
+        } else if (this.method && !this.path) {
+          return `${this.method}: <msg.path>`;
+        } else {
+          return 'Data Layer Request';
+        }
+      }
+  });
+</script>
+
+
+
+
+<script type="text/html" data-template-name="ctrlx-datalayer-request">
+  <div class="form-row">
+    <label for="node-input-device"><i class="fa fa-sign-in"></i> Device</label>
+    <input type="text" id="node-input-device">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-method"><i class="fa fa-tasks"></i> Method</label>
+    <select type="text" id="node-input-method" style="width:70%;">
+    <option value="READ">READ</option>
+    <option value="WRITE">WRITE</option>
+    <option value="BROWSE">BROWSE</option>
+    <option value="METADATA">METADATA</option>
+    <option value="REFERENCES">REFERENCES</option>
+    <option value="msg">- set by msg.method -</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-path"><i class="fa fa-globe"></i> Path</label>
+    <input id="node-input-path" type="text" placeholder="framework/metrics/system/cpu-utilisation-percent">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+
+
+
+<script type="text/html" data-help-name="ctrlx-datalayer-request">
+  <p>Use this node to read or write data to the ctrlX Data Layer.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+      <dt class="optional">path <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the path of the request.</dd>
+      <dt class="optional">method <span class="property-type">string</span></dt>
+      <dd>If not configured in the node, this optional property sets the method of the request.
+          Must be one of <code>READ</code>, <code>WRITE</code>, <code>BROWSE</code>, <code>METADATA</code> or <code>REFERENCES</code>.</dd>
+      <dt class="optional">payload</dt>
+      <dd>Data to be sent in case of WRITE method.</dd>
+      <!-- TODO: implemented later
+      <dt class="optional">rejectUnauthorized</dt>
+      <dd>If set to <code>false</code>, allows requests to be made to https sites that use
+          self signed certificates.</dd>-->
+      <dt class="optional">requestTimeout</dt>
+      <dd>If set to a positive number of milliseconds, will override the globally set <code>httpRequestTimeout</code> parameter.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+      <dt>payload <span class="property-type">string | object | buffer</span></dt>
+      <dd>The body of the response. The node can be configured to return the data
+            as a string, attempt to parse it as a JSON string or leave it as a
+            binary buffer.</dd>
+      <dt>statusCode <span class="property-type">number</span></dt>
+      <dd>The http status code of the response, or the error code if the request could not be completed.</dd>
+      <dt>problem <span class="property-type">object</span></dt>
+      <dd>In case an error occured, then this object holds additional information about the error.</dd>
+  </dl>
+
+  <h3>Details</h3>
+  <p>TODO</p>
+
+</script>

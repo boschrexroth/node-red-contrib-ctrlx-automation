@@ -17,9 +17,9 @@ package ctrlx {
 
 }
 
-package node-red-contrib-ctrlx-core {
+package node-red-contrib-ctrlx-automation {
 
-  class CtrlxCoreConfig << Node-RED config node >>
+  class CtrlxConfig << Node-RED config node >>
   {
     +String hostname
     +String username
@@ -36,11 +36,11 @@ package node-red-contrib-ctrlx-core {
     BROWSE
   }
 
-  class CtrlxCoreDatalayerRequest << Node-RED node >>
+  class CtrlxDatalayerRequest << Node-RED node >>
   {
-    +CtrlxCoreConfig device
+    +CtrlxConfig device
     +Method method
-    +String url
+    +String path
     +String name
     +onInput()
     +onClose()
@@ -53,12 +53,12 @@ package "ctrlX CORE" <<Node>> {
 }
 
 
-CtrlxCoreConfig "1" *-- "1" CtrlxCore : use >
+CtrlxConfig "1" *-- "1" CtrlxCore : use >
 
-CtrlxCoreDatalayerRequest --> CtrlxCoreConfig : register, unregister, use >
+CtrlxDatalayerRequest "0..*" --> "1" CtrlxConfig : register, unregister, use >
 
-CtrlxCoreConfig --> CtrlxCoreDatalayerRequest  : notify status >
+CtrlxConfig "1" --> "0..*" CtrlxDatalayerRequest  : notify status >
 
-CtrlxCore --> HttpsServer
+CtrlxCore "0..*" --> "1" HttpsServer
 
 @enduml

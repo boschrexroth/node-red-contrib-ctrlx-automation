@@ -32,20 +32,28 @@
 
 
  module.exports = function(RED) {
+  'use strict';
+  let mustache = require("mustache");
 
 
   /* ---------------------------------------------------------------------------
    * NODE - Request
    * -------------------------------------------------------------------------*/
-  function CtrlxCoreDatalayerRequest(config) {
+  function CtrlxDatalayerRequest(config) {
     RED.nodes.createNode(this, config);
 
     // Save settings in local node
     this.device = config.device;
     this.configNode = RED.nodes.getNode(this.device);
     this.name = config.name;
-    this.url = config.url;
+    this.path = config.path;
     this.method = config.method;
+    this.isTemplatedPath = (this.path || "").indexOf("{{") != -1;
+    if (RED.settings.httpRequestTimeout) { this.reqTimeout = parseInt(RED.settings.httpRequestTimeout) || 120000; }
+    else { this.reqTimeout = 120000; }
+
+
+
 
     let node = this;
     if (this.configNode) {
@@ -58,12 +66,54 @@
       node.on("input", function(msg, send, done) {
         node.status({fill: "blue", shape: "dot", text: "requesting"});
 
+        // Prepare the path
+        let path = node.path || msg.path;
+        if (msg.path && node.path && (node.path !== msg.path)) {
+          node.warn(RED._("common.errors.nooverride"));
+        }
+        if (node.isTemplatedPath) {
+          path = mustache.render(node.path, msg);
+        }
+        if (!path) {
+          node.error("property path for node is not set", msg);
+          done();
+          return;
+        }
+
+        // Prepare the method
+        let method = node.method || "READ";
+        if (msg.method && node.method && (node.method !== "msg")) {
+          node.warn(RED._("common.errors.nooverride"));
+        }
+        if (msg.method && node.method && (node.method === "msg")) {
+          method = msg.method.toUpperCase();
+        }
+        if (!method) {
+          node.error("property method for node is not set", msg);
+          done();
+          return;
+        }
+
+        // Prepare the timeout
+        let timeout = node.reqTimeout;
+        if (msg.requestTimeout !== undefined) {
+          if (isNaN(msg.requestTimeout)) {
+              node.warn("msg.requestTimeout is given as NaN");
+          } else if (msg.requestTimeout < 1) {
+              node.warn(RED._("msg.requestTimeout is given as negative value"));
+          } else {
+              timeout = msg.requestTimeout;
+          }
+        }
+        node.configNode.setTimeout(timeout);
+
+
         if (node.method == 'READ') {
 
           //
           // READ
           //
-          node.configNode.readDatalayer(node.url,
+          node.configNode.readDatalayer(path,
             function(err, data) {
 
               if (err) {
@@ -99,7 +149,7 @@
           //
           // Write
           //
-          node.configNode.writeDatalayer(node.url, msg.payload,
+          node.configNode.writeDatalayer(path, msg.payload,
             function(err) {
 
               if (err) {
@@ -126,7 +176,7 @@
           //
           // METADATA
           //
-          node.configNode.readDatalayerMetadata(node.url,
+          node.configNode.readDatalayerMetadata(path,
             function(err, data) {
 
               if (err) {
@@ -155,7 +205,7 @@
           //
           // REFERENCES
           //
-          node.configNode.readDatalayerReferences(node.url,
+          node.configNode.readDatalayerReferences(path,
             function(err, data) {
 
               if (err) {
@@ -210,8 +260,8 @@
       node.configNode.register(node);
 
     } else {
-      this.error(RED._("ctrlx-core.errors.missing-config"));
+      this.error("Missing configuration node for ctrlX Data Layer");
     }
   }
-  RED.nodes.registerType("ctrlx-core-datalayer-request", CtrlxCoreDatalayerRequest);
+  RED.nodes.registerType("ctrlx-datalayer-request", CtrlxDatalayerRequest);
 };
