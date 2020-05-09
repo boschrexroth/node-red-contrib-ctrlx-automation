@@ -34,7 +34,8 @@
 
 
 module.exports = function(RED) {
-  const CtrlxCore = require('./lib/CtrlxCore')
+  const CtrlxCore = require('./lib/CtrlxCore');
+  const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
 
   /* ---------------------------------------------------------------------------
@@ -175,6 +176,20 @@ module.exports = function(RED) {
         node.ctrlX.browseDatalayer(path, callback)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
+      }
+    }
+
+    this.logAdditionalErrorInfo = function(node, err) {
+      if (!this.debug) {
+        return;
+      }
+
+      if (err instanceof CtrlxProblemError) {
+        let message = err.toStringExtended();
+        node.log(`${message}`);
+        node.warn(`${message}`);
+      } else {
+        node.log(err.toString());
       }
     }
 

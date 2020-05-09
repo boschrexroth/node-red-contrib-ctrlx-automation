@@ -24,23 +24,24 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Decision: Use topic for the datalayer path?
 - [ ] Decision: How to name the node for common http requests? http vs. webapi
 - [x] Decision: How to name? AUTOMATION vs. CORE
-- [ ] Implement: User Documentation in the nodes
+- [x] Implement: User Documentation in the nodes
 - [ ] Implement: User Documentation in the readme
 - [ ] Implement: Node-RED Tests
-- [ ] Implement: More Mocca Tests
+- [ ] Implement: More Mocca Tests (including assertions)
 - [x] Implement: Allow configuration of nodes via `msg` object
-- [ ] Implement: Proper error handling. Return Problem.json on server errors.
+- [x] Implement: Proper error handling. Return Problem.json on server errors.
 - [x] Implement: Add support for mustache in msg.path.
 - [ ] Implement: Add proper timeout handling
-- [ ] Implement: Add support for browsing
+- [x] Implement: Add support for browsing
 - [ ] Implement: Implement correct outputs
-- [ ] Fix: [DEP0123] DeprecationWarning
+- [x] Fix: [DEP0123] DeprecationWarning
 
 ### v1.1.0
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Find the device via UPnP
 - [ ] Feature: Interactive Data Layer Browser
+- [ ] Feature: Support http proxy configuration
 - [ ] Feature: Allow custom certificate handling
 
 ### v1.2.0

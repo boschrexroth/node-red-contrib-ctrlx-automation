@@ -127,6 +127,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
                 return;
               }
 
@@ -163,6 +164,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
                 return;
               }
 
@@ -190,6 +192,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
                 return;
               }
 
@@ -219,6 +222,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
                 return;
               }
 
@@ -249,6 +253,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
                 return;
               }
 

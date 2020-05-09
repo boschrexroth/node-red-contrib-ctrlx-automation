@@ -77,37 +77,43 @@
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-      <dt class="optional">path <span class="property-type">string</span></dt>
-      <dd>If not configured in the node, this optional property sets the path of the request.</dd>
-      <dt class="optional">method <span class="property-type">string</span></dt>
-      <dd>If not configured in the node, this optional property sets the method of the request.
-          Must be one of <code>READ</code>, <code>WRITE</code>, <code>BROWSE</code>, <code>METADATA</code> or <code>REFERENCES</code>.</dd>
-      <dt class="optional">payload</dt>
-      <dd>Data to be sent in case of WRITE method.</dd>
-      <!-- TODO: implemented later
-      <dt class="optional">rejectUnauthorized</dt>
-      <dd>If set to <code>false</code>, allows requests to be made to https sites that use
-          self signed certificates.</dd>-->
-      <dt class="optional">requestTimeout</dt>
-      <dd>If set to a positive number of milliseconds, will override the globally set <code>httpRequestTimeout</code> parameter.</dd>
+    <dt class="optional">path <span class="property-type">string</span></dt>
+    <dd>If not configured in the node, this optional property sets the path of the request.</dd>
+    <dt class="optional">method <span class="property-type">string</span></dt>
+    <dd>If not configured in the node, this optional property sets the method of the request.
+        Must be one of <code>READ</code>, <code>WRITE</code>, <code>BROWSE</code>, <code>METADATA</code> or <code>REFERENCES</code>.</dd>
+    <dt class="optional">payload <span class="property-type">object</span></dt>
+    <dd>Data to be sent in case of WRITE method.</dd>
+    <!-- TODO: implemented later
+    <dt class="optional">rejectUnauthorized</dt>
+    <dd>If set to <code>false</code>, allows requests to be made to https sites that use
+        self signed certificates.</dd>-->
+    <dt class="optional">requestTimeout <span class="property-type">number</span></dt>
+    <dd>If set to a positive number of milliseconds, will override the globally set <code>httpRequestTimeout</code> parameter.</dd>
   </dl>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-      <dt>payload <span class="property-type">string | object | buffer</span></dt>
-      <dd>The body of the response. The node can be configured to return the data
-          as a string, attempt to parse it as a JSON string or leave it as a
-          binary buffer.</dd>
-      <dt>topic <span class="property-type">string</span></dt>
-      <dd>If the <code>topic</code> property is not already set in the <code>msg</code> object as input, then it will be set to the effective
-          <code>path</code> of request.</dd>
-      <dt>statusCode <span class="property-type">number</span></dt>
-      <dd>The http status code of the response, or the error code if the request could not be completed.</dd>
-      <dt>problem <span class="property-type">object</span></dt>
-      <dd>In case an error occured, then this object holds additional information about the error.</dd>
+    <dt>payload <span class="property-type">string | object | buffer</span></dt>
+    <dd>The body of the response. The node can be configured to return the data
+        as a string, attempt to parse it as a JSON string or leave it as a
+        binary buffer.</dd>
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>If the <code>topic</code> property is not already set in the <code>msg</code> object as input, then it will be set to the effective
+        <code>path</code> of request.</dd>
   </dl>
 
   <h3>Details</h3>
-  <p>TODO</p>
+  <p>In case of an error, the node will not emit a <code>msg</code> but throw an error, that can be catched by the <code>catch</code> node.</p>
+  <!-- TODO: implement later
+  <p><b>Note</b>: If running behind a proxy, the standard <code>http_proxy=...</code> environment variable should be set and Node-RED restarted, or use Proxy Configuration. If Proxy Configuration was set, the configuration take precedence over environment variable.</p>
+  -->
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://github.com/boschrexroth/node-red-contrib-ctrlx-automation">GitHub</a> - the nodes github repository</li>
+    <li><a href="https://docs.automation.boschrexroth.com">ctrlX AUTOMATION Product Help</a> - the online documentation of ctrlX AUTOMATION</li>
+    <li><a href="https://boschrexroth.com">Bosch Rexroth AG</a> - WE MOVE. YOU WIN</li>
+  </ul>
 
 </script>
