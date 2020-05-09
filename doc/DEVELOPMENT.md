@@ -19,10 +19,8 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 ### v1.0.0 (MVP)
 
 - [ ] Implement: Auto reconnect and more resilience for server errors
-- [ ] Implement: Node for common https requests
 - [x] Decision: How to name the datalayer path ("path" vs "url")
 - [x] Decision: Use topic for the datalayer path?
-- [ ] Decision: How to name the node for common http requests? http vs. webapi
 - [x] Decision: How to name? AUTOMATION vs. CORE
 - [x] Implement: User Documentation in the nodes
 - [x] Implement: User Documentation in the readme
@@ -31,21 +29,26 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Allow configuration of nodes via `msg` object
 - [x] Implement: Proper error handling. Return Problem.json on server errors.
 - [x] Implement: Add support for mustache in msg.path.
-- [ ] Implement: Add proper timeout handling
+- [x] Implement: Add proper timeout handling
 - [x] Implement: Add support for browsing
 - [x] Implement: Implement correct outputs
 - [x] Fix: [DEP0123] DeprecationWarning
 
 ### v1.1.0
 
+- [ ] Feature: Support http proxy configuration
+- [ ] Feature: Allow custom certificate handling
+- [ ] Feature: Node for common https requests
+- [ ] Decision: How to name the node for common http requests? http vs. webapi
+
+### v1.2.0
+
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Find the device via UPnP
 - [ ] Feature: Interactive Data Layer Browser
-- [ ] Feature: Support http proxy configuration
 - [ ] Feature: Different output types (value only, object, raw)
-- [ ] Feature: Allow custom certificate handling
 
-### v1.2.0
+### v1.3.0
 
 - [] Feature: i18n
 
