@@ -70,6 +70,7 @@ module.exports = function(RED) {
     //
     let node = this;
     this.users = {};
+    this.pendingRequests = {};
 
     // Register function to be called by all nodes which are attached to this config node.
     this.register = function(ctrlxNode) {
@@ -110,23 +111,67 @@ module.exports = function(RED) {
               node.log('Successfully logged in to: ' + node.hostname);
               node.log('Token will expire at ' + new Date(data.token_expireTime).toLocaleString() + ' local time');
             }
-            for (var id in node.users) {
-              // eslint-disable-next-line no-prototype-builtins
-              if (node.users.hasOwnProperty(id)) {
+
+            for (let id in node.users) {
+              if (Object.prototype.hasOwnProperty.call(node.users, id)) {
                 node.users[id].status({fill:"green", shape:"dot", text:"Authenticated"});
               }
             }
+
+            // Now execute all the pending requests
+            for (let id in node.pendingRequests) {
+              if (Object.prototype.hasOwnProperty.call(node.pendingRequests, id)) {
+
+                switch(node.pendingRequests[id].method) {
+                  case 'READ': {
+                    node.readDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    break;
+                  }
+                  case 'WRITE': {
+                    node.writeDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
+                    break;
+                  }
+                  case 'METADATA': {
+                    node.readDatalayerMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    break;
+                  }
+                  case 'REFERENCES': {
+                    node.readDatalayerReferences(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    break;
+                  }
+                  case 'BROWSE': {
+                    node.browseDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    break;
+                  }
+                  default: {
+                    node.error('internal error: received invalid pending request!');
+                  }
+                }
+
+                delete node.pending[id];
+              }
+            }
+
           })
           .catch((err) => {
             if (node.debug) {
               node.log('Failed to log in to ' + node.hostname + ' with error ' + err.message);
             }
-            for (var id in node.users) {
-              // eslint-disable-next-line no-prototype-builtins
-              if (node.users.hasOwnProperty(id)) {
+
+            for (let id in node.users) {
+              if (Object.prototype.hasOwnProperty.call(node.users, id)) {
                 node.users[id].status({fill: "red", shape: "ring", text: "Authentication failed"});
               }
             }
+
+            // Now cancel all the pending requests
+            for (let id in node.pendingRequests) {
+              if (Object.prototype.hasOwnProperty.call(node.pendingRequests, id)) {
+                node.pendingRequests[id].callback(err, null);
+                delete node.pendingRequests[id];
+              }
+            }
+
           });
 
         }catch(err) {
@@ -139,43 +184,84 @@ module.exports = function(RED) {
       node.ctrlX.timeout = timeout;
     }
 
-    this.readDatalayer = function(path, callback) {
+    this.readDatalayer = function(nodeRef, path, callback) {
       if (node.connected) {
         node.ctrlX.readDatalayer(path)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'READ',
+          path: path,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
       }
     }
 
-    this.writeDatalayer = function(path, data, callback) {
+    this.writeDatalayer = function(nodeRef, path, data, callback) {
       if (node.connected) {
         node.ctrlX.writeDatalayer(path, data)
           .then(() => callback(null))
           .catch((err) => callback(err));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'WRITE',
+          path: path,
+          data: data,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
       }
     }
 
-    this.readDatalayerMetadata = function(path, callback) {
+    this.readDatalayerMetadata = function(nodeRef, path, callback) {
       if (node.connected) {
         node.ctrlX.readDatalayerMetadata(path)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'METADATA',
+          path: path,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
       }
     }
 
-    this.readDatalayerReferences = function(path, callback) {
+    this.readDatalayerReferences = function(nodeRef, path, callback) {
       if (node.connected) {
         node.ctrlX.readDatalayerReferences(path, callback)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'REFERENCES',
+          path: path,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
       }
     }
 
-    this.browseDatalayer = function(path, callback) {
+    this.browseDatalayer = function(nodeRef, path, callback) {
       if (node.connected) {
         node.ctrlX.browseDatalayer(path, callback)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'BROWSE',
+          path: path,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
       }
     }
 

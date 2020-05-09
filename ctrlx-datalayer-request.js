@@ -117,7 +117,7 @@
           //
           // READ
           //
-          node.configNode.readDatalayer(path,
+          node.configNode.readDatalayer(node, path,
             function(err, data) {
 
               if (err) {
@@ -154,7 +154,7 @@
           //
           // Write
           //
-          node.configNode.writeDatalayer(path, msg.payload,
+          node.configNode.writeDatalayer(node, path, msg.payload,
             function(err) {
 
               if (err) {
@@ -182,7 +182,7 @@
           //
           // METADATA
           //
-          node.configNode.readDatalayerMetadata(path,
+          node.configNode.readDatalayerMetadata(node, path,
             function(err, data) {
 
               if (err) {
@@ -212,7 +212,7 @@
           //
           // REFERENCES
           //
-          node.configNode.readDatalayerReferences(path,
+          node.configNode.readDatalayerReferences(node, path,
             function(err, data) {
 
               if (err) {
@@ -243,7 +243,7 @@
           //
           // BROWSE
           //
-          node.configNode.browseDatalayer(path,
+          node.configNode.browseDatalayer(node, path,
             function(err, data) {
 
               if (err) {

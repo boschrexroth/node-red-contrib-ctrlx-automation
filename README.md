@@ -1,6 +1,6 @@
 # Node-RED nodes for ctrlX AUTOMATION
 
-This package contains nodes to easily connect to [ctrlX AUTOMATION](https://ctrlx-automation.com/) devices from [Bosch Rexroth](https://boschrexroth.com).
+This package contains nodes to easily connect to [ctrlX AUTOMATION](https://www.ctrlx-automation.com/) devices from [Bosch Rexroth](https://www.boschrexroth.com).
 
 ![ctrlX_AUTOMATION.gif](./doc/images/ctrlX_AUTOMATION.gif)
 
