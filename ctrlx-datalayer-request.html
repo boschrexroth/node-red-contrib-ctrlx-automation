@@ -24,7 +24,7 @@
           if (this.path.length < 50) {
             return `${this.method}: ${this.path}`;
           } else {
-            let shortPath = this.path.substr(this.path.length - 50);
+            let shortPath = this.path.substr(this.path.length - 45);
             let shortPathStart = Math.max(shortPath.indexOf('/'), 0);
             return `${this.method}: ...${shortPath.substr(shortPathStart)}`;
           }
@@ -60,7 +60,7 @@
 
   <div class="form-row">
     <label for="node-input-path"><i class="fa fa-globe"></i> Path</label>
-    <input id="node-input-path" type="text" placeholder="framework/metrics/system/cpu-utilisation-percent">
+    <input id="node-input-path" type="text" placeholder="path/to/data/layer/node">
   </div>
 
   <div class="form-row">

@@ -1,6 +1,8 @@
 # Node-RED nodes for ctrlX AUTOMATION
 
-This package contains nodes to easily connect to ctrlX AUTOMATION devices from Bosch Rexroth.
+This package contains nodes to easily connect to [ctrlX AUTOMATION](https://ctrlx-automation.com/) devices from [Bosch Rexroth](https://boschrexroth.com).
+
+![ctrlX_AUTOMATION.gif](./doc/ctrlX_AUTOMATION.gif)
 
 Using the nodes you can read and write to the datalayer. These nodes can be installed directly on ctrlX CORE devices as well as on a third-party device which runs Node-RED.
 
@@ -10,19 +12,33 @@ Install using the managed palette from inside Node-RED.
 
 ### Usage
 
-There are some new nodes which appear in the category 'ctrlX' in your Node-RED palette.
+There is a new node which appears in the category 'ctrlX' in your Node-RED palette.
 
 ![nodes.png](./doc/nodes.png)
 
 #### Data Layer Request
 
-Allows to read or write to the ctrlX Data Layer.
+Allows to read or write to the ctrlX Data Layer. There are multiple example flows included which demonstrate how the node can be use.
+They appear under the Examples section of the library import menu in Node-RED.
 
-#### Additional Information
+![datalayer_request_examples.png](./doc/datalayer_request_examples.png)
 
 ## History
 
 - 2020-Apr-14: 0.1.0 - First prototype.
+
+## About
+
+Copyright © 2020 Bosch Rexroth AG. All rights reserved.
+
+![rexroth.gif](./doc/rexroth.gif)
+
+<https://www.boschrexroth.com>
+
+Bosch Rexroth AG  
+Bgm.-Dr.-Nebel-Str. 2  
+97816 Lohr am Main  
+GERMANY  
 
 ## Licenses
 

@@ -25,7 +25,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [ ] Decision: How to name the node for common http requests? http vs. webapi
 - [x] Decision: How to name? AUTOMATION vs. CORE
 - [x] Implement: User Documentation in the nodes
-- [ ] Implement: User Documentation in the readme
+- [x] Implement: User Documentation in the readme
 - [ ] Implement: Node-RED Tests
 - [ ] Implement: More Mocca Tests (including assertions)
 - [x] Implement: Allow configuration of nodes via `msg` object
@@ -33,7 +33,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Add support for mustache in msg.path.
 - [ ] Implement: Add proper timeout handling
 - [x] Implement: Add support for browsing
-- [ ] Implement: Implement correct outputs
+- [x] Implement: Implement correct outputs
 - [x] Fix: [DEP0123] DeprecationWarning
 
 ### v1.1.0
@@ -42,6 +42,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [ ] Feature: Find the device via UPnP
 - [ ] Feature: Interactive Data Layer Browser
 - [ ] Feature: Support http proxy configuration
+- [ ] Feature: Different output types (value only, object, raw)
 - [ ] Feature: Allow custom certificate handling
 
 ### v1.2.0
