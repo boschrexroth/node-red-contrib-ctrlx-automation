@@ -112,7 +112,7 @@
           msg.topic = path;
         }
 
-        if (node.method == 'READ') {
+        if (method == 'READ') {
 
           //
           // READ
@@ -149,7 +149,7 @@
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
             });
 
-        } else if (node.method == 'WRITE') {
+        } else if (method == 'WRITE') {
 
           //
           // Write
@@ -178,7 +178,7 @@
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
             });
 
-        } else if (node.method == 'METADATA') {
+        } else if (method == 'METADATA') {
           //
           // METADATA
           //
@@ -208,7 +208,7 @@
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
           });
 
-        } else if (node.method == 'REFERENCES') {
+        } else if (method == 'REFERENCES') {
           //
           // REFERENCES
           //
@@ -239,7 +239,7 @@
 
           });
 
-        }else if (node.method == 'BROWSE') {
+        }else if (method == 'BROWSE') {
           //
           // BROWSE
           //
