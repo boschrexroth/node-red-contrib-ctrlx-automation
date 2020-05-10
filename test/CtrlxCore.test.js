@@ -33,7 +33,7 @@
 
 const assert = require('assert');
 const CtrlxCore = require('../lib/CtrlxCore')
-const CtrlxMockup = require('node-red-contrib-ctrlx-automation/test/helper/CtrlxMockup')
+const CtrlxMockup = require('./helper/CtrlxMockup')
 
 
 

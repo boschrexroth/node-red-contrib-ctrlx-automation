@@ -44,7 +44,7 @@ const ctrlxConfigNode = require("../ctrlx-config.js");
 const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 
 // The the server mockup to test against
-const CtrlxMockup = require('node-red-contrib-ctrlx-automation/test/helper/CtrlxMockup')
+const CtrlxMockup = require('./helper/CtrlxMockup')
 
 
 
