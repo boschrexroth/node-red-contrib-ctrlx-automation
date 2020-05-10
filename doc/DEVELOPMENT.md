@@ -18,17 +18,16 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 
 ### v1.0.0 (MVP)
 
+- [x] Implement: Authentication for seesion with automatic handling of certificate expiration
+- [x] Implement: Node to allow requests to datalayer
 - [ ] Implement: Auto reconnect and more resilience for server errors
-- [x] Decision: How to name the datalayer path ("path" vs "url")
-- [x] Decision: Use topic for the datalayer path?
-- [x] Decision: How to name? AUTOMATION vs. CORE
 - [x] Implement: User Documentation in the nodes
 - [x] Implement: User Documentation in the readme
-- [ ] Implement: Node-RED Tests
-- [ ] Implement: More Mocca Tests (including assertions)
+- [x] Implement: Solid testing framework for lib an node
+- [ ] Implement: A decent amount of tests for good coverage
 - [x] Implement: Allow configuration of nodes via `msg` object
-- [x] Implement: Proper error handling. Return Problem.json on server errors.
-- [x] Implement: Add support for mustache in msg.path.
+- [x] Implement: Proper error handling. Return Problem.json on server errors
+- [x] Implement: Add support for mustache in msg.path
 - [x] Implement: Add proper timeout handling
 - [x] Implement: Add support for browsing
 - [x] Implement: Implement correct outputs
@@ -51,6 +50,18 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 ### v1.3.0
 
 - [] Feature: i18n
+
+## Test
+
+To run the unit tests call `npm test`. Extended logging can be enabled via `npm test_with_debug_log`.
+By default, the tests are running against a mockup of the device which runs as server on localhost.
+But it is possible to override the settings via enviroment variables to also run the tests agains a real hardware.
+
+Environment variables:
+
+- `TEST_HOSTNAME` The hostname to run the tests against.
+- `TEST_USERNAME` The username to use for the tests.
+- `TEST_PASSWORD` The password to use for the tests.
 
 ## Tipps & Tricks
 
