@@ -58,8 +58,8 @@ class CtrlxMockup {
     //
     this.app.post('/identity-manager/api/v1/auth/token', function(req, res){
       let token = jwt.encode({
-        iat: Date.now().valueOf(),        // issued at (seconds since 1970)
-        exp: Date.now().valueOf() + 120,  // expiration time (seconds since 1970)
+        iat: Date.now().valueOf() / 1000,        // issued at (seconds since 1970)
+        exp: Date.now().valueOf() / 1000 + 120,  // expiration time (seconds since 1970)
       }, 'secret');
       let result = {
         token_type: 'Bearer',
@@ -82,10 +82,11 @@ class CtrlxMockup {
 
           try {
             let decoded = jwt.decode(token, 'secret');
-            if (Date.now().valueOf() < decoded.iat) {
+            let dateNow = Date.now().valueOf() / 1000;
+            if (dateNow < decoded.iat) {
               return res.sendStatus(401);
             }
-            if (Date.now().valueOf() > decoded.exp) {
+            if (dateNow > decoded.exp) {
               return res.sendStatus(401);
             }
             next();
