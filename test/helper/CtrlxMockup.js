@@ -136,7 +136,7 @@ class CtrlxMockup {
     };
 
     this.httpsServer = https.createServer(options, this.app);
-    this.httpsServer.listen(443, () => {
+    this.httpsServer.listen(443, 'localhost', () => {
       callback();
     });
   }
