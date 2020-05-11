@@ -46,7 +46,7 @@
     "scripts": {
         "test": "mocha",
         "test_with_debug_log": "set DEBUG=ctrlxcore&& mocha",
-        "test_with_coverage": "nyc --reporter=txt mocha",
+        "test_with_coverage": "nyc --reporter=text mocha",
         "test_with_coverage_html": "nyc --reporter=html mocha"
     }
 }
