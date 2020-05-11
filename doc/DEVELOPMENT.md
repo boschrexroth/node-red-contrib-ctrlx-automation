@@ -53,7 +53,9 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 
 ## Test
 
-To run the unit tests call `npm test`. Extended logging can be enabled via `npm test_with_debug_log`.
+To run the unit tests call `npm test`. Extended logging can be enabled via `npm run test_with_debug_log`.
+For calculation of coverage call with `npm run test_with_coverage`. Use `npm run test_with_coverage_html` to 
+generate a pretty html report.
 By default, the tests are running against a mockup of the device which runs as server on localhost.
 But it is possible to override the settings via enviroment variables to also run the tests agains a real hardware.
 
