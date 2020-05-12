@@ -37,6 +37,8 @@ const https = require('https');
 const fs = require('fs');
 const jwt = require('jwt-simple');
 
+const STATUS_CODES = require('http').STATUS_CODES;
+
 
 
 /**
@@ -52,6 +54,7 @@ class CtrlxMockup {
     // create new express app and save it as "app"
     this.app = express();
     this.app.use(cors());
+    this.app.use(express.json());
 
     //
     // Authentication
@@ -104,18 +107,55 @@ class CtrlxMockup {
     // Builtin Data Mockups
     //
 
-    this.app.get('/automation/api/v1.0/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, function(req, res) {
+    this.app.get('/automation/api/v1.0/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
         value: true,
         type: 'bool'
       });
     });
-    this.app.get('/automation/api/v1.0/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, function(req, res) {
+    this.app.get('/automation/api/v1.0/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
         value: 17.5,
         type: 'double'
+      });
+    });
+
+    this.var_i = 0;
+    this.app.put('/automation/api/v1.0/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
+      if (req.body.type !== 'int16') {
+        res.statusCode = 405;
+        res.send();
+        return;
+      }
+      this.var_i = req.body.value;
+      res.statusCode = 200;
+      res.json({
+        value: this.var_i,
+        type: 'int16'
+      });
+    });
+    this.app.get('/automation/api/v1.0/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
+      res.statusCode = 200;
+      res.json({
+        value: this.var_i,
+        type: 'int16'
+      });
+    });
+
+    this.app.get('/automation/api/v1.0/nonexistent/path', authenticateJWT, (req, res) => {
+      res.statusCode = 404;
+      res.json({
+        title: 'Error on Read',
+        type: 'about:blank',
+        status: 404,
+        detail: 'Your current balance is 30, but that costs 50.',
+        instance: '/account/12345/msgs/abc',
+        mainDiagnosisCode: 'F0360001',
+        detailedDiagnosisCode: '00666001',
+        dynamicDescription : 'This could be a dynamic description',
+        severity: 'ERROR'
       });
     });
   }

@@ -45,6 +45,7 @@ const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 
 // The the server mockup to test against
 const CtrlxMockup = require('./helper/CtrlxMockup')
+const CtrlxCore = require('../lib/CtrlxCore')
 
 
 
@@ -159,6 +160,56 @@ describe('ctrlx-datalayer-request', function() {
         n1.receive({ payload: "" });
       });
     });
+
+
+    it('should write a value', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"WRITE","path":"plc/app/Application/sym/PLC_PRG/i","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            msg.should.have.property('payload').with.property('value').which.is.a.Number().eql(23);
+            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('int16');
+
+            let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+            ctrlx.logIn()
+              .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+              .then((data) => {
+                  data.should.have.property('value').which.is.a.Number().eql(23);
+                  data.should.have.property('type').which.is.a.String().eql('int16');
+                  done();
+                })
+              .catch((err) => done(err))
+              .finally(() => {ctrlx.logOut()});
+
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: {type: 'int16', value: 23} });
+      });
+    });
+
   });
 
 });

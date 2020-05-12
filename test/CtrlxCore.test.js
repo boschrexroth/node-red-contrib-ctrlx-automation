@@ -32,7 +32,9 @@
 
 
 const assert = require('assert');
+const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
+const CtrlxProblemError = require('../lib/CtrlxProblemError')
 const CtrlxMockup = require('./helper/CtrlxMockup')
 
 
@@ -95,6 +97,32 @@ describe('CtrlxCore', function() {
 
     });
 
+    it('should read and write a value and then logout without error', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+        .then((data) => {
+            assert.equal(data.value, 0);
+            assert.equal(data.type, 'int16');
+          })
+        .then(() => ctrlx.writeDatalayer('plc/app/Application/sym/PLC_PRG/i', {type:'int16', value: 23}))
+        .then((data) => {
+            assert.equal(data.value, 23);
+            assert.equal(data.type, 'int16');
+          })
+        .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+        .then((data) => {
+            assert.equal(data.value, 23);
+            assert.equal(data.type, 'int16');
+            done();
+          })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
   });
 
 
@@ -115,6 +143,50 @@ describe('CtrlxCore', function() {
           })
         .finally(() => ctrlx.logOut());
 
+    });
+
+
+    it('should return an error as CtrlxProblemError with additional problem properties', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.readDatalayer('nonexistent/path') )
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => {
+            expect(err.name).equal('CtrlxProblemError');
+            expect(err.title).to.be.a('string');
+            expect(err.type).to.be.a('string').equal('about:blank');
+            expect(err.severity).to.be.a('string').equal('ERROR');
+            expect(err.type).to.be.a('string');
+            expect(err.status).to.be.a('number').equal(404);
+            expect(err.detail).to.be.a('string');
+            expect(err.instance).to.be.a('string');
+            expect(err.mainDiagnosisCode).to.be.a('string').with.length(8);
+            expect(err.detailedDiagnosisCode).to.be.a('string').with.length(8);
+            expect(err.dynamicDescription).to.be.a('string');
+
+            var message = err.toStringExtended();
+            expect(message).to.not.include('about:blank');
+            expect(message).to.include(err.title);
+            expect(message).to.include(err.severity);
+            expect(message).to.include(err.detail);
+            expect(message).to.include(err.mainDiagnosisCode);
+            expect(message).to.include(err.detailedDiagnosisCode);
+
+            done();
+          })
+        .finally(() => ctrlx.logOut());
+
+    });
+
+
+    it('should create a CtrlxProblemError from http status code', function() {
+
+      let err = CtrlxProblemError.fromHttpStatuscode(404);
+      expect(err.status).to.be.a('number').equal(404);
+      expect(err.title).to.be.a('string').equal('[404] Not Found');
+      expect(err.toStringExtended()).to.include('[404] Not Found');
     });
 
   });
