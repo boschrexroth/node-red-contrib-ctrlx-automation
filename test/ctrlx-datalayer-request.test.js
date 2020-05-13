@@ -47,6 +47,9 @@ const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 const CtrlxMockup = require('./helper/CtrlxMockup')
 const CtrlxCore = require('../lib/CtrlxCore')
 
+const expect = require('chai').expect;
+
+
 
 
 describe('ctrlx-datalayer-request', function() {
@@ -210,6 +213,87 @@ describe('ctrlx-datalayer-request', function() {
       });
     });
 
+
+    it('should browse a node', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"BROWSE","path":"framework/metrics/system","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            expect(msg.payload.value).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
+            expect(msg.payload.type).to.equal('arstring');
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: "" });
+      });
+    });
+
+
+    it('should read metadata', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"METADATA","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            expect(msg.payload.nodeClass).to.equal('Resource');
+            expect(msg.payload.description).to.be.a('string');
+            expect(msg.payload.descriptionUrl).to.be.a('string');
+            expect(msg.payload.displayName).to.be.a('string');
+            expect(msg.payload.displayFormat).to.be.a('string');
+            expect(msg.payload.unit).to.be.a('string');
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: "" });
+      });
+    });
   });
+
+
 
 });

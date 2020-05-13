@@ -59,7 +59,13 @@ class CtrlxMockup {
     //
     // Authentication
     //
-    this.app.post('/identity-manager/api/v1/auth/token', function(req, res){
+    this.app.post('/identity-manager/api/v1/auth/token', function(req, res) {
+      if ( !req.body.name || req.body.name !== 'boschrexroth'
+        || !req.body.password || req.body.password !== 'boschrexroth' ) {
+        res.statusCode = 401;
+        res.send();
+        return
+      }
       let token = jwt.encode({
         iat: Date.now().valueOf() / 1000,        // issued at (seconds since 1970)
         exp: Date.now().valueOf() / 1000 + 120,  // expiration time (seconds since 1970)
@@ -115,11 +121,66 @@ class CtrlxMockup {
       });
     });
     this.app.get('/automation/api/v1.0/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
-      res.statusCode = 200;
-      res.json({
-        value: 17.5,
-        type: 'double'
-      });
+      switch (req.query.type) {
+        case undefined:
+          res.statusCode = 200;
+          res.json({
+            value: 17.5,
+            type: 'double'
+          });
+          break;
+        case 'data':
+          res.statusCode = 200;
+          res.json({
+            value: 17.5,
+            type: 'double'
+          });
+          break;
+        case 'metadata':
+          res.statusCode = 200;
+          res.json({
+            nodeClass: "Resource",
+            operations: {
+              read: true,
+              write: false,
+              create: false,
+              delete: false,
+            },
+            description: "",
+            descriptionUrl: "'descriptionUrl'",
+            displayName: "'displayName'",
+            displayFormat: "Auto",
+            unit: "'unit'",
+            references: [
+              { type: "createType", targetAddress: "" },
+              { type: "readType", targetAddress: "" },
+              { type: "writeType", targetAddress: "" },
+            ],
+          });
+          break;
+        case 'references':
+          res.statusCode = 200;
+          res.json({
+            "type":"arstring", "value":[""]   // TODO: is this format correct?
+          });
+          break;
+        default:
+          res.statusCode = 405;
+          res.send();
+          break;
+      }
+    });
+    this.app.get('/automation/api/v1.0/framework/metrics/system', authenticateJWT, (req, res) => {
+      if (req.query.type === 'browse') {
+        res.statusCode = 200;
+        res.json({
+          "type":"arstring", "value":["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]
+        });
+        return;
+      }
+      res.statusCode = 405;
+      res.send();
+      return;
     });
 
     this.var_i = 0;

@@ -123,12 +123,106 @@ describe('CtrlxCore', function() {
 
     });
 
+    it('should read metadata', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent') )
+        .then((data) => {
+          expect(data.nodeClass).to.equal('Resource');
+          expect(data.description).to.be.a('string');
+          expect(data.descriptionUrl).to.be.a('string');
+          expect(data.displayName).to.be.a('string');
+          expect(data.displayFormat).to.be.a('string');
+          expect(data.unit).to.be.a('string');
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
+    it('should read references', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent') )
+        .then((/*data*/) => {
+          // TODO: check for valid references here
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
+    it('should browse data layer', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.browseDatalayer('framework/metrics/system') )
+        .then((data) => {
+          expect(data.value).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
+          expect(data.type).to.equal('arstring');
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
   });
 
 
 
 
   describe('CtrlxCore: Check correct error handling', function() {
+
+    it('should return an error when not authenticated', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent')
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .finally(() => ctrlx.logOut());
+       ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent')
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .finally(() => ctrlx.logOut());
+       ctrlx.readDatalayerReferences('framework/metrics/system/cpu-utilisation-percent')
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .finally(() => ctrlx.logOut());
+       ctrlx.writeDatalayer('framework/metrics/system/cpu-utilisation-percent', {value:'5', type: 'double'})
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .finally(() => ctrlx.logOut());
+      ctrlx.browseDatalayer('framework/metrics/system/cpu-utilisation-percent')
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .finally(() => ctrlx.logOut());
+      done();
+    });
+
+
+    it('should return an error on wrong username/password', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), 'xxx');
+
+      ctrlx.logIn()
+        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
+        .catch((err) => {
+            assert.equal(err.name, 'CtrlxProblemError');
+            assert.equal(err.status, 401);
+            done();
+          })
+        .finally(() => ctrlx.logOut());
+
+    });
 
     it('should return an error as CtrlxProblemError', function(done) {
 
@@ -144,7 +238,6 @@ describe('CtrlxCore', function() {
         .finally(() => ctrlx.logOut());
 
     });
-
 
     it('should return an error as CtrlxProblemError with additional problem properties', function(done) {
 
@@ -179,7 +272,6 @@ describe('CtrlxCore', function() {
         .finally(() => ctrlx.logOut());
 
     });
-
 
     it('should create a CtrlxProblemError from http status code', function() {
 

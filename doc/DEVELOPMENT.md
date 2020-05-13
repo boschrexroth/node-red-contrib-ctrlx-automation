@@ -24,7 +24,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: User Documentation in the nodes
 - [x] Implement: User Documentation in the readme
 - [x] Implement: Solid testing framework for lib an node
-- [ ] Implement: A decent amount of tests for good coverage
+- [x] Implement: A decent amount of tests for good coverage
 - [x] Implement: Allow configuration of nodes via `msg` object
 - [x] Implement: Proper error handling. Return Problem.json on server errors
 - [x] Implement: Add support for mustache in msg.path
@@ -32,6 +32,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Add support for browsing
 - [x] Implement: Implement correct outputs
 - [x] Fix: [DEP0123] DeprecationWarning
+- [ ] Fix: implement a valid test case for references
 
 ### v1.1.0
 
