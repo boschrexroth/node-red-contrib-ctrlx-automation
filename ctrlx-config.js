@@ -58,6 +58,7 @@ module.exports = function(RED) {
     this.connecting = false;
     this.closing = false;
     this.ctrlX = new CtrlxCore(this.hostname, this.username, this.password);
+    this.ctrlX.autoReconnect = true;
 
     // If the config node is missing certain options (it was probably deployed prior to an update to the node code),
     // select/generate sensible options for the new fields

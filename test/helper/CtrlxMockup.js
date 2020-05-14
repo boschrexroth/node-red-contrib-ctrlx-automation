@@ -37,7 +37,6 @@ const https = require('https');
 const fs = require('fs');
 const jwt = require('jwt-simple');
 
-const STATUS_CODES = require('http').STATUS_CODES;
 
 
 
@@ -59,7 +58,8 @@ class CtrlxMockup {
     //
     // Authentication
     //
-    this.app.post('/identity-manager/api/v1/auth/token', function(req, res) {
+    this.sessionEstablished = false;
+    this.app.post('/identity-manager/api/v1/auth/token', (req, res) => {
       if ( !req.body.name || req.body.name !== 'boschrexroth'
         || !req.body.password || req.body.password !== 'boschrexroth' ) {
         res.statusCode = 401;
@@ -76,16 +76,23 @@ class CtrlxMockup {
       };
       res.statusCode = 201;
       res.json(result);
+      this.sessionEstablished = true;
     });
 
-    this.app.delete('/identity-manager/api/v1/auth/token', function(req, res){
+    this.app.delete('/identity-manager/api/v1/auth/token', (req, res) => {
       res.statusCode = 204;
       res.send();
+      this.sessionEstablished = false;
     });
 
     const authenticateJWT = (req, res, next) => {
-      const authHeader = req.headers.authorization;
 
+      if (!this.sessionEstablished) {
+        res.sendStatus(401);
+        return;
+      }
+
+      const authHeader = req.headers.authorization;
       if (authHeader) {
           const token = authHeader.split(' ')[1];
 

@@ -67,6 +67,23 @@ describe('CtrlxCore', function() {
   });
 
 
+  describe('CtrlxCore: Basics', function() {
+
+    it('should have working properties', function(done) {
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      expect(ctrlx.autoReconnect).to.eql(false);
+      ctrlx.autoReconnect = true;
+      expect(ctrlx.autoReconnect).to.eql(true);
+
+      expect(ctrlx.timeout).to.eql(-1);
+      ctrlx.timeout = 23;
+      expect(ctrlx.timeout).to.eql(23);
+
+      done();
+    });
+
+  });
 
 
   describe('CtrlxCore: Read/Write to Data Layer', function() {
@@ -167,6 +184,60 @@ describe('CtrlxCore', function() {
         .then((data) => {
           expect(data.value).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
           expect(data.type).to.equal('arstring');
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
+    it('should automatically logout() before new login() and be successfully logged in', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.logIn() )
+        .then((data) => {
+          data.should.have.property('access_token').which.is.a.String();
+          data.should.have.property('token_type').which.is.a.String().eql('Bearer');
+        })
+        .then(() => ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent') )
+        .then((data) => {
+          data.should.have.property('value').which.is.a.Number().within(0, 100);
+          data.should.have.property('type').which.is.a.String().eql('double');
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
+    it('should automatically reconnect if session was closed by server', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+      ctrlx.autoReconnect = true;
+
+      ctrlx.logIn()
+        .then((data) => {
+          data.should.have.property('access_token').which.is.a.String();
+          data.should.have.property('token_type').which.is.a.String().eql('Bearer');
+          testServer.sessionEstablished = false;
+        })
+        .then(() => ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent') )
+        .then((data) => {
+          data.should.have.property('value').which.is.a.Number().within(0, 100);
+          data.should.have.property('type').which.is.a.String().eql('double');
+          testServer.sessionEstablished = false;
+        })
+        .then(() => ctrlx.writeDatalayer('plc/app/Application/sym/PLC_PRG/i', {type:'int16', value: 23}))
+        .then((data) => {
+          assert.equal(data.value, 23);
+          assert.equal(data.type, 'int16');
+        })
+        .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+        .then((data) => {
+          assert.equal(data.value, 23);
+          assert.equal(data.type, 'int16');
           done();
         })
         .catch((err) => done(err))

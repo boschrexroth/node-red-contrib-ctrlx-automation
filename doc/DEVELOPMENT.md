@@ -20,7 +20,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 
 - [x] Implement: Authentication for seesion with automatic handling of certificate expiration
 - [x] Implement: Node to allow requests to datalayer
-- [ ] Implement: Auto reconnect and more resilience for server errors
+- [x] Implement: Auto reconnect and more resilience for server errors
 - [x] Implement: User Documentation in the nodes
 - [x] Implement: User Documentation in the readme
 - [x] Implement: Solid testing framework for lib an node
