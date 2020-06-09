@@ -120,14 +120,14 @@ class CtrlxMockup {
     // Builtin Data Mockups
     //
 
-    this.app.get('/automation/api/v1.0/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v1/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
         value: true,
         type: 'bool'
       });
     });
-    this.app.get('/automation/api/v1.0/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v1/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
       switch (req.query.type) {
         case undefined:
           res.statusCode = 200;
@@ -177,7 +177,7 @@ class CtrlxMockup {
           break;
       }
     });
-    this.app.get('/automation/api/v1.0/framework/metrics/system', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v1/framework/metrics/system', authenticateJWT, (req, res) => {
       if (req.query.type === 'browse') {
         res.statusCode = 200;
         res.json({
@@ -191,7 +191,7 @@ class CtrlxMockup {
     });
 
     this.var_i = 0;
-    this.app.put('/automation/api/v1.0/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
+    this.app.put('/automation/api/v1/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
       if (req.body.type !== 'int16') {
         res.statusCode = 405;
         res.send();
@@ -204,7 +204,7 @@ class CtrlxMockup {
         type: 'int16'
       });
     });
-    this.app.get('/automation/api/v1.0/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v1/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
         value: this.var_i,
@@ -212,7 +212,7 @@ class CtrlxMockup {
       });
     });
 
-    this.app.get('/automation/api/v1.0/nonexistent/path', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v1/nonexistent/path', authenticateJWT, (req, res) => {
       res.statusCode = 404;
       res.json({
         title: 'Error on Read',
@@ -230,7 +230,7 @@ class CtrlxMockup {
     //
     // Builtin Data Mockups
     //
-    this.app.post('/automation/api/v1.0/motion/axs', authenticateJWT, (req, res) => {
+    this.app.post('/automation/api/v1/motion/axs', authenticateJWT, (req, res) => {
       if (req.body.type !== 'string') {
         res.statusCode = 405;
         res.send();
@@ -242,11 +242,11 @@ class CtrlxMockup {
         type: 'uint32'
       });
     });
-    this.app.delete('/automation/api/v1.0/motion/axs/nostromo', authenticateJWT, (req, res) => {
+    this.app.delete('/automation/api/v1/motion/axs/nostromo', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.send();
     });
-    this.app.post('/automation/api/v1.0/motion/axs/no/content', authenticateJWT, (req, res) => {
+    this.app.post('/automation/api/v1/motion/axs/no/content', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.send();
     });
