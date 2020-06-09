@@ -292,6 +292,83 @@ describe('ctrlx-datalayer-request', function() {
         n1.receive({ payload: "" });
       });
     });
+
+
+    it('should create a node', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"CREATE","path":"motion/axs","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            msg.payload.should.have.property('value').which.is.a.Number();
+            msg.payload.should.have.property('type').which.is.a.String().eql('uint32');
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: {type: 'string', value: 'nostromo'} });
+      });
+    });
+
+
+    it('should delete a node', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"DELETE","path":"motion/axs/nostromo","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            // payload is just pass through
+            msg.payload.should.have.property('value').which.is.a.String().eql('nostromo');
+            msg.payload.should.have.property('type').which.is.a.String().eql('string');
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: {type: 'string', value: 'nostromo'} });
+      });
+    });
+
   });
 
 

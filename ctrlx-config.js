@@ -132,6 +132,14 @@ module.exports = function(RED) {
                     node.writeDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
                     break;
                   }
+                  case 'CREATE': {
+                    node.createDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
+                    break;
+                  }
+                  case 'DELETE': {
+                    node.deleteDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    break;
+                  }
                   case 'METADATA': {
                     node.readDatalayerMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
@@ -211,6 +219,39 @@ module.exports = function(RED) {
           method: 'WRITE',
           path: path,
           data: data,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
+      }
+    }
+
+    this.createDatalayer = function(nodeRef, path, data, callback) {
+      if (node.connected) {
+        node.ctrlX.createDatalayer(path, data)
+          .then((data) => callback(null, data))
+          .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'CREATE',
+          path: path,
+          data: data,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
+      }
+    }
+
+    this.deleteDatalayer = function(nodeRef, path, callback) {
+      if (node.connected) {
+        node.ctrlX.deleteDatalayer(path)
+          .then(() => callback(null))
+          .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'DELETE',
+          path: path,
           callback: callback
         };
       } else {

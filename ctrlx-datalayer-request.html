@@ -51,6 +51,8 @@
     <select type="text" id="node-input-method" style="width:70%;">
     <option value="READ">READ</option>
     <option value="WRITE">WRITE</option>
+    <option value="CREATE">CREATE</option>
+    <option value="DELETE">DELETE</option>
     <option value="BROWSE">BROWSE</option>
     <option value="METADATA">METADATA</option>
     <option value="REFERENCES">REFERENCES</option>
@@ -81,9 +83,9 @@
     <dd>If not configured in the node, this optional property sets the path of the request.</dd>
     <dt class="optional">method <span class="property-type">string</span></dt>
     <dd>If not configured in the node, this optional property sets the method of the request.
-        Must be one of <code>READ</code>, <code>WRITE</code>, <code>BROWSE</code>, <code>METADATA</code> or <code>REFERENCES</code>.</dd>
+        Must be one of <code>READ</code>, <code>WRITE</code>, <code>CREATE</code>, <code>DELETE</code>, <code>BROWSE</code>, <code>METADATA</code> or <code>REFERENCES</code>.</dd>
     <dt class="optional">payload <span class="property-type">object</span></dt>
-    <dd>Data to be sent in case of WRITE method.</dd>
+    <dd>Data to be sent in case of WRITE or CREATE method.</dd>
     <!-- TODO: implemented later
     <dt class="optional">rejectUnauthorized</dt>
     <dd>If set to <code>false</code>, allows requests to be made to https sites that use
@@ -113,7 +115,7 @@
   <ul>
     <li><a href="https://github.com/boschrexroth/node-red-contrib-ctrlx-automation">GitHub</a> - the nodes github repository</li>
     <li><a href="https://docs.automation.boschrexroth.com">ctrlX AUTOMATION Product Help</a> - the online documentation of ctrlX AUTOMATION</li>
-    <li><a href="https://www.boschrexroth.com">Bosch Rexroth AG</a> - WE MOVE. YOU WIN</li>
+    <li><a href="https://www.boschrexroth.com">Bosch Rexroth AG</a> - WE MOVE. YOU WIN.</li>
   </ul>
 
 </script>

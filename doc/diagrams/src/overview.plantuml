@@ -13,6 +13,8 @@ package ctrlx {
     +readDatalayerMetadata(path)
     +readDatalayerReferences(path)
     +writeDatalayer(path, data)
+    +createDatalayer(path, data)
+    +deleteDatalayer(path)
   }
 
 }
@@ -31,6 +33,8 @@ package node-red-contrib-ctrlx-automation {
   enum Method {
     READ
     WRITE
+    CREATE
+    DELETE
     METADATA
     REFERENCES
     BROWSE

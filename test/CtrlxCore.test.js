@@ -67,6 +67,13 @@ describe('CtrlxCore', function() {
   });
 
 
+
+
+
+
+
+
+
   describe('CtrlxCore: Basics', function() {
 
     it('should have working properties', function(done) {
@@ -84,6 +91,14 @@ describe('CtrlxCore', function() {
     });
 
   });
+
+
+
+
+
+
+
+
 
 
   describe('CtrlxCore: Read/Write to Data Layer', function() {
@@ -246,6 +261,54 @@ describe('CtrlxCore', function() {
     });
 
   });
+
+
+
+
+
+
+  describe('CtrlxCore: Create/Delete to Data Layer', function() {
+
+    it('should create and delete a node and then logout without error', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.createDatalayer('motion/axs', {"type":"string","value":"nostromo"}))
+        .then((data) => {
+          data.should.have.property('value').which.is.a.Number();
+          data.should.have.property('type').which.is.a.String().eql('uint32');
+          })
+        .then(() => ctrlx.deleteDatalayer('motion/axs/nostromo'))
+        .then(() => {
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
+    it('should not crash when no response is returned on create', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.createDatalayer('motion/axs/no/content', {"type":"string","value":"nostromo"}))
+        .then((data) => {
+          assert.equal(data, undefined);
+          })
+        .then(() => {
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
+  });
+
+
+
 
 
 

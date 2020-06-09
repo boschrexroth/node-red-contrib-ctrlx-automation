@@ -152,7 +152,7 @@
         } else if (method == 'WRITE') {
 
           //
-          // Write
+          // WRITE
           //
           node.configNode.writeDatalayer(node, path, msg.payload,
             function(err) {
@@ -175,6 +175,66 @@
               if (done) {
                 done();
               }
+              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+            });
+
+        } else if (method == 'CREATE') {
+
+          //
+          // CREATE
+          //
+          node.configNode.createDatalayer(node, path, msg.payload,
+            function(err, data) {
+
+              if (err) {
+                if (done) {
+                  done(err); // Node-RED 1.0 compatible
+                } else {
+                  node.error(err, msg); // Node-RED 0.x compatible
+                }
+                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
+                return;
+              }
+
+              send = send || function() { node.send.apply(node, arguments) }
+
+              msg.payload = data;
+              send(msg);
+
+              if (done) {
+                done();
+              }
+              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+            });
+
+        } else if (method == 'DELETE') {
+
+          //
+          // DELETE
+          //
+          node.configNode.deleteDatalayer(node, path,
+            function(err) {
+
+              if (err) {
+                if (done) {
+                  done(err); // Node-RED 1.0 compatible
+                } else {
+                  node.error(err, msg); // Node-RED 0.x compatible
+                }
+                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.configNode.logAdditionalErrorInfo(node, err);
+                return;
+              }
+
+              send = send || function() { node.send.apply(node, arguments) }
+
+              send(msg);
+
+              if (done) {
+                done();
+              }
+
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
             });
 
@@ -278,7 +338,6 @@
           }
           node.status({fill: "red", shape: "ring", text: "Request failed"});
         }
-
 
       });
 

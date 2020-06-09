@@ -31,6 +31,8 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Add proper timeout handling
 - [x] Implement: Add support for browsing
 - [x] Implement: Implement correct outputs
+- [x] Implement: Create/Delete on datalayer
+- [ ] Implement: Make sure, that async/await is working
 - [x] Fix: [DEP0123] DeprecationWarning
 - [ ] Fix: implement a valid test case for references
 
@@ -39,6 +41,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [ ] Feature: Support http proxy configuration
 - [ ] Feature: Allow custom certificate handling
 - [ ] Feature: Node for common https requests
+- [ ] Feature: Support typescript bindings
 - [ ] Decision: How to name the node for common http requests? http vs. webapi
 
 ### v1.2.0

@@ -226,6 +226,30 @@ class CtrlxMockup {
         severity: 'ERROR'
       });
     });
+
+    //
+    // Builtin Data Mockups
+    //
+    this.app.post('/automation/api/v1.0/motion/axs', authenticateJWT, (req, res) => {
+      if (req.body.type !== 'string') {
+        res.statusCode = 405;
+        res.send();
+        return;
+      }
+      res.statusCode = 200;
+      res.json({
+        value: 1048576,
+        type: 'uint32'
+      });
+    });
+    this.app.delete('/automation/api/v1.0/motion/axs/nostromo', authenticateJWT, (req, res) => {
+      res.statusCode = 200;
+      res.send();
+    });
+    this.app.post('/automation/api/v1.0/motion/axs/no/content', authenticateJWT, (req, res) => {
+      res.statusCode = 200;
+      res.send();
+    });
   }
 
 
