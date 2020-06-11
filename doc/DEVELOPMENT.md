@@ -32,7 +32,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Add support for browsing
 - [x] Implement: Implement correct outputs
 - [x] Implement: Create/Delete on datalayer
-- [ ] Implement: Make sure, that async/await is working
+- [x] Implement: Make sure, that async/await is working
 - [x] Fix: [DEP0123] DeprecationWarning
 - [ ] Fix: implement a valid test case for references
 
@@ -58,7 +58,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 ## Test
 
 To run the unit tests call `npm test`. Extended logging can be enabled via `npm run test_with_debug_log`.
-For calculation of coverage call with `npm run test_with_coverage`. Use `npm run test_with_coverage_html` to 
+For calculation of coverage call with `npm run test_with_coverage`. Use `npm run test_with_coverage_html` to
 generate a pretty html report.
 By default, the tests are running against a mockup of the device which runs as server on localhost.
 But it is possible to override the settings via enviroment variables to also run the tests agains a real hardware.

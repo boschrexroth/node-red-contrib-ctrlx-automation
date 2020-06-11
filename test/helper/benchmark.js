@@ -33,7 +33,8 @@
 
 const CtrlxCore = require('../../lib/CtrlxCore')
 const {performance, PerformanceObserver} = require('perf_hooks')
-const async = require('async')
+const async = require('async');
+const { assert } = require('console');
 
 
 
@@ -91,13 +92,14 @@ function benchmarkSimple() {
       return ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
     })
     .then((data) => {
+      assert(data === true);
       performance.mark('E');
       performance.measure('Login', 'A', 'B');
       performance.measure('Read 1', 'B', 'C');
       performance.measure('Read 2', 'C', 'D');
       performance.measure('Read 3', 'D', 'E');
     })
-    .catch((err) => {})
+    .catch((err) => {console.error(err)})
     .finally(() => {
       ctrlx.logOut()
       performance.clearMarks();
@@ -106,6 +108,38 @@ function benchmarkSimple() {
 }
 
 
+/**
+ * This is a very simple benchmark to check the latency of a few read requests. It is a rough indication
+ * how fast a simple ad-hoc requests takes to execute.
+ */
+async function benchmarkSimpleAsync() {
+
+  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:322]', 'boschrexroth', 'boschrexroth');
+
+  try {
+
+    performance.mark('A');
+    await ctrlx.logIn();
+    performance.mark('B');
+    await ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    performance.mark('C');
+    await ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    performance.mark('D');
+    await ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    performance.mark('E');
+    performance.measure('Login', 'A', 'B');
+    performance.measure('Read 1', 'B', 'C');
+    performance.measure('Read 2', 'C', 'D');
+    performance.measure('Read 3', 'D', 'E');
+
+  } catch(err) {
+    console.error('Housten we are in trouble: ' + err);
+  } finally {
+    await ctrlx.logOut();
+  }
+
+  console.log('DONE!');
+}
 
 
 /**
@@ -139,22 +173,28 @@ function benchmarkRequestsPerSecond() {
     // loop over asynchronous function and look how long it takes to get a result
     performance.mark('A');
     async.map(paths, performRead, function (err, res) {
+      performance.mark('B');
+      performance.measure('Complete Loop', 'A', 'B');
+
+      assert(res.every((val) => {return val.value === true;}));
       if (err) {
         console.log('Async map failed with error:')
         console.log(err);
         return;
       }
-      performance.mark('B');
-      performance.measure('Complete Loop', 'A', 'B');
 
-      ctrlx.logOut()
       console.log('DONE!');
+      ctrlx.logOut();
     })
 
   })
 
 }
 
+exports.benchmarkSimple = benchmarkSimple;
+exports.benchmarkSimpleAsync = benchmarkSimpleAsync;
+exports.benchmarkRequestsPerSecond = benchmarkRequestsPerSecond;
 
-//benchmarkBasic();
-//benchmarkRequestsPerSecond();
+//benchmarkSimple()
+//benchmarkSimpleAsync();
+//benchmarkRequestsPerSecond()
