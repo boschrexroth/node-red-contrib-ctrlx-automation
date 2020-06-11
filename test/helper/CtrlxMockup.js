@@ -74,15 +74,15 @@ class CtrlxMockup {
         token_type: 'Bearer',
         access_token: token,
       };
+      this.sessionEstablished = true;
       res.statusCode = 201;
       res.json(result);
-      this.sessionEstablished = true;
     });
 
     this.app.delete('/identity-manager/api/v1/auth/token', (req, res) => {
+      this.sessionEstablished = false;
       res.statusCode = 204;
       res.send();
-      this.sessionEstablished = false;
     });
 
     const authenticateJWT = (req, res, next) => {
@@ -282,10 +282,11 @@ class CtrlxMockup {
    * @memberof CtrlxMockup
    */
   stopServer(callback) {
-    this.httpsServer.close();
-    if (callback) {
-      callback();
-    }
+    this.httpsServer.close(() => {
+      if (callback) {
+        callback();
+      }
+    });
   }
 
 }

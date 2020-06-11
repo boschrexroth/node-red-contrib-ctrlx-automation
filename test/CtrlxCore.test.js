@@ -61,6 +61,7 @@ describe('CtrlxCore', function() {
   });
 
   after(function(done) {
+    this.timeout(10000);
     testServer.stopServer(() => {
       done();
     });
