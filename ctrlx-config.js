@@ -209,10 +209,6 @@ module.exports = function(RED) {
                     node.readDatalayerMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
-                  case 'REFERENCES': {
-                    node.readDatalayerReferences(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
-                    break;
-                  }
                   case 'BROWSE': {
                     node.browseDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
@@ -332,22 +328,6 @@ module.exports = function(RED) {
       } else if (node.connecting) {
         node.pendingRequests[nodeRef.id] = {
           method: 'METADATA',
-          path: path,
-          callback: callback
-        };
-      } else {
-        callback(new Error('No session available!'), null);
-      }
-    }
-
-    this.readDatalayerReferences = function(nodeRef, path, callback) {
-      if (node.connected) {
-        node.ctrlX.readDatalayerReferences(path, callback)
-          .then((data) => callback(null, data))
-          .catch((err) => callback(err, null));
-      } else if (node.connecting) {
-        node.pendingRequests[nodeRef.id] = {
-          method: 'REFERENCES',
           path: path,
           callback: callback
         };

@@ -11,10 +11,10 @@ package ctrlx {
     +logOut()
     +readDatalayer(path)
     +readDatalayerMetadata(path)
-    +readDatalayerReferences(path)
     +writeDatalayer(path, data)
     +createDatalayer(path, data)
     +deleteDatalayer(path)
+    +browseDatalayer(path)
   }
 
 }
@@ -36,7 +36,6 @@ package node-red-contrib-ctrlx-automation {
     CREATE
     DELETE
     METADATA
-    REFERENCES
     BROWSE
   }
 

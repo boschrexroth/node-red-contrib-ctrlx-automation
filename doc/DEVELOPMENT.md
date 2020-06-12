@@ -8,7 +8,7 @@ Content is only relevant for developers which want to extend or debug this softw
 
 The following diagram shows a basic overview of the architecture of the project.
 
-![Overview](https://www.plantuml.com/plantuml/svg/0/TLDDRwCm4BtpAqQSqW-gxXwh2ZLBM6qERIGIgNjrO49GOCpQGx9HbV--na1Yskm1sJEUUNxlcNdHB1GtLGcBFQfzWGTFxmggXH8LfBAg9I7naeybWgdwxdcrI7SYHqXPbN_Xm_C0qb9e3L6RYAH2a_am7q2mP5LG3YntI3PpTowQRALc4XNUGwDHTRlQu1oaocwwubBcSvfSWaN3GwHGP3F1eXH7L9DQyFRQmIkoo4pmtu84DwYGKjHkoK4LZ6FqUsXnslEJvvqkBf3CC52O1Qaa8tOTM5i2qR2i11UIhZX4coA7vsTuQtkJU6PyjgaM2yBmRDzTRz_Wr2Wvc3PA3lvroRMK9MIuRl9HKTzrQdaXDHKObxOowozDukdCRjwJ-IgskzTuDPrDLzF-_6USn6zHlBJXZsJnlem7E4UcO_6V1ZMF17zHwZgJuRv8UrqzjSekdwJozfeiav0qf_hogqYAIgbnqZsUuNb-FBzzhDyGBPBOD_nQUc5eANL2VZ7NUcd60fNjSrdwttou3GAxddzgU6hV1SA-z8i7_kF3mwqFGH2wVHRl2HJcXMPKPY38sJjupjKMeaExVfK19Cd5vWXcmhdH3eZX-Oc8AzHxGShCgFy3 "Overview")
+![Overview](https://www.plantuml.com/plantuml/svg/VLJ1RgCm4Btp5IDEsRPKtJrM5MeMa1ffkv58fFRgm9IWWCtQGx9HbNzVOnnYKhG7n7ZyvldD6yop8YQfhIjOxb7kIpnuQbVoXabMGoRgHd3ajA9ZXQ1HFpolOTcE5GWPoUelV7eUG5OnfI3g4f6Gg3EV-W48LYHBNW297NAJkHr0iwrGn5cDTz0gb7tKQ9w3aFct7bo9Oi5dbyMofVDA8ijZHgnYHvIpXj5sQkCLYULwuG8EiYGSbzv11xBxcMRuBo372gy1TciZnK5DR9qyxtHnZeiS0ubva0ck3Te4nig0jIHgHgNW4wxoZxA0foVutTMcIQndOr8T5uJXOFcjjVpixYXvDdgKF7jkEn2YWXmtRJ42sQfJfmjvMuDsTYjoUsYQp6CJlAMBTMAYIETi62U_4Xk-9kjvF5_FpU9dkdnR9MTMfzl1lnJ_jAXerFUNXbs3SjoNcMtFAgpDwwfZsavrfnE2BtXp-Se4ZogXSDRFKEiSPkXtCtk7Q9acljRNoGj38wblv8MeKIjzer2QEbUb_zs7co0mx-4-m6Ct7WWjz8i7_iFz_OqFGH2wTORl4IGMfIAK-Yvn9tRudACDHSysVPGcv8BAZoFedmEroY7HEg-4k8rwpyXp_PVu1m00 "Overview")
 
 The config node `CtrlxConfig` represents a connection to a ctrlX CORE. It holds the hostname, as well as the password for the connection.
 Each node, that is used in a flow is actually registering and unregistering at the config node and using functions that the config node provides, to request information from the device. The config node is responsible to manage the connection to the device and updates the status of all registered nodes.
@@ -34,11 +34,11 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Create/Delete on datalayer
 - [x] Implement: Make sure, that async/await is working
 - [x] Fix: [DEP0123] DeprecationWarning
-- [ ] Fix: implement a valid test case for references
 - [x] Feature: Interactive Data Layer Browser
 
 ### v1.1.0
 
+- [ ] Feature: Support for read with arguments and methods
 - [ ] Feature: Support http proxy configuration
 - [ ] Feature: Allow custom certificate handling
 - [ ] Feature: Node for common https requests

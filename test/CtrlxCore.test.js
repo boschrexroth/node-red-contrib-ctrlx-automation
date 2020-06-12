@@ -176,21 +176,6 @@ describe('CtrlxCore', function() {
 
     });
 
-    it('should read references', function(done) {
-
-      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
-
-      ctrlx.logIn()
-        .then(() => ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent') )
-        .then((/*data*/) => {
-          // TODO: check for valid references here
-          done();
-        })
-        .catch((err) => done(err))
-        .finally(() => ctrlx.logOut());
-
-    });
-
     it('should browse data layer', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
@@ -325,10 +310,6 @@ describe('CtrlxCore', function() {
         .catch((err) => { assert.equal(err.name, 'Error'); })
         .finally(() => ctrlx.logOut());
        ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent')
-        .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
-        .catch((err) => { assert.equal(err.name, 'Error'); })
-        .finally(() => ctrlx.logOut());
-       ctrlx.readDatalayerReferences('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => { assert.equal(err.name, 'Error'); })
         .finally(() => ctrlx.logOut());

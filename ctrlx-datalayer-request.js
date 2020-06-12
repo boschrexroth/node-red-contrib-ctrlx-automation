@@ -268,37 +268,6 @@
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
           });
 
-        } else if (method == 'REFERENCES') {
-          //
-          // REFERENCES
-          //
-          node.configNode.readDatalayerReferences(node, path,
-            function(err, data) {
-
-              if (err) {
-                if (done) {
-                  done(err); // Node-RED 1.0 compatible
-                } else {
-                  node.error(err, msg); // Node-RED 0.x compatible
-                }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
-                return;
-              }
-
-              send = send || function() { node.send.apply(node, arguments) }
-
-              msg.payload = data;
-              send(msg);
-
-              if (done) {
-                done();
-              }
-
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
-
-          });
-
         }else if (method == 'BROWSE') {
           //
           // BROWSE
