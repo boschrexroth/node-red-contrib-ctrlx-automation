@@ -35,6 +35,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Implement: Make sure, that async/await is working
 - [x] Fix: [DEP0123] DeprecationWarning
 - [ ] Fix: implement a valid test case for references
+- [x] Feature: Interactive Data Layer Browser
 
 ### v1.1.0
 
@@ -48,7 +49,6 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Find the device via UPnP
-- [ ] Feature: Interactive Data Layer Browser
 - [ ] Feature: Different output types (value only, object, raw)
 
 ### v1.3.0

@@ -32,10 +32,75 @@
 
 
 
-
 module.exports = function(RED) {
   const CtrlxCore = require('./lib/CtrlxCore');
   const CtrlxProblemError = require('./lib/CtrlxProblemError');
+
+
+  /* ---------------------------------------------------------------------------
+   * API for frontend UI
+   * -------------------------------------------------------------------------*/
+
+  // https://discourse.nodered.org/t/create-an-admin-configuration-api-https-endpoint/4423/7
+  // https://discourse.nodered.org/t/accessing-server-side-from-client-side/26022/4
+  RED.httpAdmin.get('/ctrlx/browse', function(req, res, next) {
+    //console.log(req.query);
+
+    var id = req.query.id;
+    var username = req.query.username;
+    var password = req.query.password;
+    var hostname = req.query.hostname;
+    var path = req.query.path;
+
+    if (hostname && username && password) {
+
+      // The frontend send us hostname, username and a password, so let's use this information
+      // and establish a connection to browse on the device.
+      let ctrlx = new CtrlxCore(hostname, username, password);
+
+      ctrlx.logIn()
+        .then(() => ctrlx.browseDatalayer(path) )
+        .then((data) => {
+          if (!data || !data.value ) {
+            return res.end('[]');
+          }
+          res.end(JSON.stringify(data.value));
+        })
+        .catch((err) => {
+          res.end('[]');
+        })
+        .finally(() => ctrlx.logOut());
+
+    } else if (id) {
+
+      // Let's use an already instances config node in the runtime to make our browse on the device.
+      var configNode = RED.nodes.getNode(id);
+
+      if (!configNode) {
+        res.end('[]');
+        return;
+      }
+
+      configNode.browseDatalayer(null, path, (err, data) => {
+
+        if (err) {
+          return res.end('[]');
+        }
+        if (!data || !data.value ) {
+          return res.end('[]');
+        }
+
+        res.end(JSON.stringify(data.value));
+      })
+
+    } else {
+      // we do not have enough infos to establish a session to a device and query the infos.
+      return res.end('[]');
+    }
+
+  });
+
+
 
 
   /* ---------------------------------------------------------------------------
@@ -296,7 +361,7 @@ module.exports = function(RED) {
         node.ctrlX.browseDatalayer(path, callback)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
-      } else if (node.connecting) {
+      } else if (node.connecting && nodeRef) {
         node.pendingRequests[nodeRef.id] = {
           method: 'BROWSE',
           path: path,
