@@ -194,7 +194,7 @@ describe('ctrlx-datalayer-request', function() {
             let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
             ctrlx.logIn()
-              .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+              .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i'))
               .then((data) => {
                   data.should.have.property('value').which.is.a.Number().eql(23);
                   data.should.have.property('type').which.is.a.String().eql('int16');

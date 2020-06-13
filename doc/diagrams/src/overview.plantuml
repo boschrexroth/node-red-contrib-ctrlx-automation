@@ -9,12 +9,12 @@ package ctrlx {
     +CtrlxCore(hostname, username, password)
     +logIn()
     +logOut()
-    +readDatalayer(path)
-    +readDatalayerMetadata(path)
-    +writeDatalayer(path, data)
-    +createDatalayer(path, data)
-    +deleteDatalayer(path)
-    +browseDatalayer(path)
+    +datalayerRead(path)
+    +datalayerReadMetadata(path)
+    +datalayerWrite(path, data)
+    +datalayerCreate(path, data)
+    +datalayerDelete(path)
+    +datalayerBrowse(path)
   }
 
 }

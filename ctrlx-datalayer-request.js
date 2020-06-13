@@ -117,7 +117,7 @@
           //
           // READ
           //
-          node.configNode.readDatalayer(node, path,
+          node.configNode.datalayerRead(node, path,
             function(err, data) {
 
               if (err) {
@@ -154,7 +154,7 @@
           //
           // WRITE
           //
-          node.configNode.writeDatalayer(node, path, msg.payload,
+          node.configNode.datalayerWrite(node, path, msg.payload,
             function(err) {
 
               if (err) {
@@ -183,7 +183,7 @@
           //
           // CREATE
           //
-          node.configNode.createDatalayer(node, path, msg.payload,
+          node.configNode.datalayerCreate(node, path, msg.payload,
             function(err, data) {
 
               if (err) {
@@ -213,7 +213,7 @@
           //
           // DELETE
           //
-          node.configNode.deleteDatalayer(node, path,
+          node.configNode.datalayerDelete(node, path,
             function(err) {
 
               if (err) {
@@ -242,7 +242,7 @@
           //
           // METADATA
           //
-          node.configNode.readDatalayerMetadata(node, path,
+          node.configNode.datalayerReadMetadata(node, path,
             function(err, data) {
 
               if (err) {
@@ -272,7 +272,7 @@
           //
           // BROWSE
           //
-          node.configNode.browseDatalayer(node, path,
+          node.configNode.datalayerBrowse(node, path,
             function(err, data) {
 
               if (err) {

@@ -59,7 +59,7 @@ module.exports = function(RED) {
       let ctrlx = new CtrlxCore(hostname, username, password);
 
       ctrlx.logIn()
-        .then(() => ctrlx.browseDatalayer(path) )
+        .then(() => ctrlx.datalayerBrowse(path) )
         .then((data) => {
           if (!data || !data.value ) {
             return res.end('[]');
@@ -81,7 +81,7 @@ module.exports = function(RED) {
         return;
       }
 
-      configNode.browseDatalayer(null, path, (err, data) => {
+      configNode.datalayerBrowse(null, path, (err, data) => {
 
         if (err) {
           return res.end('[]');
@@ -190,27 +190,27 @@ module.exports = function(RED) {
 
                 switch(node.pendingRequests[id].method) {
                   case 'READ': {
-                    node.readDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    node.datalayerRead(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
                   case 'WRITE': {
-                    node.writeDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
+                    node.datalayerWrite(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
                     break;
                   }
                   case 'CREATE': {
-                    node.createDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
+                    node.datalayerCreate(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
                     break;
                   }
                   case 'DELETE': {
-                    node.deleteDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    node.datalayerDelete(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
                   case 'METADATA': {
-                    node.readDatalayerMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    node.datalayerReadMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
                   case 'BROWSE': {
-                    node.browseDatalayer(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                    node.datalayerBrowse(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
                   default: {
@@ -254,9 +254,9 @@ module.exports = function(RED) {
       node.ctrlX.timeout = timeout;
     }
 
-    this.readDatalayer = function(nodeRef, path, callback) {
+    this.datalayerRead = function(nodeRef, path, callback) {
       if (node.connected) {
-        node.ctrlX.readDatalayer(path)
+        node.ctrlX.datalayerRead(path)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting) {
@@ -270,9 +270,9 @@ module.exports = function(RED) {
       }
     }
 
-    this.writeDatalayer = function(nodeRef, path, data, callback) {
+    this.datalayerWrite = function(nodeRef, path, data, callback) {
       if (node.connected) {
-        node.ctrlX.writeDatalayer(path, data)
+        node.ctrlX.datalayerWrite(path, data)
           .then(() => callback(null))
           .catch((err) => callback(err));
       } else if (node.connecting) {
@@ -287,9 +287,9 @@ module.exports = function(RED) {
       }
     }
 
-    this.createDatalayer = function(nodeRef, path, data, callback) {
+    this.datalayerCreate = function(nodeRef, path, data, callback) {
       if (node.connected) {
-        node.ctrlX.createDatalayer(path, data)
+        node.ctrlX.datalayerCreate(path, data)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting) {
@@ -304,9 +304,9 @@ module.exports = function(RED) {
       }
     }
 
-    this.deleteDatalayer = function(nodeRef, path, callback) {
+    this.datalayerDelete = function(nodeRef, path, callback) {
       if (node.connected) {
-        node.ctrlX.deleteDatalayer(path)
+        node.ctrlX.datalayerDelete(path)
           .then(() => callback(null))
           .catch((err) => callback(err, null));
       } else if (node.connecting) {
@@ -320,9 +320,9 @@ module.exports = function(RED) {
       }
     }
 
-    this.readDatalayerMetadata = function(nodeRef, path, callback) {
+    this.datalayerReadMetadata = function(nodeRef, path, callback) {
       if (node.connected) {
-        node.ctrlX.readDatalayerMetadata(path)
+        node.ctrlX.datalayerReadMetadata(path)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting) {
@@ -336,9 +336,9 @@ module.exports = function(RED) {
       }
     }
 
-    this.browseDatalayer = function(nodeRef, path, callback) {
+    this.datalayerBrowse = function(nodeRef, path, callback) {
       if (node.connected) {
-        node.ctrlX.browseDatalayer(path, callback)
+        node.ctrlX.datalayerBrowse(path, callback)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting && nodeRef) {

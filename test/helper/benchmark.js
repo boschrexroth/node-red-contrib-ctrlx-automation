@@ -81,15 +81,15 @@ function benchmarkSimple() {
   ctrlx.logIn()
     .then(() => {
       performance.mark('B');
-      return ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+      return ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
     })
     .then(() => {
       performance.mark('C');
-      return ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+      return ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
     })
     .then(() => {
       performance.mark('D');
-      return ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+      return ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
     })
     .then((data) => {
       assert(data === true);
@@ -121,11 +121,11 @@ async function benchmarkSimpleAsync() {
     performance.mark('A');
     await ctrlx.logIn();
     performance.mark('B');
-    await ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
     performance.mark('C');
-    await ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
     performance.mark('D');
-    await ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
     performance.mark('E');
     performance.measure('Login', 'A', 'B');
     performance.measure('Read 1', 'B', 'C');
@@ -151,7 +151,7 @@ function benchmarkRequestsPerSecond() {
   // This is our iteratee, that we want to benchmark
   function performRead(path, callback) {
 
-    ctrlx.readDatalayer(path)
+    ctrlx.datalayerRead(path)
     .then((data) => {
       callback(null, data);
     }).catch((err) => {

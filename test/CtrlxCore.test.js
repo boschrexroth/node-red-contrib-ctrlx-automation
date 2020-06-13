@@ -109,7 +109,7 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => { return ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active'); })
+        .then(() => { return ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active'); })
         .then((data) => {assert.equal(data.value, true); done();})
         .catch((err) => done(err))
         .finally(() => ctrlx.logOut());
@@ -121,9 +121,9 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.readDatalayer('framework/bundles/com_boschrexroth_comm_datalayer/active') )
+        .then(() => ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active') )
         .then((/*data*/) => {/*console.log(data)*/})
-        .then(() => ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent') )
+        .then(() => ctrlx.datalayerRead('framework/metrics/system/cpu-utilisation-percent') )
         .then((/*data*/) => {done(); /*console.log(data)*/})
         .catch((err) => done(err))
         .finally(() => ctrlx.logOut());
@@ -135,17 +135,17 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i'))
         .then((data) => {
             assert.equal(data.value, 0);
             assert.equal(data.type, 'int16');
           })
-        .then(() => ctrlx.writeDatalayer('plc/app/Application/sym/PLC_PRG/i', {type:'int16', value: 23}))
+        .then(() => ctrlx.datalayerWrite('plc/app/Application/sym/PLC_PRG/i', {type:'int16', value: 23}))
         .then((data) => {
             assert.equal(data.value, 23);
             assert.equal(data.type, 'int16');
           })
-        .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i'))
         .then((data) => {
             assert.equal(data.value, 23);
             assert.equal(data.type, 'int16');
@@ -161,7 +161,7 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent') )
+        .then(() => ctrlx.datalayerReadMetadata('framework/metrics/system/cpu-utilisation-percent') )
         .then((data) => {
           expect(data.nodeClass).to.equal('Resource');
           expect(data.description).to.be.a('string');
@@ -181,7 +181,7 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.browseDatalayer('framework/metrics/system') )
+        .then(() => ctrlx.datalayerBrowse('framework/metrics/system') )
         .then((data) => {
           expect(data.value).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
           expect(data.type).to.equal('arstring');
@@ -202,7 +202,7 @@ describe('CtrlxCore', function() {
           data.should.have.property('access_token').which.is.a.String();
           data.should.have.property('token_type').which.is.a.String().eql('Bearer');
         })
-        .then(() => ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent') )
+        .then(() => ctrlx.datalayerRead('framework/metrics/system/cpu-utilisation-percent') )
         .then((data) => {
           data.should.have.property('value').which.is.a.Number().within(0, 100);
           data.should.have.property('type').which.is.a.String().eql('double');
@@ -224,18 +224,18 @@ describe('CtrlxCore', function() {
           data.should.have.property('token_type').which.is.a.String().eql('Bearer');
           testServer.sessionEstablished = false;
         })
-        .then(() => ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent') )
+        .then(() => ctrlx.datalayerRead('framework/metrics/system/cpu-utilisation-percent') )
         .then((data) => {
           data.should.have.property('value').which.is.a.Number().within(0, 100);
           data.should.have.property('type').which.is.a.String().eql('double');
           testServer.sessionEstablished = false;
         })
-        .then(() => ctrlx.writeDatalayer('plc/app/Application/sym/PLC_PRG/i', {type:'int16', value: 23}))
+        .then(() => ctrlx.datalayerWrite('plc/app/Application/sym/PLC_PRG/i', {type:'int16', value: 23}))
         .then((data) => {
           assert.equal(data.value, 23);
           assert.equal(data.type, 'int16');
         })
-        .then(() => ctrlx.readDatalayer('plc/app/Application/sym/PLC_PRG/i'))
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i'))
         .then((data) => {
           assert.equal(data.value, 23);
           assert.equal(data.type, 'int16');
@@ -260,12 +260,12 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.createDatalayer('motion/axs', {"type":"string","value":"nostromo"}))
+        .then(() => ctrlx.datalayerCreate('motion/axs', {"type":"string","value":"nostromo"}))
         .then((data) => {
           data.should.have.property('value').which.is.a.Number();
           data.should.have.property('type').which.is.a.String().eql('uint32');
           })
-        .then(() => ctrlx.deleteDatalayer('motion/axs/nostromo'))
+        .then(() => ctrlx.datalayerDelete('motion/axs/nostromo'))
         .then(() => {
           done();
         })
@@ -279,7 +279,7 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.createDatalayer('motion/axs/no/content', {"type":"string","value":"nostromo"}))
+        .then(() => ctrlx.datalayerCreate('motion/axs/no/content', {"type":"string","value":"nostromo"}))
         .then((data) => {
           assert.equal(data, undefined);
           })
@@ -305,19 +305,19 @@ describe('CtrlxCore', function() {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
-      ctrlx.readDatalayer('framework/metrics/system/cpu-utilisation-percent')
+      ctrlx.datalayerRead('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => { assert.equal(err.name, 'Error'); })
         .finally(() => ctrlx.logOut());
-       ctrlx.readDatalayerMetadata('framework/metrics/system/cpu-utilisation-percent')
+       ctrlx.datalayerReadMetadata('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => { assert.equal(err.name, 'Error'); })
         .finally(() => ctrlx.logOut());
-       ctrlx.writeDatalayer('framework/metrics/system/cpu-utilisation-percent', {value:'5', type: 'double'})
+       ctrlx.datalayerWrite('framework/metrics/system/cpu-utilisation-percent', {value:'5', type: 'double'})
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => { assert.equal(err.name, 'Error'); })
         .finally(() => ctrlx.logOut());
-      ctrlx.browseDatalayer('framework/metrics/system/cpu-utilisation-percent')
+      ctrlx.datalayerBrowse('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => { assert.equal(err.name, 'Error'); })
         .finally(() => ctrlx.logOut());
@@ -345,7 +345,7 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.readDatalayerMetadata('invalidnode') )
+        .then(() => ctrlx.datalayerReadMetadata('invalidnode') )
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
             assert.equal(err.name, 'CtrlxProblemError');
@@ -360,7 +360,7 @@ describe('CtrlxCore', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.readDatalayer('nonexistent/path') )
+        .then(() => ctrlx.datalayerRead('nonexistent/path') )
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
             expect(err.name).equal('CtrlxProblemError');
