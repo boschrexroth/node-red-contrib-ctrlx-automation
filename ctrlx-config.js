@@ -43,7 +43,7 @@ module.exports = function(RED) {
 
   // https://discourse.nodered.org/t/create-an-admin-configuration-api-https-endpoint/4423/7
   // https://discourse.nodered.org/t/accessing-server-side-from-client-side/26022/4
-  RED.httpAdmin.get('/ctrlx/browse', function(req, res, next) {
+  RED.httpAdmin.get('/ctrlx/browse', function(req, res/*, next*/) {
     //console.log(req.query);
 
     var id = req.query.id;
@@ -66,7 +66,7 @@ module.exports = function(RED) {
           }
           res.end(JSON.stringify(data.value));
         })
-        .catch((err) => {
+        .catch((/*err*/) => {
           res.end('[]');
         })
         .finally(() => ctrlx.logOut());
