@@ -39,15 +39,15 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 ### v1.1.0
 
 - [ ] Feature: Support for read with arguments and methods
-- [ ] Feature: Support http proxy configuration
 - [ ] Feature: Allow custom certificate handling
 - [ ] Feature: Node for common https requests
-- [ ] Feature: Support typescript bindings
 - [ ] Decision: How to name the node for common http requests? http vs. webapi
+- [ ] Feature: Support http proxy configuration
 
 ### v1.2.0
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
+- [ ] Feature: Support typescript bindings
 - [ ] Feature: Find the device via UPnP
 - [ ] Feature: Different output types (value only, object, raw)
 
