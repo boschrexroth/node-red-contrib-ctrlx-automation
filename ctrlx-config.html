@@ -8,7 +8,7 @@
     category: 'config',
     defaults: {
       name: {value: '', required: false},
-      hostname: {value: '192.168.1.1', required: true},
+      hostname: {value: 'localhost', required: true},
       debug: {value: false, required: true}
     },
     credentials: {
@@ -23,8 +23,8 @@
 
 <script type="text/html" data-template-name="ctrlx-config">
     <div class="form-row">
-        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-config-input-name" />
+      <label for="node-config-input-hostname"><i class="fa fa-globe"></i> Address</label>
+      <input type="text" id="node-config-input-hostname" placeholder="localhost" />
     </div>
     <div class="form-row">
         <label for="node-config-input-username"><i class="fa fa-user"></i> Username</label>
@@ -35,8 +35,8 @@
         <input type="password" id="node-config-input-password" />
     </div>
     <div class="form-row">
-        <label for="node-config-input-hostname"><i class="fa fa-globe"></i> Address</label>
-        <input type="text" id="node-config-input-hostname" placeholder="192.168.1.1" />
+      <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-config-input-name" />
     </div>
     <div class="form-row">
       <label>&nbsp;</label>
