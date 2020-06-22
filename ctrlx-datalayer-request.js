@@ -112,13 +112,12 @@
           msg.topic = path;
         }
 
-        if (method == 'READ') {
+        if (method == 'READ' || method == 'READ_WITH_ARG') {
 
           //
           // READ
           //
-          node.configNode.datalayerRead(node, path,
-            function(err, data) {
+          let func = function(err, data) {
 
               if (err) {
                 if (done) {
@@ -147,7 +146,13 @@
               }
 
               node.status({fill: "green", shape: "dot", text: "Request successfull"});
-            });
+            }
+
+            if (method == 'READ_WITH_ARG') {
+              node.configNode.datalayerReadWithArg(node, path, msg.payload, func);
+            } else {
+              node.configNode.datalayerRead(node, path, func);
+            }
 
         } else if (method == 'WRITE') {
 

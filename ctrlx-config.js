@@ -193,6 +193,10 @@ module.exports = function(RED) {
                     node.datalayerRead(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
+                  case 'READ_WITH_ARG': {
+                    node.datalayerReadWithArg(id, node.pendingRequests[id].path, node.pendingRequests[id].arg, node.pendingRequests[id].callback);
+                    break;
+                  }
                   case 'WRITE': {
                     node.datalayerWrite(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
                     break;
@@ -263,6 +267,23 @@ module.exports = function(RED) {
         node.pendingRequests[nodeRef.id] = {
           method: 'READ',
           path: path,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
+      }
+    }
+
+    this.datalayerReadWithArg = function(nodeRef, path, arg, callback) {
+      if (node.connected) {
+        node.ctrlX.datalayerRead(path, arg)
+          .then((data) => callback(null, data))
+          .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'READ_WITH_ARG',
+          path: path,
+          arg: arg,
           callback: callback
         };
       } else {

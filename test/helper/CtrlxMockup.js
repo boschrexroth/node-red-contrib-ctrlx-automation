@@ -117,7 +117,7 @@ class CtrlxMockup {
 
 
     //
-    // Builtin Data Mockups
+    // Builtin Data Mockups - Basics
     //
 
     this.app.get('/automation/api/v1/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, (req, res) => {
@@ -227,8 +227,9 @@ class CtrlxMockup {
       });
     });
 
+
     //
-    // Builtin Data Mockups
+    // Builtin Data Mockups - Create/Delete
     //
     this.app.post('/automation/api/v1/motion/axs', authenticateJWT, (req, res) => {
       if (req.body.type !== 'string') {
@@ -249,6 +250,26 @@ class CtrlxMockup {
     this.app.post('/automation/api/v1/motion/axs/no/content', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.send();
+    });
+
+
+    //
+    // Builtin Data Mockups - Read with parameter
+    //
+    this.app.post('/automation/api/v1/test/add', authenticateJWT, (req, res) => {
+      let x1 = req.body.arg1;
+      let x2 = req.body.arg2;
+
+      if (typeof x1 === 'undefined' || typeof x2 === 'undefined') {
+        res.statusCode = 405;
+        res.send();
+        return;
+      }
+      res.statusCode = 200;
+      res.json({
+        value: x1 + x2,
+        type: 'uint32'
+      });
     });
   }
 

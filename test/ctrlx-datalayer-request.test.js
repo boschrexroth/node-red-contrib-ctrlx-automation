@@ -166,6 +166,44 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
+    it('should read with arguments', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ_WITH_ARG","path":"test/add","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            msg.should.have.property('payload').with.property('value').which.is.a.Number().eql(22);
+            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('uint32');
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: {arg1: 17, arg2: 5} });
+      });
+    });
+
+
     it('should write a value', function(done) {
 
       let flow = [

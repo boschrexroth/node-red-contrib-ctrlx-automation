@@ -156,6 +156,22 @@ describe('CtrlxCore', function() {
 
     });
 
+    it('should read with arguments', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.datalayerRead('test/add', {arg1: 17, arg2: 5}) )
+        .then((data) => {
+          expect(data.type).to.equal('uint32');
+          expect(data.value).to.equal(22);
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
     it('should read metadata', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
@@ -395,6 +411,15 @@ describe('CtrlxCore', function() {
       expect(err.status).to.be.a('number').equal(404);
       expect(err.title).to.be.a('string').equal('[404] Not Found');
       expect(err.toStringExtended()).to.include('[404] Not Found');
+    });
+
+    it('should return CtrlxProblemError type only if set', function() {
+
+      let err = CtrlxProblemError.fromHttpStatuscode(404);
+      expect(err.type).to.equal('about:blank');
+      expect(err.toStringExtended()).to.not.include('about:blank');
+      err._type = 'https://example.com/probs/out-of-credit';
+      expect(err.toStringExtended()).to.include('https://example.com/probs/out-of-credit');
     });
 
   });
