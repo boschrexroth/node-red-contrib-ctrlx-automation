@@ -10,7 +10,7 @@ Install using the managed palette from inside Node-RED.
 
 ### Usage
 
-There is a new node which appears in the category 'ctrlX' in your Node-RED palette.
+There is a new node which appears in the category 'ctrlX AUTOMATION' in your Node-RED palette.
 
 ![nodes.png](./doc/images/nodes.png)
 
