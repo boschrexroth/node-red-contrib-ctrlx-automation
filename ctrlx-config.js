@@ -249,7 +249,7 @@ module.exports = function(RED) {
           });
 
         }catch(err) {
-            console.log(err);
+          node.error(err);
         }
       }
     };
