@@ -1,0 +1,52 @@
+<!--
+
+  ctrlx-config -- config node which represents a connection to a ctrlX device.
+
+-->
+<script type="text/javascript">
+  RED.nodes.registerType('ctrlx-config', {
+    category: 'config',
+    defaults: {
+      name: {value: '', required: false},
+      hostname: {value: 'localhost', required: true},
+      debug: {value: false, required: true}
+    },
+    credentials: {
+      username: {type: 'text'},
+      password: {type: 'password'}
+    },
+    label: function() {
+      return this.name ? this.name : this.hostname;
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="ctrlx-config">
+    <div class="form-row">
+      <label for="node-config-input-hostname"><i class="fa fa-globe"></i> Address</label>
+      <input type="text" id="node-config-input-hostname" placeholder="localhost" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-username"><i class="fa fa-user"></i> Username</label>
+        <input type="text" id="node-config-input-username" />
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-key"></i> Password</label>
+        <input type="password" id="node-config-input-password" />
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-config-input-name" />
+    </div>
+    <div class="form-row">
+      <label>&nbsp;</label>
+      <input type="checkbox" id="node-config-input-debug" style="display: inline-block; width: auto; vertical-align: top;">
+      <label for="node-config-input-debug" style="width: 70%;"> Debug mode</label>
+    </div>
+    <div class="form-tips">
+      <p>You need to configure a user and password for your ctrlX CORE connection.</p>
+      <p>Hint: You can configure a user and password after logging into your ctrlX CORE. It is recommended to configure a dedicated user for your node-RED connection. Assign only the permissions, that you really need.</p>
+    </div>
+</script>
+
+

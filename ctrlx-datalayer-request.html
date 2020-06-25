@@ -1,0 +1,227 @@
+<!--
+
+  ctrlx-datalayer-request -- A node to read data from the datalayer.
+
+-->
+<script type="text/javascript">
+
+  var treeList;
+
+  function onEditPrepare(node) {
+
+    // Create a new TreeList widget.
+    // See: https://nodered.org/docs/api/ui/treeList/
+    //      https://discourse.nodered.org/t/select-form-with-tree-structure-in-custom-node/8348
+    treeList = $("<div>")
+      .css({width: "100%", height: "100%"})
+      .appendTo(".node-input-browse-row")
+      .treeList({})
+      .on('treelistitemmouseover', function(e, item) {
+      })
+      .on('treelistitemmouseout', function(e, item) {
+      })
+      .on('treelistselect', function(event, item) {
+        if (item.id && item.id !== '') {
+          $('#node-input-path').val(item.id);
+        }
+      });
+
+
+    // Now create the root item of the tree view.
+    let rootItem = {
+      label:  "Data Layer",
+      id: '',
+      class: 'red-ui-palette-header',
+      expanded: true,
+      children: function(done) {
+
+        // Get a reference to the config node settings.
+        let config = RED.nodes.node($('#node-input-device').val());
+
+        // We need to browse the child items on the server(runtime of Node-RED). For this, the server needs to know the config node or username/password.
+        let username = (config && config.credentials) ? config.credentials.username : undefined;
+        let password = (config && config.credentials) ? config.credentials.password : undefined;
+        let hostname = (config) ? config.hostname : undefined;
+        let id = (config) ? config.id : undefined;
+
+        // Ask the server to browse the given path for us. Send all necessary infos along the request.
+        $.getJSON('ctrlx/browse', {id: config.id, path: this.id, hostname: hostname, username: username, password: password}, (result) => {
+
+          // Create a new subitem for each browsed element
+          let childs = result.map((val) => {
+            return {
+              id: (this.id) ? this.id + '/' + val : val,
+              label: val,
+              expanded: false,
+              children: this.children
+            }
+          });
+          done(childs);
+
+        }).fail(function(jqxhr, textStatus, error) {
+
+          // Display a toast message on error.
+          RED.notify('Something went wrong (' + error + '). Please retry.', 'error');
+          console.log(textStatus + ', ' + error);
+          done([]);
+
+        });
+      }
+    }
+    let items = [];
+    items.push(rootItem);
+
+    // Show and fill the TreeView when button is clicked.
+    $('#node-input-browse-button').click(function() {
+
+      treeList.treeList('empty');
+      treeList.treeList('data', items);
+      $(".node-input-browse-row").show()
+
+      setTimeout(function() {
+        treeList.treeList('show', '');
+      }, 100);
+
+    });
+  }
+
+  function resizeNodeList() {
+      var rows = $("#dialog-form>div:not(.node-input-browse-row)");
+      var height = $("#dialog-form").height();
+      for (var i = 0; i < rows.length; i++) {
+          height -= $(rows[i]).outerHeight(true);
+      }
+      var editorRow = $("#dialog-form>div.node-input-browse-row");
+      height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom")));
+      $(".node-input-browse-row").css("height",height+"px");
+  }
+
+  function generateName(node) {
+    if (node.name) {
+      return node.name;
+    } else if (node.path && node.method) {
+      if (node.path.length < 50) {
+        return `${node.method}: ${node.path}`;
+      } else {
+        let shortPath = node.path.substr(node.path.length - 45);
+        let shortPathStart = Math.max(shortPath.indexOf('/'), 0);
+        return `${node.method}: ...${shortPath.substr(shortPathStart)}`;
+      }
+    } else if (node.method && !node.path) {
+      return `${node.method}: <msg.path>`;
+    } else {
+      return 'Data Layer Request';
+    }
+  }
+
+
+  RED.nodes.registerType('ctrlx-datalayer-request', {
+      category: 'ctrlX AUTOMATION',
+      color: '#C0DEED',
+      icon: 'icons/core.png',
+      defaults: {
+        device: {type: 'ctrlx-config', required: true},
+        method: {value: 'READ', required: true},
+        path: {value: '', required: false},
+        name: {value: ''}
+      },
+      inputs: 1,
+      outputs: 1,
+      paletteLabel: 'Data Layer Request',
+      label: function() {
+        return generateName(this);
+      },
+      oneditprepare: function() {
+        onEditPrepare(this);
+      },
+      oneditresize: resizeNodeList
+  });
+</script>
+
+
+
+
+<script type="text/html" data-template-name="ctrlx-datalayer-request">
+  <div class="form-row">
+    <label for="node-input-device"><i class="fa fa-sign-in"></i> Device</label>
+    <input type="text" id="node-input-device">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-method"><i class="fa fa-tasks"></i> Method</label>
+    <select type="text" id="node-input-method" style="width:70%;">
+    <option value="READ">READ</option>
+    <option value="WRITE">WRITE</option>
+    <option value="CREATE">CREATE</option>
+    <option value="DELETE">DELETE</option>
+    <option value="BROWSE">BROWSE</option>
+    <option value="METADATA">METADATA</option>
+    <option value="READ_WITH_ARG">READ_WITH_ARG</option>
+    <option value="msg">- set by msg.method -</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-path"><i class="fa fa-globe"></i> Path</label>
+    <input id="node-input-path" type="text" placeholder="path/to/data/layer/node">
+    <button type="button" id="node-input-browse-button" class="btn"><i class="fa fa-search"></i></button>
+  </div>
+
+  <div class="form-row node-input-browse-row" hidden></div>
+
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+
+</script>
+
+
+
+
+<script type="text/html" data-help-name="ctrlx-datalayer-request">
+  <p>Use this node to read or write data to the ctrlX Data Layer.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="optional">path <span class="property-type">string</span></dt>
+    <dd>If not configured in the node, this optional property sets the path of the request.</dd>
+    <dt class="optional">method <span class="property-type">string</span></dt>
+    <dd>If not configured in the node, this optional property sets the method of the request.
+        Must be one of <code>READ</code>, <code>WRITE</code>, <code>CREATE</code>, <code>DELETE</code>, <code>BROWSE</code>, <code>READ_WITH_ARG</code> or <code>METADATA</code>.</dd>
+    <dt class="optional">payload <span class="property-type">object</span></dt>
+    <dd>Data to be sent in case of WRITE, READ_WITH_ARG or CREATE method.</dd>
+    <!-- TODO: implemented later
+    <dt class="optional">rejectUnauthorized</dt>
+    <dd>If set to <code>false</code>, allows requests to be made to https sites that use
+        self signed certificates.</dd>-->
+    <dt class="optional">requestTimeout <span class="property-type">number</span></dt>
+    <dd>If set to a positive number of milliseconds, will override the globally set <code>httpRequestTimeout</code> parameter.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">string | object | buffer</span></dt>
+    <dd>The body of the response. The node can be configured to return the data
+        as a string, attempt to parse it as a JSON string or leave it as a
+        binary buffer.</dd>
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>If the <code>topic</code> property is not already set in the <code>msg</code> object as input, then it will be set to the effective
+        <code>path</code> of request.</dd>
+  </dl>
+
+  <h3>Details</h3>
+  <p>In case of an error, the node will not emit a <code>msg</code> but throw an error, that can be catched by the <code>catch</code> node.</p>
+  <!-- TODO: implement later
+  <p><b>Note</b>: If running behind a proxy, the standard <code>http_proxy=...</code> environment variable should be set and Node-RED restarted, or use Proxy Configuration. If Proxy Configuration was set, the configuration take precedence over environment variable.</p>
+  -->
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://github.com/boschrexroth/node-red-contrib-ctrlx-automation">GitHub</a> - the nodes github repository</li>
+    <li><a href="https://docs.automation.boschrexroth.com">ctrlX AUTOMATION Product Help</a> - the online documentation of ctrlX AUTOMATION</li>
+    <li><a href="https://www.boschrexroth.com">Bosch Rexroth AG</a> - WE MOVE. YOU WIN.</li>
+  </ul>
+
+</script>
