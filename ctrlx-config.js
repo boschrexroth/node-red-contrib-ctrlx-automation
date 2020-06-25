@@ -66,8 +66,14 @@ module.exports = function(RED) {
           }
           res.end(JSON.stringify(data.value));
         })
-        .catch((/*err*/) => {
-          res.end('[]');
+        .catch((err) => {
+          if (err instanceof CtrlxProblemError) {
+            res.statusCode = err.status;
+            return res.end(err.toStringExtended());
+          } else if (err instanceof Error) {
+            res.statusCode = 500;
+            return res.end(err.message);
+          }
         })
         .finally(() => ctrlx.logOut());
 
@@ -77,15 +83,21 @@ module.exports = function(RED) {
       var configNode = RED.nodes.getNode(id);
 
       if (!configNode) {
+        res.statusCode = 404;
         res.end('[]');
         return;
       }
 
       configNode.datalayerBrowse(null, path, (err, data) => {
 
-        if (err) {
-          return res.end('[]');
+        if (err instanceof CtrlxProblemError) {
+          res.statusCode = err.status;
+          return res.end(err.toStringExtended());
+        } else if (err instanceof Error) {
+          res.statusCode = 500;
+          return res.end(err.message);
         }
+
         if (!data || !data.value ) {
           return res.end('[]');
         }
@@ -95,6 +107,7 @@ module.exports = function(RED) {
 
     } else {
       // we do not have enough infos to establish a session to a device and query the infos.
+      res.statusCode = 400;
       return res.end('[]');
     }
 

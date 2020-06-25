@@ -57,7 +57,15 @@
             }
           });
           done(childs);
-        })
+
+        }).fail(function(jqxhr, textStatus, error) {
+
+          // Display a toast message on error.
+          RED.notify('Something went wrong (' + error + '). Please retry.', 'error');
+          console.log(textStatus + ', ' + error);
+          done([]);
+
+        });
       }
     }
     let items = [];
