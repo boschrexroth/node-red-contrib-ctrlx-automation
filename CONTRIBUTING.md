@@ -10,8 +10,8 @@ first step examples up to extensive demo solutions.
 * We are still in the evaluation phase using the GitHub platform for public use, therefore we restrict
 software contributions like pull request etc. from developers outside Bosch Rexroth AG.
 * We know this isn't in line with the Open Source idea entirely, but nevertheless there are some ways for contributing.
-Discuss the changes you want to propose via issue, email, or any other method with the owners of this repository.
-The repository owner is marked within the CONTRIBUTORS.md.
+Discuss the changes you want to propose via issue, email, or any other method with the maintainer of this repository.
+The repository maintainer is marked within the CONTRIBUTORS.md.
 
 Thank you for your understanding.
 
