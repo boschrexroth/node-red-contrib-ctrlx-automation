@@ -4,12 +4,12 @@ Dear GitHub Community Member,
 the product portfolio of Bosch Rexroth.
 * We are going to provide a wide range of software parts helping you to understand and to use our products in
 an easy and comfortable manner.
-* The software parts will cover items like SDKs, libs, configurations, build/test specs, API descriptions,
+* The software parts will cover items like SDKs, libs, configurations, build/test specs, API descriptions and
 first step examples up to extensive demo solutions.
-* Depending on the assigned license you are free to download, to modify and to include the code wthin your own projects/products.
+* Depending on the assigned license, you are free to download, to modify and to include the code within your own projects/products.
 * We are still in the evaluation phase using the GitHub platform for public use, therefore we restrict
 software contributions like pull request etc. from developers outside Bosch Rexroth AG.
-* We know this isn't in line with the Open Source idea entirely, but nevertheless there are some ways for contributing.
+* We know this is not in line with the Open Source idea entirely, but nevertheless there are some ways for contributing.
 Discuss the changes you want to propose via issue, email, or any other method with the maintainer of this repository.
 The repository maintainer is marked within the CONTRIBUTORS.md.
 
@@ -43,7 +43,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 ### Our Pledge
 
 In the interest of fostering an open and welcoming environment, we as
-contributors and maintainers pledge to making participation in our project and
+contributors and maintainers pledge to make participation in our project and
 our community a harassment-free experience for everyone, regardless of age, body
 size, disability, ethnicity, gender identity and expression, level of experience,
 nationality, personal appearance, race, religion, or sexual identity and
