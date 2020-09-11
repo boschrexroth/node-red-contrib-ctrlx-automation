@@ -145,7 +145,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+              node.status({fill: "green", shape: "dot", text: "Request successful"});
             }
 
             if (method == 'READ_WITH_ARG') {
@@ -180,7 +180,7 @@
               if (done) {
                 done();
               }
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+              node.status({fill: "green", shape: "dot", text: "Request successful"});
             });
 
         } else if (method == 'CREATE') {
@@ -210,7 +210,7 @@
               if (done) {
                 done();
               }
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+              node.status({fill: "green", shape: "dot", text: "Request successful"});
             });
 
         } else if (method == 'DELETE') {
@@ -240,7 +240,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+              node.status({fill: "green", shape: "dot", text: "Request successful"});
             });
 
         } else if (method == 'METADATA') {
@@ -270,7 +270,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+              node.status({fill: "green", shape: "dot", text: "Request successful"});
           });
 
         }else if (method == 'BROWSE') {
@@ -300,7 +300,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successfull"});
+              node.status({fill: "green", shape: "dot", text: "Request successful"});
 
           });
 
