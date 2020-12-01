@@ -106,7 +106,7 @@
         node.configNode.setTimeout(timeout);
 
         // Set the topic (if msg.topic is not yet set, then we set it to the path)
-        if (msg.topic === "") {
+        if (msg.topic === undefined || msg.topic === "") {
           msg.topic = path;
         }
 

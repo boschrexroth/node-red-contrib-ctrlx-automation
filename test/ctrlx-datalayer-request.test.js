@@ -160,6 +160,85 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
+    it('should read a value and set the empty msg.topic', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            msg.should.have.property('payload').with.property('value').which.is.a.Number().within(0, 100);
+            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('double');
+            msg.should.have.property('topic').which.is.a.String().eql('framework/metrics/system/cpu-utilisation-percent');
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: "" }); // No topic is set for the msg, thus the msg.topic should be set as check above.
+      });
+    });
+
+
+
+    it('should read a value and NOT set the pre-set msg.topic', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            msg.should.have.property('payload').with.property('value').which.is.a.Number().within(0, 100);
+            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('double');
+            msg.should.have.property('topic').which.is.a.String().eql('MYTOPIC');
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: "", topic: "MYTOPIC" }); // A topic is set for the msg, thus the msg.topic should NOT be set as check above.
+      });
+    });
+
+
     it('should read with arguments', function(done) {
 
       let flow = [
