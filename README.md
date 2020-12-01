@@ -42,7 +42,7 @@ Any use of the source code and related documents of this repository in applicati
 ## Changelog
 
 - 2020-09-29: 1.2.0 - Initial release with request node for ctrlX Data Layer
-- 2020-11-28: 1.2.1 - FIX: msg.topic is not set to path if msg.topic is undefined
+- 2020-11-28: 1.2.2 - FIX: msg.topic is not set to path if msg.topic is undefined
 
 ## About
 
