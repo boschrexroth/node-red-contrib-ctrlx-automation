@@ -67,7 +67,7 @@
         // Prepare the path
         let path = node.path || msg.path;
         if (msg.path && node.path && (node.path !== msg.path)) {
-          node.warn(RED._("common.errors.nooverride"));
+          node.warn(RED._("`msg.path` differs from configuration property *Path* of node"));
         }
         if (node.isTemplatedPath) {
           path = mustache.render(node.path, msg);
@@ -81,7 +81,7 @@
         // Prepare the method
         let method = node.method || "READ";
         if (msg.method && node.method && (node.method !== "msg")) {
-          node.warn(RED._("common.errors.nooverride"));
+          node.warn(RED._("`msg.method` differs from configuration property *Method* of node"));
         }
         if (msg.method && node.method && (node.method === "msg")) {
           method = msg.method.toUpperCase();
