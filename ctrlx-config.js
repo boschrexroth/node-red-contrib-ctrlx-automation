@@ -380,7 +380,7 @@ module.exports = function(RED) {
       }
     }
 
-    this.logAdditionalErrorInfo = function(node, err) {
+    this.logAdditionalDebugErrorInfo = function(node, err) {
       if (!this.debug) {
         return;
       }
@@ -388,7 +388,6 @@ module.exports = function(RED) {
       if (err instanceof CtrlxProblemError) {
         let message = err.toStringExtended();
         node.log(`${message}`);
-        node.warn(`${message}`);
       } else {
         node.log(err.toString());
       }

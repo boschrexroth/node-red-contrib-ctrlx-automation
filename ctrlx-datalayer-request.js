@@ -67,7 +67,7 @@
         // Prepare the path
         let path = node.path || msg.path;
         if (msg.path && node.path && (node.path !== msg.path)) {
-          node.warn(RED._("common.errors.nooverride"));
+          node.warn(RED._("`msg.path` differs from configuration property *Path* of node"));
         }
         if (node.isTemplatedPath) {
           path = mustache.render(node.path, msg);
@@ -81,7 +81,7 @@
         // Prepare the method
         let method = node.method || "READ";
         if (msg.method && node.method && (node.method !== "msg")) {
-          node.warn(RED._("common.errors.nooverride"));
+          node.warn(RED._("`msg.method` differs from configuration property *Method* of node"));
         }
         if (msg.method && node.method && (node.method === "msg")) {
           method = msg.method.toUpperCase();
@@ -124,7 +124,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
+                node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
@@ -167,7 +167,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
+                node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
@@ -196,7 +196,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
+                node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
@@ -226,7 +226,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
+                node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
@@ -255,7 +255,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
+                node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
@@ -285,7 +285,7 @@
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
                 node.status({fill: "red", shape: "ring", text: "Request failed"});
-                node.configNode.logAdditionalErrorInfo(node, err);
+                node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
