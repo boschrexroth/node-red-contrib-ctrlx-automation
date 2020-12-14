@@ -229,7 +229,7 @@ module.exports = function(RED) {
                   }
                 }
 
-                delete node.pending[id];
+                delete node.pendingRequests[id];
               }
             }
 
