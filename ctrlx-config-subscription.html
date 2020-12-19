@@ -1,0 +1,81 @@
+<!--
+
+  MIT License
+
+  Copyright (c) 2020, Bosch Rexroth AG
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+-->
+
+
+<!--
+
+  ctrlx-config-subscription -- config node which represents a subscription of a ctrlX device.
+
+-->
+<script type="text/javascript">
+  RED.nodes.registerType('ctrlx-config-subscription', {
+    category: 'config',
+    defaults: {
+      device: {type: 'ctrlx-config', required: true},
+      name: {value: '', required: true},
+      publishIntervalMs: {value: '', required: false}
+      /*
+      publishIntervalMs: {value: '', required: false, validate: function(v) {
+          let val = $("#node-config-input-publishIntervalMs").val();
+          return val === '' || Number.isInteger(parseInt(val));
+        }
+      }*/
+    },
+    label: function() {
+      return this.name ? this.name : 'unnamed';
+    }
+  });
+</script>
+
+
+
+<script type="text/html" data-template-name="ctrlx-config-subscription">
+
+  <div class="form-row">
+    <label for="node-config-input-device"><i class="fa fa-sign-in"></i> Device</label>
+    <input type="text" id="node-config-input-device">
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-config-input-name" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-publishIntervalMs"><i class="fa fa-history"></i> Publish Interval</label>
+    <input type="text" id="node-config-input-publishIntervalMs" placeholder="use default" />
+  </div>
+
+  <div class="form-tips">
+    <p>The Publish Interval is the minimum time in milliseconds that the server should use to send new updates.
+      It is used to prevent the server from flooding the client.
+    </p>
+    <p>Hint: If no Publish Interval is set, then the server side default is used.</p>
+  </div>
+
+</script>
+
+

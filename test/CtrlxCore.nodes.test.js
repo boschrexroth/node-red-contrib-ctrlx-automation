@@ -29,12 +29,15 @@ const assert = require('assert');
 const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
 const CtrlxProblemError = require('../lib/CtrlxProblemError')
-const CtrlxMockup = require('./helper/CtrlxMockup')
+const CtrlxMockup = require('./helper/CtrlxMockupV2')
 
 
 
-
-describe('CtrlxCore', function() {
+/*
+ * This test group contains test cases for acyclic access of the Data Layer via mapping
+ * to REST protocol.
+ */
+describe('CtrlxCoreNodes', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';

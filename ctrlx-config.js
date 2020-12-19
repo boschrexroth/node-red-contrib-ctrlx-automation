@@ -187,7 +187,7 @@ module.exports = function(RED) {
 
             for (let id in node.users) {
               if (Object.prototype.hasOwnProperty.call(node.users, id)) {
-                node.users[id].status({fill:"green", shape:"dot", text:"Authenticated"});
+                node.users[id].setStatus({fill: 'green', shape: 'dot', text: 'authenticated'});
               }
             }
 
@@ -224,6 +224,10 @@ module.exports = function(RED) {
                     node.datalayerBrowse(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
+                  case 'SUBSCRIBE': {
+                    node.datalayerSubscribe(id, node.pendingRequests[id].paths, node.pendingRequests[id].callback);
+                    break;
+                  }
                   default: {
                     node.error('internal error: received invalid pending request!');
                   }
@@ -241,7 +245,7 @@ module.exports = function(RED) {
 
             for (let id in node.users) {
               if (Object.prototype.hasOwnProperty.call(node.users, id)) {
-                node.users[id].status({fill: "red", shape: "ring", text: "Authentication failed"});
+                node.users[id].setStatus({fill: 'red', shape: 'ring', text: 'authentication failed'});
               }
             }
 
@@ -380,7 +384,23 @@ module.exports = function(RED) {
       }
     }
 
-    this.logAdditionalDebugErrorInfo = function(node, err) {
+    this.datalayerSubscribe = function(nodeRef, paths, callback) {
+      if (node.connected) {
+        node.ctrlX.datalayerSubscribe(paths)
+          .then((data) => callback(null, data))
+          .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'SUBSCRIBE',
+          paths: paths,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
+      }
+    }
+
+    this.logAdditionalErrorInfo = function(node, err) {
       if (!this.debug) {
         return;
       }
@@ -393,7 +413,9 @@ module.exports = function(RED) {
       }
     }
 
-    // Define config node event listeners
+    //
+    // Close handler
+    //
     node.on("close", function(done) {
       // Logout, when node is closing down.
       node.closing = true;

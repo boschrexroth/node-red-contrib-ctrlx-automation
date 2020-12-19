@@ -38,14 +38,16 @@ const ctrlxConfigNode = require("../ctrlx-config.js");
 const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 
 // The the server mockup to test against
-const CtrlxMockup = require('./helper/CtrlxMockup')
+const CtrlxMockup = require('./helper/CtrlxMockupV2')
 const CtrlxCore = require('../lib/CtrlxCore')
 
 const expect = require('chai').expect;
 
 
 
-
+/*
+ * This test group contains test cases for Node-RED nodes.
+ */
 describe('ctrlx-datalayer-request', function() {
 
   function getHostname() {

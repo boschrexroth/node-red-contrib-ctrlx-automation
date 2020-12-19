@@ -108,7 +108,7 @@ function benchmarkSimple() {
  */
 async function benchmarkSimpleAsync() {
 
-  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:322]', 'boschrexroth', 'boschrexroth');
+  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:db2]', 'boschrexroth', 'boschrexroth');
 
   try {
 
@@ -185,6 +185,53 @@ function benchmarkRequestsPerSecond() {
 
 }
 
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+
+async function benchmarkEvents() {
+
+  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:db2]', 'boschrexroth', 'boschrexroth');
+  //let ctrlx = new CtrlxCore('192.168.17.188', 'boschrexroth', 'boschrexroth');
+
+  try {
+
+    performance.mark('A');
+    await ctrlx.logIn();
+    performance.mark('B');
+    //await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    //for (let i = 0; i < 10; i++) {
+    let sub = await ctrlx.datalayerSubscribe('framework/metrics/system/cpu-utilisation-percent');
+
+    sub.on('update', (data) => {
+      console.log(JSON.stringify(data));
+    });
+    //}
+    //ctrlx.datalayerSubscribe('types/datalayer/metadata');
+    await sleep(4000);
+    performance.mark('C');
+    //await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    performance.mark('D');
+    //await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
+    performance.mark('E');
+    performance.measure('Login', 'A', 'B');
+    performance.measure('Read 1', 'B', 'C');
+    performance.measure('Read 2', 'C', 'D');
+    performance.measure('Read 3', 'D', 'E');
+
+
+    sub.close();
+  } catch(err) {
+    console.error('Housten we are in trouble: ' + err);
+  } finally {
+
+    await ctrlx.logOut();
+  }
+
+  console.log('DONE!');
+}
+
+
+
+
 exports.benchmarkSimple = benchmarkSimple;
 exports.benchmarkSimpleAsync = benchmarkSimpleAsync;
 exports.benchmarkRequestsPerSecond = benchmarkRequestsPerSecond;
@@ -192,3 +239,4 @@ exports.benchmarkRequestsPerSecond = benchmarkRequestsPerSecond;
 //benchmarkSimple()
 //benchmarkSimpleAsync();
 //benchmarkRequestsPerSecond()
+benchmarkEvents();

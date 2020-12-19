@@ -51,12 +51,17 @@
     }
 
 
-
-
+    //
+    // Define functions called by nodes
+    //
     let node = this;
+    this.setStatus = function(status) {
+      node.status(status);
+    };
+
+
     if (this.configNode) {
       node.status({fill: "red", shape: "ring", text: "not logged in"});
-
 
       //
       // Input handler
@@ -123,7 +128,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -143,7 +148,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             }
 
             if (method === 'READ_WITH_ARG') {
@@ -166,7 +171,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -178,7 +183,7 @@
               if (done) {
                 done();
               }
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             });
 
         } else if (method === 'CREATE') {
@@ -195,7 +200,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -208,7 +213,7 @@
               if (done) {
                 done();
               }
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             });
 
         } else if (method === 'DELETE') {
@@ -225,7 +230,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -238,7 +243,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             });
 
         } else if (method === 'METADATA') {
@@ -254,7 +259,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -268,7 +273,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
           });
 
         }else if (method === 'BROWSE') {
@@ -284,7 +289,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -298,7 +303,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
 
           });
 
@@ -308,7 +313,7 @@
           } else {
             node.error('Method property of node unknown or not implemented:' + node.method, msg);
           }
-          node.status({fill: "red", shape: "ring", text: "Request failed"});
+          node.status({fill: "red", shape: "ring", text: "request failed"});
         }
 
       });
@@ -333,5 +338,6 @@
       this.error("Missing configuration node for ctrlX Data Layer");
     }
   }
+
   RED.nodes.registerType("ctrlx-datalayer-request", CtrlxDatalayerRequest);
 };

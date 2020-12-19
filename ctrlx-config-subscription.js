@@ -1,0 +1,169 @@
+/**
+ *
+ * MIT License
+ *
+ * Copyright (c) 2020, Bosch Rexroth AG
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+
+
+module.exports = function(RED) {
+  const CtrlxCore = require('./lib/CtrlxCore');
+  const CtrlxProblemError = require('./lib/CtrlxProblemError');
+
+
+
+  /* ---------------------------------------------------------------------------
+   * NODE - config
+   * -------------------------------------------------------------------------*/
+  function CtrlxConfigSubscription(config) {
+    RED.nodes.createNode(this, config);
+
+    // Configuration options passed by Node Red
+    this.device = config.device;
+    this.configNodeDevice = RED.nodes.getNode(this.device);
+    this.name = config.name;
+
+
+    // Node state
+    let node = this;
+    this.users = {};
+    this.dirty = true;
+    this.subscription = null;
+
+
+
+    //
+    // Define functions called by nodes
+    //
+    this.setStatus = function(status) {
+      Object.values(node.users).forEach((element) => {
+        element.node.setStatus(status);
+      });
+    };
+
+    this.updateSubscription = function() {
+
+      // Only create a new subscription if the list of nodes changed
+      if (!node.dirty) {
+        return;
+      }
+      node.dirty = false;
+
+      // Close old subscription
+      if (node.subscription) {
+        node.subscription.close();
+        node.subscription.removeAllListeners();
+        node.subscription = null;
+      }
+
+      // Create an array of all node paths to subscribe to
+      let paths = new Array();
+      Object.values(node.users).forEach((element) => {
+        if (element.path !== '') {
+          paths.push(element.path);
+        }
+      });
+
+      // No need to create an empty subscription
+      if (paths.length === 0) {
+        return;
+      }
+
+      // Create the subscription
+      node.debug('Requesting Subscription for: ' + paths);
+      node.configNodeDevice.datalayerSubscribe(node, paths, (err, subscription) => {
+
+        if (err) {
+          node.error(`Failed to create subscription ${node.name} for nodes ${paths} with error ${err.message}`);
+
+          Object.values(node.users).forEach((element) => {
+            element.callback(err);
+          });
+
+        } else {
+          node.subscription = subscription;
+
+          // This is the handler function which dispatches incoming update messages to the nodes.
+          node.subscription.on('update', (data, lastEventId) => {
+            Object.values(node.users).forEach((element) => {
+              if (element.path === data.node) {
+                element.callback(null, data, lastEventId);
+              }
+            });
+          });
+        }
+
+      });
+    }
+
+    // Register function to be called by all nodes which are attached to this config node.
+    this.register = function(ctrlxNode, path, callback) {
+
+      node.users[ctrlxNode.id] =
+      {
+        node: ctrlxNode,
+        path: path,
+        callback: callback
+      };
+
+      if (Object.keys(node.users).length === 1) {
+        node.configNodeDevice.register(node);
+      }
+
+      // Update list of nodes on next tick
+      node.dirty = true;
+      setImmediate(() => {
+        node.updateSubscription();
+      });
+    };
+
+    // Unregister of attached ctrlX node.
+    this.deregister = function(ctrlxNode, done) {
+      delete node.users[ctrlxNode.id];
+      if (Object.keys(node.users).length === 0) {
+        node.configNodeDevice.deregister(node, done);
+      } else {
+        done();
+      }
+
+      // Update list of nodes on next tick
+      node.dirty = true;
+      setImmediate(() => {
+        node.updateSubscription();
+      });
+    };
+
+
+    //
+    // Close handler
+    //
+    node.on("close", function(done) {
+      done();
+    });
+
+  }
+
+
+  RED.nodes.registerType("ctrlx-config-subscription", CtrlxConfigSubscription, {
+  });
+};

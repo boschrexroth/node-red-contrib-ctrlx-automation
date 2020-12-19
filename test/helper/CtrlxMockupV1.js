@@ -33,13 +33,13 @@ const jwt = require('jwt-simple');
 
 
 
-
 /**
  * This is a simple mockup of a ctrlX device that can be used for unit testing.
+ * The mockup simulates the version 1.x of the Data Layer protocol at the api endpoint: /automation/api/v1/
  *
- * @class CtrlxMockup
+ * @class CtrlxMockupV1
  */
-class CtrlxMockup {
+class CtrlxMockupV1 {
 
   constructor() {
     this.httpServer = undefined;
@@ -260,17 +260,15 @@ class CtrlxMockup {
         type: 'uint32'
       });
     });
+
   }
-
-
-
 
 
   /**
    * Start the mockup server.
    *
    * @param {object} callback - Will be called when server is listening.
-   * @memberof CtrlxMockup
+   * @memberof CtrlxMockupV1
    */
   startServer(callback) {
     const options = {
@@ -289,7 +287,7 @@ class CtrlxMockup {
    * Stop the mockup server.
    *
    * @param {object} callback - Will be called, when server is shutdown.
-   * @memberof CtrlxMockup
+   * @memberof CtrlxMockupV1
    */
   stopServer(callback) {
     this.httpsServer.close(() => {
@@ -301,4 +299,4 @@ class CtrlxMockup {
 
 }
 
-module.exports = CtrlxMockup;
+module.exports = CtrlxMockupV1;

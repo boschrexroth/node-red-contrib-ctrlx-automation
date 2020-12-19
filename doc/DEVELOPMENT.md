@@ -36,7 +36,14 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Fix: [DEP0123] DeprecationWarning
 - [x] Implement: Interactive Data Layer Browser
 
-### v1.x.0
+### v2.x.0
+
+- [ ] Feature: Basic subscription support
+- [ ] Implement: Subscription auto-reconnect
+- [ ] Implement: Different output formats
+- [ ] Implement: Update documentation
+
+### v2.x.0
 
 - [ ] Feature: Support for read with arguments and methods
 - [ ] Feature: Allow custom certificate handling
@@ -44,14 +51,14 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [ ] Decision: How to name the node for common http requests? http vs. webapi
 - [ ] Feature: Support http proxy configuration
 
-### v1.x.0
+### v2.x.0
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Support typescript bindings
 - [ ] Feature: Find the device via UPnP
 - [ ] Feature: Different output types (value only, object, raw)
 
-### v1.x.0
+### v2.x.0
 
 - [ ] Feature: i18n
 

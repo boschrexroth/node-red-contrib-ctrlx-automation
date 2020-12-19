@@ -8,9 +8,9 @@
           "name": "Run Node-RED",
           "type": "node",
           "request": "launch",
-          "program": "D:/programs/node-red-1.1.3/node-red/red.js",
+          "program": "C:/Apps/node-red-1.2.6/node-red/red.js",
           "env": {
-            "DEBUG": "ctrlxcore",
+            "DEBUG": "ctrlxcore,ctrlxcore:*",
             "DEBUG_COLORS": "true"
           },
           "outputCapture": "std"
