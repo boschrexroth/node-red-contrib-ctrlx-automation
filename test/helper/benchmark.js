@@ -37,7 +37,7 @@ const { assert } = require('console');
 // Test Connection
 //
 function getHostname() {
-  return process.env.TEST_HOSTNAME || '[fe80::260:34ff:fe08:322]';
+  return process.env.TEST_HOSTNAME || '[fe80::260:34ff:fe08:db2]';
 }
 function getUsername() {
   return process.env.TEST_USERNAME || 'boschrexroth';
@@ -107,8 +107,6 @@ function benchmarkSimple() {
  * how fast a simple ad-hoc requests takes to execute.
  */
 async function benchmarkSimpleAsync() {
-
-  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:db2]', 'boschrexroth', 'boschrexroth');
 
   try {
 
@@ -185,44 +183,36 @@ function benchmarkRequestsPerSecond() {
 
 }
 
-const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
-async function benchmarkEvents() {
+/**
+ * A simple benchmark to measure creation of a subscription and how long it takes to return the first event.
+ */
+async function benchmarkSubscriptionSimple() {
 
-  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:db2]', 'boschrexroth', 'boschrexroth');
-  //let ctrlx = new CtrlxCore('192.168.17.188', 'boschrexroth', 'boschrexroth');
+  const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
   try {
 
-    performance.mark('A');
     await ctrlx.logIn();
-    performance.mark('B');
-    //await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
-    //for (let i = 0; i < 10; i++) {
+
+    performance.mark('A');
     let sub = await ctrlx.datalayerSubscribe('framework/metrics/system/cpu-utilisation-percent');
+    performance.mark('B');
 
     sub.on('update', (data) => {
+      performance.mark('C');
       console.log(JSON.stringify(data));
     });
-    //}
-    //ctrlx.datalayerSubscribe('types/datalayer/metadata');
-    await sleep(4000);
-    performance.mark('C');
-    //await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
-    performance.mark('D');
-    //await ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active');
-    performance.mark('E');
-    performance.measure('Login', 'A', 'B');
-    performance.measure('Read 1', 'B', 'C');
-    performance.measure('Read 2', 'C', 'D');
-    performance.measure('Read 3', 'D', 'E');
 
+    await sleep(4000);
+
+    performance.measure('Create Subscription', 'A', 'B');
+    performance.measure('First update', 'B', 'C');
 
     sub.close();
   } catch(err) {
     console.error('Housten we are in trouble: ' + err);
   } finally {
-
     await ctrlx.logOut();
   }
 
@@ -235,8 +225,9 @@ async function benchmarkEvents() {
 exports.benchmarkSimple = benchmarkSimple;
 exports.benchmarkSimpleAsync = benchmarkSimpleAsync;
 exports.benchmarkRequestsPerSecond = benchmarkRequestsPerSecond;
+exports.benchmarkSubscriptionSimple = benchmarkSubscriptionSimple;
 
 //benchmarkSimple()
 //benchmarkSimpleAsync();
 //benchmarkRequestsPerSecond()
-benchmarkEvents();
+//benchmarkSubscriptionSimple();

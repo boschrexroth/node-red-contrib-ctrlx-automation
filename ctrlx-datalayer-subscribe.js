@@ -71,7 +71,9 @@
           node.status({fill: 'green', shape: 'dot', text: `received data #${lastEventId}`});
           node.send({
             topic: data.path,
-            payload: data.value
+            payload: data.value,
+            timestamp: data.timestamp,
+            type: data.type
           });
         }
       });

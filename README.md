@@ -10,13 +10,21 @@ Install using the managed palette from inside Node-RED.
 
 ## Usage
 
-There is a new node which appears in the category 'ctrlX AUTOMATION' in your Node-RED palette.
+There are two new nodes which appear in the category 'ctrlX AUTOMATION' in your Node-RED palette.
 
 ![nodes.png](./doc/images/nodes.png)
 
 #### Data Layer Request
 
-This node allows to read or write to the ctrlX Data Layer. There are multiple example flows included which demonstrate how the node can be use.
+This node allows read, write or browse of items in the ctrlX Data Layer. To execute the request, the node needs to be triggered by an input `msg`. The arguments can be given in the node properties or programmatically via the input `msg`.
+
+#### Data Layer Subscribe
+
+This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. This node is very efficient, because it does not poll but only publish server sent events. Monitoring of the value is done on server side.
+
+### Examples
+
+There are multiple example flows included which demonstrate how the node can be use.
 They appear under the Examples section of the library import menu in Node-RED.
 
 ![datalayer_request_examples.png](./doc/images/datalayer_request_examples.png)
@@ -45,6 +53,7 @@ Any use of the source code and related documents of this repository in applicati
 - 2020-11-28: 1.2.2 - FIX: msg.topic is not set to path if msg.topic is undefined
 - 2020-12-02: 1.2.3 - Only documentation and diagnosis improvements
 - 2020-12-14: 1.2.4 - FIX: Error when request was triggered immediately after deploy.
+- 2020-12-20: 2.0.0 - Initial release which adds node to subscribe to ctrlX Data Layer
 
 ## About
 

@@ -90,7 +90,9 @@ module.exports = function(RED) {
       }
 
       // Create the subscription
-      node.debug('Requesting Subscription for: ' + paths);
+      if (node.configNodeDevice.debug) {
+        node.debug('Requesting Subscription for: ' + paths);
+      }
       node.configNodeDevice.datalayerSubscribe(node, paths, (err, subscription) => {
 
         if (err) {

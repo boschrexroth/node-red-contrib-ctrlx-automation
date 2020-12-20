@@ -36,12 +36,11 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 - [x] Fix: [DEP0123] DeprecationWarning
 - [x] Implement: Interactive Data Layer Browser
 
-### v2.x.0
+### v2.0.0
 
-- [ ] Feature: Basic subscription support
-- [ ] Implement: Subscription auto-reconnect
-- [ ] Implement: Different output formats
-- [ ] Implement: Update documentation
+- [x] Feature: Basic subscription support
+- [ ] Implement: Unit tests for node-red
+- [x] Implement: Update documentation
 
 ### v2.x.0
 

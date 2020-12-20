@@ -38,7 +38,7 @@ const ctrlxConfigNode = require("../ctrlx-config.js");
 const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 
 // The the server mockup to test against
-const CtrlxMockup = require('./helper/CtrlxMockupV2')
+const CtrlxMockup = require('./helper/CtrlxMockupV1')
 const CtrlxCore = require('../lib/CtrlxCore')
 
 const expect = require('chai').expect;

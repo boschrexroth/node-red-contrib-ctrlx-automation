@@ -200,10 +200,14 @@
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-    <dt>payload <span class="property-type">object</span></dt>
-    <dd>The node returns the monitored data as json object.</dd>
+    <dt>payload <span class="property-type">any</span></dt>
+    <dd>The node returns the monitored data.</dd>
     <dt>topic <span class="property-type">string</span></dt>
-    <dd>The <code>topic</code> property is set to <code>path</code> of request.</dd>
+    <dd>The <code>topic</code> property is set to <code>path</code> of the data.</dd>
+    <dt>timestamp <span class="property-type">number</span></dt>
+    <dd>Timestamp of the latched dtaa as number of milliseconds from Jan 1, 1970.</dd>
+    <dt>type <span class="property-type">string</span></dt>
+    <dd>Data type of the returned payload.</dd>
   </dl>
 
   <h3>Details</h3>

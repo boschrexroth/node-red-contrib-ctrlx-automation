@@ -15,6 +15,14 @@ package ctrlx {
     +datalayerCreate(path, data)
     +datalayerDelete(path)
     +datalayerBrowse(path)
+    +datalayerSubscribe(paths)
+  }
+
+  class CtrlxDatalayerSubscription
+  {
+    +CtrlxcoreSubscription(hostname, authorization, paths)
+    +open(callback)
+    +close()
   }
 
 }
@@ -28,6 +36,13 @@ package node-red-contrib-ctrlx-automation {
     +String password
     +bool debug
     +String name
+  }
+
+  class CtrlxConfigSubscription << Node-RED config node >>
+  {
+    +CtrlxConfig device
+    +String name
+    +number publishIntervalMs
   }
 
   enum Method {
@@ -48,6 +63,14 @@ package node-red-contrib-ctrlx-automation {
     +onInput()
     +onClose()
   }
+
+  class CtrlxDatalayerSubscribe << Node-RED node >>
+  {
+    +CtrlxConfigSubscription subscription
+    +String path
+    +String name
+    +onClose()
+  }
 }
 
 
@@ -57,11 +80,16 @@ package "ctrlX CORE" <<Node>> {
 
 
 CtrlxConfig "1" *-- "1" CtrlxCore : use >
-
 CtrlxDatalayerRequest "0..*" --> "1" CtrlxConfig : register, unregister, use >
-
 CtrlxConfig "1" --> "0..*" CtrlxDatalayerRequest  : notify status >
-
 CtrlxCore "0..*" --> "1" HttpsServer
+
+CtrlxDatalayerSubscription "0..*" --> "1" HttpsServer : event stream <
+CtrlxConfig "1" --> "0..*" CtrlxConfigSubscription  : notify status >
+CtrlxConfigSubscription "0..*" --> "1" CtrlxConfig : register, unregister, use >
+CtrlxCore --> CtrlxDatalayerSubscription : create >
+CtrlxDatalayerSubscribe "0..*" --> CtrlxConfigSubscription : register, unregister, use >
+CtrlxConfigSubscription "0..*" --> CtrlxDatalayerSubscribe : update >
+CtrlxConfigSubscription "1" *-- "1" CtrlxDatalayerSubscription : use >
 
 @enduml
