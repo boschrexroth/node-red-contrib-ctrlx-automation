@@ -88,7 +88,7 @@ CtrlxDatalayerSubscription "0..*" --> "1" HttpsServer : event stream <
 CtrlxConfig "1" --> "0..*" CtrlxConfigSubscription  : notify status >
 CtrlxConfigSubscription "0..*" --> "1" CtrlxConfig : register, unregister, use >
 CtrlxCore --> CtrlxDatalayerSubscription : create >
-CtrlxDatalayerSubscribe "0..*" --> CtrlxConfigSubscription : register, unregister, use >
+CtrlxDatalayerSubscribe "0..*" --> CtrlxConfigSubscription : register, unregister >
 CtrlxConfigSubscription "0..*" --> CtrlxDatalayerSubscribe : update >
 CtrlxConfigSubscription "1" *-- "1" CtrlxDatalayerSubscription : use >
 
