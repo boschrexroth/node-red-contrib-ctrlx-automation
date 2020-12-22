@@ -146,8 +146,8 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            msg.should.have.property('payload').with.property('value').which.is.a.Number().within(0, 100);
-            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('double');
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('number').within(0, 100);
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('double');
 
             done();
           }
@@ -184,9 +184,9 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            msg.should.have.property('payload').with.property('value').which.is.a.Number().within(0, 100);
-            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('double');
-            msg.should.have.property('topic').which.is.a.String().eql('framework/metrics/system/cpu-utilisation-percent');
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('number').within(0, 100);
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('double');
+            expect(msg).to.have.property('topic').which.is.a('string').eql('framework/metrics/system/cpu-utilisation-percent');
 
             done();
           }
@@ -224,9 +224,9 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            msg.should.have.property('payload').with.property('value').which.is.a.Number().within(0, 100);
-            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('double');
-            msg.should.have.property('topic').which.is.a.String().eql('MYTOPIC');
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('number').within(0, 100);
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('double');
+            expect(msg).to.have.property('topic').which.is.a('string').eql('MYTOPIC');
 
             done();
           }
@@ -263,8 +263,8 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            msg.should.have.property('payload').with.property('value').which.is.a.Number().eql(22);
-            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('uint32');
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('number').eql(22);
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('uint32');
 
             done();
           }
@@ -301,16 +301,16 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            msg.should.have.property('payload').with.property('value').which.is.a.Number().eql(23);
-            msg.should.have.property('payload').with.property('type').which.is.a.String().eql('int16');
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('number').eql(23);
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('int16');
 
             let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
             ctrlx.logIn()
               .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i'))
               .then((data) => {
-                  data.should.have.property('value').which.is.a.Number().eql(23);
-                  data.should.have.property('type').which.is.a.String().eql('int16');
+                  expect(data).to.have.property('value').that.is.a('number').eql(23);
+                  expect(data).to.have.property('type').that.is.a('string').eql('int16');
                   done();
                 })
               .catch((err) => done(err))
@@ -350,8 +350,8 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            expect(msg.payload.value).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
-            expect(msg.payload.type).to.equal('arstring');
+            expect(msg.payload).to.have.property('value').to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
+            expect(msg.payload).to.have.property('type').to.equal('arstring');
 
             done();
           }
@@ -388,12 +388,12 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            expect(msg.payload.nodeClass).to.equal('Resource');
-            expect(msg.payload.description).to.be.a('string');
-            expect(msg.payload.descriptionUrl).to.be.a('string');
-            expect(msg.payload.displayName).to.be.a('string');
-            expect(msg.payload.displayFormat).to.be.a('string');
-            expect(msg.payload.unit).to.be.a('string');
+            expect(msg.payload).to.have.property('nodeClass').to.equal('Resource');
+            expect(msg.payload).to.have.property('description').to.be.a('string');
+            expect(msg.payload).to.have.property('descriptionUrl').to.be.a('string');
+            expect(msg.payload).to.have.property('displayName').to.be.a('string');
+            expect(msg.payload).to.have.property('displayFormat').to.be.a('string');
+            expect(msg.payload).to.have.property('unit').to.be.a('string');
 
             done();
           }
@@ -430,8 +430,8 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            msg.payload.should.have.property('value').which.is.a.Number();
-            msg.payload.should.have.property('type').which.is.a.String().eql('uint32');
+            expect(msg.payload).to.have.property('value').that.is.a('number');
+            expect(msg.payload).to.have.property('type').that.is.a('string').eql('uint32');
 
             done();
           }
@@ -469,8 +469,8 @@ describe('ctrlx-datalayer-request', function() {
         h1.on("input", (msg) => {
           try {
             // payload is just pass through
-            msg.payload.should.have.property('value').which.is.a.String().eql('nostromo');
-            msg.payload.should.have.property('type').which.is.a.String().eql('string');
+            expect(msg.payload).to.have.property('value').that.is.a('string').eql('nostromo');
+            expect(msg.payload).to.have.property('type').that.is.a('string').eql('string');
             done();
           }
           catch(err){

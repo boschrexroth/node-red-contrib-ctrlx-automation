@@ -27,8 +27,6 @@
 
 
 module.exports = function(RED) {
-  const CtrlxCore = require('./lib/CtrlxCore');
-  const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
 
 
@@ -42,6 +40,7 @@ module.exports = function(RED) {
     this.device = config.device;
     this.configNodeDevice = RED.nodes.getNode(this.device);
     this.name = config.name;
+    this.publishIntervalMs = config.publishIntervalMs;
 
 
     // Node state
@@ -93,7 +92,7 @@ module.exports = function(RED) {
       if (node.configNodeDevice.debug) {
         node.debug('Requesting Subscription for: ' + paths);
       }
-      node.configNodeDevice.datalayerSubscribe(node, paths, (err, subscription) => {
+      node.configNodeDevice.datalayerSubscribe(node, paths, node.publishIntervalMs, (err, subscription) => {
 
         if (err) {
           node.error(`Failed to create subscription ${node.name} for nodes ${paths} with error ${err.message}`);

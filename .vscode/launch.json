@@ -29,6 +29,7 @@
             //"TEST_USERNAME": "boschrexroth",                // uncomment to override the username to use for tests
             //"TEST_PASSWORD": "boschrexroth",                // uncomment to override the password to use for tests
             // "DEBUG": "ctrlxcore",                          // uncomment for additional debug logs
+            // "DEBUG": "express:*",                          // uncomment for additional experss server logs
             "NODE_ENV": "testing"
           }
         },

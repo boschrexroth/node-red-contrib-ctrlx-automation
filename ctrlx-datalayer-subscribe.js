@@ -70,7 +70,7 @@
         } else {
           node.status({fill: 'green', shape: 'dot', text: `received data #${lastEventId}`});
           node.send({
-            topic: data.path,
+            topic: data.node,
             payload: data.value,
             timestamp: data.timestamp,
             type: data.type

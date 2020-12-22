@@ -25,11 +25,9 @@
  */
 
 
-//const assert = require('assert');
 const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
 const CtrlxDatalayerSubscription = require('../lib/CtrlxDatalayerSubscription');
-//const CtrlxProblemError = require('../lib/CtrlxProblemError')
 const CtrlxMockup = require('./helper/CtrlxMockupV2')
 
 const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
@@ -83,7 +81,7 @@ describe('CtrlxCoreEvents', function() {
         await ctrlx.logIn();
 
         // Create the subscription
-        let subscription = await ctrlx.datalayerSubscribe('framework/metrics/system/cpu-utilisation-percent');
+        let subscription = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent']);
         expect(subscription).to.exist;
 
         // Check and count the updates
@@ -99,7 +97,7 @@ describe('CtrlxCoreEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -143,7 +141,7 @@ describe('CtrlxCoreEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
 
           numReceived++;
         });
@@ -175,8 +173,9 @@ describe('CtrlxCoreEvents', function() {
         await ctrlx.logIn();
 
         // Create the subscription
-        let subscription = await ctrlx.datalayerSubscribe('framework/metrics/system/cpu-utilisation-percent', 100);
+        let subscription = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent'], 100);
         expect(subscription).to.exist;
+        expect(subscription.publishIntervalMs).to.be.a('number').eql(100);
 
         // Check and count the updates
         let numReceived = 0;
@@ -191,7 +190,7 @@ describe('CtrlxCoreEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(100);
 
-          console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -211,6 +210,47 @@ describe('CtrlxCoreEvents', function() {
       }
 
     });
+
+
+    it('should open a subscription only once', async function() {
+      this.timeout(5000);
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      try {
+
+        await ctrlx.logIn();
+
+        // Create the subscription
+        let subscription = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent'], 100);
+        expect(subscription).to.exist;
+        subscription.open((err) => {
+          expect(err).to.be.an('error');
+        });
+
+        // Check and count the updates
+        let numReceived = 0;
+        subscription.on('update', (data) => {
+
+          expect(data.node).to.be.a('string').eql('framework/metrics/system/cpu-utilisation-percent');
+          numReceived++;
+        });
+
+        // Give some time to receive the updates
+        await sleep(2000);
+        subscription.close();
+
+        expect(numReceived).to.be.greaterThan(0);
+
+      } catch(err) {
+        console.error('Housten we are in trouble: ' + err);
+        throw err;
+      } finally {
+        await ctrlx.logOut();
+      }
+
+    });
+
+
 
 
   });
