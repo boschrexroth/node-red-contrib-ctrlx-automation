@@ -267,17 +267,19 @@ class CtrlxMockupV1 {
   /**
    * Start the mockup server.
    *
+   * @param {string} hostname - The hostname for the server to listen on.
+   * @param {number} port - The port for the server to liston on.
    * @param {object} callback - Will be called when server is listening.
    * @memberof CtrlxMockupV1
    */
-  startServer(callback) {
+  startServer(hostname = 'localhost', port = 443, callback) {
     const options = {
       key: fs.readFileSync('./test/certs/key.pem'),
       cert: fs.readFileSync('./test/certs/cert.pem')
     };
 
     this.httpsServer = https.createServer(options, this.app);
-    this.httpsServer.listen(443, 'localhost', () => {
+    this.httpsServer.listen(port, hostname, () => {
       callback();
     });
   }

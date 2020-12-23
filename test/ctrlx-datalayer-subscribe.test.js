@@ -66,7 +66,7 @@ describe('ctrlx-datalayer-subscribe', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer(() => {
+    testServer.startServer('localhost', 443, () => {
       done();
     });
   });

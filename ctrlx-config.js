@@ -370,7 +370,7 @@ module.exports = function(RED) {
 
     this.datalayerBrowse = function(nodeRef, path, callback) {
       if (node.connected) {
-        node.ctrlX.datalayerBrowse(path, callback)
+        node.ctrlX.datalayerBrowse(path)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting && nodeRef) {

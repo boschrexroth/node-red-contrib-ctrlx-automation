@@ -64,7 +64,7 @@ describe('ctrlx-datalayer-request', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer(() => {
+    testServer.startServer('localhost', 443, () => {
       done();
     });
   });

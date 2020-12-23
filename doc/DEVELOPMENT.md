@@ -45,6 +45,7 @@ To handle subsciptions an additional config node `CtrlXConfigSubscription`is nec
 - [x] Feature: Basic subscription support
 - [x] Implement: Unit tests for node-red
 - [x] Implement: Update documentation
+- [x] Feature: Support custom port after hostname. E.g. 'localhost:8443'.
 
 ### vX.X.0
 

@@ -37,7 +37,7 @@ const CtrlxMockup = require('./helper/CtrlxMockupV1')
  * This test group contains test cases for acyclic access of the Data Layer via mapping
  * to REST protocol.
  */
-describe('CtrlxCoreNodes', function() {
+describe('CtrlxCoreDataLayerNodes', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -52,7 +52,7 @@ describe('CtrlxCoreNodes', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer(() => {
+    testServer.startServer('localhost', 443, () => {
       done();
     });
   });
@@ -63,39 +63,6 @@ describe('CtrlxCoreNodes', function() {
       done();
     });
   });
-
-
-
-
-
-
-
-
-
-  describe('CtrlxCore: Basics', function() {
-
-    it('should have working properties', function(done) {
-      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
-
-      expect(ctrlx.autoReconnect).to.eql(false);
-      ctrlx.autoReconnect = true;
-      expect(ctrlx.autoReconnect).to.eql(true);
-
-      expect(ctrlx.timeout).to.eql(-1);
-      ctrlx.timeout = 23;
-      expect(ctrlx.timeout).to.eql(23);
-
-      done();
-    });
-
-  });
-
-
-
-
-
-
-
 
 
 
@@ -421,6 +388,71 @@ describe('CtrlxCoreNodes', function() {
       err._type = 'https://example.com/probs/out-of-credit';
       expect(err.toStringExtended()).to.include('https://example.com/probs/out-of-credit');
     });
+
+  });
+
+});
+
+
+
+/*
+ * This test group contains test cases for acyclic access of the Data Layer via mapping
+ * to REST protocol.
+ */
+
+describe('CtrlxCoreDataLayerNodes - With different port', function() {
+
+  function getHostname() {
+    return process.env.TEST_HOSTNAME || '127.0.0.1:8443';
+  }
+  function getUsername() {
+    return process.env.TEST_USERNAME || 'boschrexroth';
+  }
+  function getPassword() {
+    return process.env.TEST_PASSWORD || 'boschrexroth';
+  }
+
+  let testServer;
+  before(function(done) {
+    testServer = new CtrlxMockup();
+    testServer.startServer('localhost', 8443, () => {
+      done();
+    });
+  });
+
+  after(function(done) {
+    this.timeout(10000);
+    testServer.stopServer(() => {
+      done();
+    });
+  });
+
+  it('should return true when reading framework/bundles/com_boschrexroth_comm_datalayer/active', function(done) {
+
+    let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+    ctrlx.logIn()
+      .then(() => { return ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active'); })
+      .then((data) => {
+        assert.equal(data.value, true);
+        done();
+      })
+      .catch((err) => done(err))
+      .finally(() => ctrlx.logOut());
+
+  });
+
+  it('should read two values and then logout without error', function(done) {
+
+    let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+    ctrlx.logIn()
+      .then(() => ctrlx.datalayerRead('framework/bundles/com_boschrexroth_comm_datalayer/active') )
+      .then((/*data*/) => {/*console.log(data)*/})
+      .then(() => ctrlx.datalayerRead('framework/metrics/system/cpu-utilisation-percent') )
+      .then((/*data*/) => {done(); /*console.log(data)*/})
+      .catch((err) => done(err))
+      .finally(() => ctrlx.logOut());
 
   });
 

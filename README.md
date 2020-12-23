@@ -49,11 +49,12 @@ Any use of the source code and related documents of this repository in applicati
 
 ## Changelog
 
-- 2020-09-29: 1.2.0 - Initial release with request node for ctrlX Data Layer
-- 2020-11-28: 1.2.2 - FIX: msg.topic is not set to path if msg.topic is undefined
-- 2020-12-02: 1.2.3 - Only documentation and diagnosis improvements
+- 2020-09-29: 1.2.0 - Initial release with request node for ctrlX Data Layer.
+- 2020-11-28: 1.2.2 - FIX: msg.topic is not set to path if msg.topic is undefined.
+- 2020-12-02: 1.2.3 - Only documentation and diagnosis improvements.
 - 2020-12-14: 1.2.4 - FIX: Error when request was triggered immediately after deploy.
-- 2020-12-20: 1.8.0 - Initial release which adds node to subscribe to ctrlX Data Layer
+- 2020-12-20: 1.8.0 - Initial release which adds node to subscribe to ctrlX Data Layer.
+                      Support custom port after hostname. E.g. 'localhost:8443'.
 
 ## About
 

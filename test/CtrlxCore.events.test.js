@@ -38,7 +38,7 @@ const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitT
  * This test group contains test cases for the subcription mechanism of the Data Layer
  * which is mapped to server sent events.
  */
-describe('CtrlxCoreEvents', function() {
+describe('CtrlxCoreDataLayerEvents', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -53,7 +53,7 @@ describe('CtrlxCoreEvents', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer(() => {
+    testServer.startServer('localhost', 443, () => {
       done();
     });
   });
