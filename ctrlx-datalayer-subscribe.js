@@ -27,6 +27,7 @@
 
  module.exports = function(RED) {
   'use strict';
+  const CtrlxDatalayerSubscription = require('./lib/CtrlxDatalayerSubscription');
 
 
   /* ---------------------------------------------------------------------------
@@ -72,8 +73,9 @@
           node.send({
             topic: data.node,
             payload: data.value,
-            timestamp: data.timestamp,
-            type: data.type
+            type: data.type,
+            timestamp:  data.timestamp,
+            timestampDate: CtrlxDatalayerSubscription.convertTimestamp2Date(data.timestamp)
           });
         }
       });

@@ -299,7 +299,7 @@ class CtrlxMockupV2 {
           var data = {
             node: element,
             schema: undefined,
-            timestamp: Date.now() + 11644473600000 * 10000 // expected format is FILETIME (100-nanosecond intervals since January 1, 1601 UTC)
+            timestamp: Date.now() * 1e4 + 116444736e9  // expected format is FILETIME (100-nanosecond intervals since January 1, 1601 UTC)
           }
 
           switch(element) {

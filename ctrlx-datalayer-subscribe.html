@@ -204,10 +204,12 @@
     <dd>The node returns the monitored data.</dd>
     <dt>topic <span class="property-type">string</span></dt>
     <dd>The <code>topic</code> property is set to <code>path</code> of the data.</dd>
-    <dt>timestamp <span class="property-type">number</span></dt>
-    <dd>Timestamp of the latched dtaa as number of milliseconds from Jan 1, 1970.</dd>
     <dt>type <span class="property-type">string</span></dt>
     <dd>Data type of the returned payload.</dd>
+    <dt>timestamp <span class="property-type">number</span></dt>
+    <dd>Timestamp of the latched data as 100-nanoseconds since Jan 1 1601 (a.k.a FILETIME).</dd>
+    <dt>timestampDate <span class="property-type">Date</span></dt>
+    <dd>Timestamp of the latched data as Javascript Date object (contains number of milliseconds from Jan 1, 1970).</dd>
   </dl>
 
   <h3>Details</h3>
