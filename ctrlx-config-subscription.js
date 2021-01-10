@@ -95,11 +95,17 @@ module.exports = function(RED) {
       node.configNodeDevice.datalayerSubscribe(node, paths, node.publishIntervalMs, (err, subscription) => {
 
         if (err) {
-          node.error(`Failed to create subscription ${node.name} for nodes ${paths} with error ${err.message}`);
+          node.error(`Failed to create subscription ${node.name} for nodes ${paths} with error ${err.message}, but will retry`);
 
           Object.values(node.users).forEach((element) => {
             element.callback(err);
           });
+
+          // Retry to create the subscription soon
+          node.dirty = true;
+          setTimeout(() => {
+            node.updateSubscription();
+          }, 1000);
 
         } else {
           node.subscription = subscription;

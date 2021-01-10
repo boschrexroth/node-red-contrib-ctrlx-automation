@@ -55,6 +55,7 @@ Any use of the source code and related documents of this repository in applicati
 - 2020-12-14: 1.2.4 - FIX: Error when request was triggered immediately after deploy.
 - 2020-12-20: 1.8.0 - Initial release which adds node to subscribe to ctrlX Data Layer.
                       Support custom port after hostname. E.g. 'localhost:8443'.
+- 2020-10-01: 1.8.1 - Fix automatic reconnect when device was not available on start of flow.
 
 ## About
 

@@ -181,6 +181,7 @@ module.exports = function(RED) {
           .then((data) => {
             node.connecting = false;
             node.connected = true;
+
             if (node.debug) {
               node.log('Successfully logged in to: ' + node.hostname);
               node.log('Token will expire at ' + new Date(data.token_expireTime).toLocaleString() + ' local time');
@@ -240,6 +241,9 @@ module.exports = function(RED) {
 
           })
           .catch((err) => {
+            node.connecting = false;
+            node.connected = false;
+
             if (node.debug) {
               node.log('Failed to log in to ' + node.hostname + ' with error ' + err.message);
             }
@@ -257,6 +261,9 @@ module.exports = function(RED) {
                 delete node.pendingRequests[id];
               }
             }
+
+            // Try again
+            setTimeout(node.connect, 500);
 
           });
 
