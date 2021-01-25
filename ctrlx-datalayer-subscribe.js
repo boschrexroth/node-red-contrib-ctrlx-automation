@@ -74,8 +74,8 @@
             topic: data.node,
             payload: data.value,
             type: data.type,
-            timestamp:  data.timestamp,
-            timestampDate: CtrlxDatalayerSubscription.convertTimestamp2Date(data.timestamp)
+            timestamp: CtrlxDatalayerSubscription.convertTimestamp2Javascript(data.timestamp),
+            timestampFiletime: data.timestamp
           });
         }
       });

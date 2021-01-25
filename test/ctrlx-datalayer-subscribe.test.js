@@ -133,11 +133,13 @@ describe('ctrlx-datalayer-subscribe', function() {
           try {
             expect(msg).to.have.property('topic').to.be.a('string').eql('framework/metrics/system/cpu-utilisation-percent');
             expect(msg).to.have.property('timestamp').to.be.a('number');
+            expect(msg).to.have.property('timestampFiletime').to.be.a('number');
             expect(msg).to.have.property('type').to.be.a('string').eql('double');
             expect(msg).to.have.property('payload').to.be.a('number').within(0, 100);
 
-            const timestamp = CtrlxDatalayerSubscription.convertTimestamp2Date(msg.timestamp);
-            const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
+            expect(msg.timestamp).to.be.eql(CtrlxDatalayerSubscription.convertTimestamp2Date(msg.timestampFiletime).valueOf());
+
+            const deltaTime = Math.abs(msg.timestamp.valueOf() - Date.now());
             expect(deltaTime).to.be.below(500);
 
             done();
