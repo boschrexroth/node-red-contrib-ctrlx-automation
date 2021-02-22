@@ -4,6 +4,8 @@ This package contains nodes to easily connect to [ctrlX AUTOMATION](https://www.
 
 Using the nodes you can read and write to the ctrlX Data Layer. These nodes can be installed directly on a ctrlX CORE device as well as on a third-party device which runs Node-RED.
 
+Important: Please upgrade the AutomationCore System App to at least version 1.8.0 (XCR-V-0108, part of ReleaseMilestone 21.03) or newer, because the nodes are now using the new API which introduces subscription support!
+
 ## Installation
 
 Install using the managed palette from inside Node-RED.
@@ -56,6 +58,8 @@ Any use of the source code and related documents of this repository in applicati
 - 2020-12-20: 1.8.0 - Initial release which adds node to subscribe to ctrlX Data Layer.
                       Support custom port after hostname. E.g. 'localhost:8443'.
 - 2020-10-01: 1.8.1 - Fix automatic reconnect when device was not available on start of flow.
+- 2021-02-22: 1.8.2 - Switched to ctrlX Data Layer API version v2 which is only available with AutomationCore 1.8.0 or newer.
+                      Introduced new setting to request node, which allows to set payload format to return only `value` or `value` and `type`.
 
 ## About
 
