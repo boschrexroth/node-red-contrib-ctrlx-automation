@@ -154,6 +154,7 @@
         device: {type: 'ctrlx-config', required: true},
         method: {value: 'READ', required: true},
         path: {value: '', required: false},
+        payloadFormat: {value: 'value', required: true},
         name: {value: ''}
       },
       inputs: 1,
@@ -202,6 +203,15 @@
   <div class="form-row node-input-browse-row" hidden></div>
 
   <div class="form-row">
+    <label for="node-input-payloadFormat"><i class="fa fa-sign-out"></i> Payload</span></label>
+    <select id="node-input-payloadFormat" style="width:70%;">
+        <option value="value">value only</option>
+        <option value="value_type">value + type (json)</option>
+        <option value="v1">v1 (deprecated)</option>
+    </select>
+</div>
+
+  <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
   </div>
@@ -234,10 +244,9 @@
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-    <dt>payload <span class="property-type">string | object | buffer</span></dt>
-    <dd>The body of the response. The node can be configured to return the data
-        as a string, attempt to parse it as a JSON string or leave it as a
-        binary buffer.</dd>
+    <dt>payload <span class="property-type">string | object</span></dt>
+    <dd>The body of the response. The node can be configured to return only the value of the data
+        as a string or value and type as a json object.</dd>
     <dt>topic <span class="property-type">string</span></dt>
     <dd>If the <code>topic</code> property is not already set in the <code>msg</code> object as input, then it will be set to the effective
         <code>path</code> of request.</dd>

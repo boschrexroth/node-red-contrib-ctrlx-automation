@@ -29,7 +29,7 @@ const assert = require('assert');
 const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
 const CtrlxProblemError = require('../lib/CtrlxProblemError')
-const CtrlxMockup = require('./helper/CtrlxMockupV1')
+const CtrlxMockup = require('./helper/CtrlxMockupV2')
 
 
 

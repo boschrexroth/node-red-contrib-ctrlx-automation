@@ -42,6 +42,14 @@
     this.name = config.name;
     this.path = config.path;
     this.method = config.method;
+    this.payloadFormat = config.payloadFormat;
+
+    // If the config is missing certain options (it was probably deployed prior to an update to the node code),
+    // select compatibility options for the new fields
+    if (typeof this.payloadFormat === 'undefined') {
+      this.payloadFormat = 'v1';
+    }
+
     this.isTemplatedPath = (this.path || "").indexOf("{{") !== -1;
     if (RED.settings.httpRequestTimeout) {
       this.reqTimeout = parseInt(RED.settings.httpRequestTimeout) || 120000;
@@ -138,7 +146,23 @@
               // fallback to using `node.send`
               send = send || function() { node.send.apply(node, arguments) }
 
-              msg.payload = data;
+              // Return only expected output data. Option 'v1' is for backward compatibility to
+              // deprecated Data Layer API v1.
+              switch(node.payloadFormat) {
+                case 'v1':
+                  if (data.type === 'object') {
+                    msg.payload = data.value;
+                  } else {
+                    msg.payload = data;
+                  }
+                  break;
+                case 'value':
+                  msg.payload = data.value;
+                  break;
+                case 'value_type':
+                  msg.payload = data;
+                  break;
+              }
               send(msg);
 
               // Once finished, call 'done'.
@@ -162,7 +186,28 @@
           //
           // WRITE
           //
-          node.configNode.datalayerWrite(node, path, msg.payload,
+
+          // Return only expected output data. Option 'v1' is for backward compatibility to
+          // deprecated Data Layer API v1.
+          let payload = {};
+          switch(node.payloadFormat) {
+            case 'v1':
+              if (msg.payload.type === 'undefined') {
+                payload.value = msg.payload;
+                payload.type = 'object';
+              } else {
+                payload = msg.payload;
+              }
+              break;
+            case 'value':
+              payload.value = msg.payload;
+              break;
+            case 'value_type':
+              payload = msg.payload;
+              break;
+          }
+
+          node.configNode.datalayerWrite(node, path, payload,
             function(err) {
 
               if (err) {
@@ -207,7 +252,23 @@
 
               send = send || function() { node.send.apply(node, arguments) }
 
-              msg.payload = data;
+              // Return only expected output data. Option 'v1' is for backward compatibility to
+              // deprecated Data Layer API v1.
+              switch(node.payloadFormat) {
+                case 'v1':
+                  if (data.type === 'object') {
+                    msg.payload = data.value;
+                  } else {
+                    msg.payload = data;
+                  }
+                  break;
+                case 'value':
+                  msg.payload = data.value;
+                  break;
+                case 'value_type':
+                  msg.payload = data;
+                  break;
+              }
               send(msg);
 
               if (done) {
