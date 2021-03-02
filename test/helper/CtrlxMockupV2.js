@@ -157,7 +157,7 @@ class CtrlxMockupV2 {
         case 'references':
           res.statusCode = 200;
           res.json({
-            "type":"arstring", "value":[""]   // TODO: is this format correct?
+            "type":"arstring", "value":[""]
           });
           break;
         default:
@@ -296,7 +296,7 @@ class CtrlxMockupV2 {
 
         let pusher = setInterval(() => {
 
-          var data = {
+          let data = {
             node: element,
             schema: undefined,
             timestamp: Date.now() * 1e4 + 116444736e9  // expected format is FILETIME (100-nanosecond intervals since January 1, 1601 UTC)

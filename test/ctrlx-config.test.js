@@ -124,7 +124,9 @@ describe('ctrlx-config', function() {
           })
           .expect(200)
           .end((err, res) => {
-            if (err) return done(err);
+            if (err) {
+              return done(err);
+            }
             expect(res.text).eql('["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]');
             done();
           });
@@ -166,7 +168,9 @@ describe('ctrlx-config', function() {
             })
             .expect(200)
             .end((err, res) => {
-              if (err) return done(err);
+              if (err) {
+                return done(err);
+              }
               expect(res.text).eql('["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]');
               done();
             });

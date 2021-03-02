@@ -157,7 +157,7 @@ class CtrlxMockupV1 {
         case 'references':
           res.statusCode = 200;
           res.json({
-            "type":"arstring", "value":[""]   // TODO: is this format correct?
+            "type":"arstring", "value":[""]
           });
           break;
         default:
