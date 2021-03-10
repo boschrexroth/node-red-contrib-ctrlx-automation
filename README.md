@@ -60,6 +60,7 @@ Any use of the source code and related documents of this repository in applicati
 - 2020-10-01: 1.8.1 - Fix automatic reconnect when device was not available on start of flow.
 - 2021-02-22: 1.8.2 - Switched to ctrlX Data Layer API version v2 which is only available with AutomationCore 1.8.0 or newer.
                       Introduced new setting to request node, which allows to set payload format to return only `value` or `value` and `type`.
+- 2021-03-10: 1.8.3 - Internal improvements for more compliant URI encoding of http requests.
 
 ## About
 
