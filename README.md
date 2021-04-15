@@ -66,7 +66,7 @@ This is an arbitrary name which is displayed in the Node-RED editor.
 If checked, the node emits debug information on the ctrlX CORE debug message logger.
 
 The logger can be reached in the ctrlX CORE web interface via **Diagnostics** -> **Logbook**.  
-The visibility of the messages has to be activated via the dialogs **setup/cog** icon:
+The visibility of the messages has to be activated via the dialogs **setup** icon:
 
 <details>
   <summary>Expand for <strong>screenshot</strong></summary>
@@ -94,12 +94,11 @@ An example output is shown in the following figure:
 ### Data Layer Request
 
 The node offers read and write access to/from the ctrlX Data Layer, browsing and creating/deleting objects in the ctrlX Data Layer. It accesses the so called *data nodes* in the Data Layer tree structure which are addressed via a *path* addressing scheme.  
-Only "end nodes" can be accessed and no tree structures (i.e. a node with its whole sub-nodes as a compact data object).
 
 A node basically consists of the following parts:
 
-* Address: Path used to address this node
-* Data: Node value
+* Path: An address to uniquly identify this node
+* Value: Contains the node data
 * Metadata: Additional node information, e.g. data type, unit, displayname.
 
 Access permissions are taken into account in respect to the underlying configuration node settings.
@@ -191,7 +190,6 @@ An example input `msg` containing the input values described above with `READ` a
 The `msg.payload` contains the data which is given back by the Data Layer Request operation.
 
 Rules exist how the Data Layer variant types are converted into the Node-RED JSON data types.  
-See the [Data Layer Base documentation](#References) for further details.
 
 Examples:
 
@@ -268,7 +266,7 @@ As an example, if the `msg.path` does not point to an existent Data Layer node, 
 
 ### Data Layer Subscribe
 
-This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. This node is very efficient, because it does not poll but only publish server sent events. Monitoring of the value is done on server side.
+This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. This node is very efficient, because it does not poll but only publish server sent events. Monitoring of the value is done on server side. Thus for continuous tracking of value in the ctrlX Data Layer, this node should be prefered of the *Data Layer Request* node.
 
 ### Examples
 
