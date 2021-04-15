@@ -3,4 +3,5 @@ in alphabetical order:
 
 * [Jochen Scheib](https://github.com/mapero)
 * [Sebastian Krauskopf](https://github.com/krauskopf), ![Repo Maintainer](https://badgen.net/badge/repo/maintainer/blue "Repo Maintainer")
+* [Stephan Schultze](https://github.com/StephanStS)
 * [Thorsten Schulz](https://github.com/mrtandthecode)
