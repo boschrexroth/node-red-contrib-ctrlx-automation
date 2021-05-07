@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020, Bosch Rexroth AG
+ * Copyright (c) 2020-2021, Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@
 
 
 module.exports = function(RED) {
+  'use strict';
   const CtrlxCore = require('./lib/CtrlxCore');
   const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
@@ -180,6 +181,7 @@ module.exports = function(RED) {
           .then((data) => {
             node.connecting = false;
             node.connected = true;
+
             if (node.debug) {
               node.log('Successfully logged in to: ' + node.hostname);
               node.log('Token will expire at ' + new Date(data.token_expireTime).toLocaleString() + ' local time');
@@ -187,7 +189,7 @@ module.exports = function(RED) {
 
             for (let id in node.users) {
               if (Object.prototype.hasOwnProperty.call(node.users, id)) {
-                node.users[id].status({fill:"green", shape:"dot", text:"Authenticated"});
+                node.users[id].setStatus({fill: 'green', shape: 'dot', text: 'authenticated'});
               }
             }
 
@@ -224,6 +226,10 @@ module.exports = function(RED) {
                     node.datalayerBrowse(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
                     break;
                   }
+                  case 'SUBSCRIBE': {
+                    node.datalayerSubscribe(id, node.pendingRequests[id].paths, node.pendingRequests[id].publishIntervalMs, node.pendingRequests[id].callback);
+                    break;
+                  }
                   default: {
                     node.error('internal error: received invalid pending request!');
                   }
@@ -235,13 +241,16 @@ module.exports = function(RED) {
 
           })
           .catch((err) => {
+            node.connecting = false;
+            node.connected = false;
+
             if (node.debug) {
               node.log('Failed to log in to ' + node.hostname + ' with error ' + err.message);
             }
 
             for (let id in node.users) {
               if (Object.prototype.hasOwnProperty.call(node.users, id)) {
-                node.users[id].status({fill: "red", shape: "ring", text: "Authentication failed"});
+                node.users[id].setStatus({fill: 'red', shape: 'ring', text: 'authentication failed'});
               }
             }
 
@@ -252,6 +261,9 @@ module.exports = function(RED) {
                 delete node.pendingRequests[id];
               }
             }
+
+            // Try again
+            setTimeout(node.connect, 500);
 
           });
 
@@ -366,13 +378,30 @@ module.exports = function(RED) {
 
     this.datalayerBrowse = function(nodeRef, path, callback) {
       if (node.connected) {
-        node.ctrlX.datalayerBrowse(path, callback)
+        node.ctrlX.datalayerBrowse(path)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting && nodeRef) {
         node.pendingRequests[nodeRef.id] = {
           method: 'BROWSE',
           path: path,
+          callback: callback
+        };
+      } else {
+        callback(new Error('No session available!'), null);
+      }
+    }
+
+    this.datalayerSubscribe = function(nodeRef, paths, publishIntervalMs, callback) {
+      if (node.connected) {
+        node.ctrlX.datalayerSubscribe(paths, publishIntervalMs)
+          .then((data) => callback(null, data))
+          .catch((err) => callback(err, null));
+      } else if (node.connecting) {
+        node.pendingRequests[nodeRef.id] = {
+          method: 'SUBSCRIBE',
+          paths: paths,
+          publishIntervalMs: publishIntervalMs,
           callback: callback
         };
       } else {
@@ -393,7 +422,9 @@ module.exports = function(RED) {
       }
     }
 
-    // Define config node event listeners
+    //
+    // Close handler
+    //
     node.on("close", function(done) {
       // Logout, when node is closing down.
       node.closing = true;

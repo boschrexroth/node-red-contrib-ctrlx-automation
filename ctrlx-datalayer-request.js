@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020, Bosch Rexroth AG
+ * Copyright (c) 2020-2021, Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,14 @@
     this.name = config.name;
     this.path = config.path;
     this.method = config.method;
+    this.payloadFormat = config.payloadFormat;
+
+    // If the config is missing certain options (it was probably deployed prior to an update to the node code),
+    // select compatibility options for the new fields
+    if (typeof this.payloadFormat === 'undefined') {
+      this.payloadFormat = 'v1';
+    }
+
     this.isTemplatedPath = (this.path || "").indexOf("{{") !== -1;
     if (RED.settings.httpRequestTimeout) {
       this.reqTimeout = parseInt(RED.settings.httpRequestTimeout) || 120000;
@@ -51,12 +59,17 @@
     }
 
 
-
-
+    //
+    // Define functions called by nodes
+    //
     let node = this;
+    this.setStatus = function(status) {
+      node.status(status);
+    };
+
+
     if (this.configNode) {
       node.status({fill: "red", shape: "ring", text: "not logged in"});
-
 
       //
       // Input handler
@@ -123,7 +136,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -133,7 +146,23 @@
               // fallback to using `node.send`
               send = send || function() { node.send.apply(node, arguments) }
 
-              msg.payload = data;
+              // Return only expected output data. Option 'v1' is for backward compatibility to
+              // deprecated Data Layer API v1.
+              switch(node.payloadFormat) {
+                case 'v1':
+                  if (data.type === 'object') {
+                    msg.payload = data.value;
+                  } else {
+                    msg.payload = data;
+                  }
+                  break;
+                case 'value':
+                  msg.payload = data.value;
+                  break;
+                case 'value_type':
+                  msg.payload = data;
+                  break;
+              }
               send(msg);
 
               // Once finished, call 'done'.
@@ -143,7 +172,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             }
 
             if (method === 'READ_WITH_ARG') {
@@ -157,7 +186,28 @@
           //
           // WRITE
           //
-          node.configNode.datalayerWrite(node, path, msg.payload,
+
+          // Return only expected output data. Option 'v1' is for backward compatibility to
+          // deprecated Data Layer API v1.
+          let payload = {};
+          switch(node.payloadFormat) {
+            case 'v1':
+              if (msg.payload.type === 'undefined') {
+                payload.value = msg.payload;
+                payload.type = 'object';
+              } else {
+                payload = msg.payload;
+              }
+              break;
+            case 'value':
+              payload.value = msg.payload;
+              break;
+            case 'value_type':
+              payload = msg.payload;
+              break;
+          }
+
+          node.configNode.datalayerWrite(node, path, payload,
             function(err) {
 
               if (err) {
@@ -166,7 +216,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -178,7 +228,7 @@
               if (done) {
                 done();
               }
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             });
 
         } else if (method === 'CREATE') {
@@ -195,20 +245,36 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
 
               send = send || function() { node.send.apply(node, arguments) }
 
-              msg.payload = data;
+              // Return only expected output data. Option 'v1' is for backward compatibility to
+              // deprecated Data Layer API v1.
+              switch(node.payloadFormat) {
+                case 'v1':
+                  if (data.type === 'object') {
+                    msg.payload = data.value;
+                  } else {
+                    msg.payload = data;
+                  }
+                  break;
+                case 'value':
+                  msg.payload = data.value;
+                  break;
+                case 'value_type':
+                  msg.payload = data;
+                  break;
+              }
               send(msg);
 
               if (done) {
                 done();
               }
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             });
 
         } else if (method === 'DELETE') {
@@ -225,7 +291,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -238,7 +304,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
             });
 
         } else if (method === 'METADATA') {
@@ -254,7 +320,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -268,7 +334,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
           });
 
         }else if (method === 'BROWSE') {
@@ -284,7 +350,7 @@
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({fill: "red", shape: "ring", text: "Request failed"});
+                node.status({fill: "red", shape: "ring", text: "request failed"});
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -298,7 +364,7 @@
                 done();
               }
 
-              node.status({fill: "green", shape: "dot", text: "Request successful"});
+              node.status({fill: "green", shape: "dot", text: "request successful"});
 
           });
 
@@ -308,7 +374,7 @@
           } else {
             node.error('Method property of node unknown or not implemented:' + node.method, msg);
           }
-          node.status({fill: "red", shape: "ring", text: "Request failed"});
+          node.status({fill: "red", shape: "ring", text: "request failed"});
         }
 
       });
@@ -333,5 +399,6 @@
       this.error("Missing configuration node for ctrlX Data Layer");
     }
   }
+
   RED.nodes.registerType("ctrlx-datalayer-request", CtrlxDatalayerRequest);
 };

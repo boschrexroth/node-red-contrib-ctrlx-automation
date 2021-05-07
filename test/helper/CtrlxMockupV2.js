@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020, Bosch Rexroth AG
+ * Copyright (c) 2020-2021, Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,13 +33,13 @@ const jwt = require('jwt-simple');
 
 
 
-
 /**
  * This is a simple mockup of a ctrlX device that can be used for unit testing.
+ * The mockup simulates the version 2.x of the Data Layer protocol at the api endpoint: /automation/api/v2/
  *
- * @class CtrlxMockup
+ * @class CtrlxMockupV2
  */
-class CtrlxMockup {
+class CtrlxMockupV2 {
 
   constructor() {
     this.httpServer = undefined;
@@ -114,14 +114,14 @@ class CtrlxMockup {
     // Builtin Data Mockups - Basics
     //
 
-    this.app.get('/automation/api/v1/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v2/nodes/framework/bundles/com_boschrexroth_comm_datalayer/active', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
         value: true,
         type: 'bool'
       });
     });
-    this.app.get('/automation/api/v1/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v2/nodes/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
       switch (req.query.type) {
         case undefined:
           // fallthrough intended
@@ -157,7 +157,7 @@ class CtrlxMockup {
         case 'references':
           res.statusCode = 200;
           res.json({
-            "type":"arstring", "value":[""]   // TODO: is this format correct?
+            "type":"arstring", "value":[""]
           });
           break;
         default:
@@ -166,7 +166,7 @@ class CtrlxMockup {
           break;
       }
     });
-    this.app.get('/automation/api/v1/framework/metrics/system', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v2/nodes/framework/metrics/system', authenticateJWT, (req, res) => {
       if (req.query.type === 'browse') {
         res.statusCode = 200;
         res.json({
@@ -180,7 +180,7 @@ class CtrlxMockup {
     });
 
     this.var_i = 0;
-    this.app.put('/automation/api/v1/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
+    this.app.put('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
       if (req.body.type !== 'int16') {
         res.statusCode = 405;
         res.send();
@@ -193,7 +193,7 @@ class CtrlxMockup {
         type: 'int16'
       });
     });
-    this.app.get('/automation/api/v1/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
         value: this.var_i,
@@ -201,7 +201,7 @@ class CtrlxMockup {
       });
     });
 
-    this.app.get('/automation/api/v1/nonexistent/path', authenticateJWT, (req, res) => {
+    this.app.get('/automation/api/v2/nodes/nonexistent/path', authenticateJWT, (req, res) => {
       res.statusCode = 404;
       res.json({
         title: 'Error on Read',
@@ -220,7 +220,7 @@ class CtrlxMockup {
     //
     // Builtin Data Mockups - Create/Delete
     //
-    this.app.post('/automation/api/v1/motion/axs', authenticateJWT, (req, res) => {
+    this.app.post('/automation/api/v2/nodes/motion/axs', authenticateJWT, (req, res) => {
       if (req.body.type !== 'string') {
         res.statusCode = 405;
         res.send();
@@ -232,11 +232,11 @@ class CtrlxMockup {
         type: 'uint32'
       });
     });
-    this.app.delete('/automation/api/v1/motion/axs/nostromo', authenticateJWT, (req, res) => {
+    this.app.delete('/automation/api/v2/nodes/motion/axs/nostromo', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.send();
     });
-    this.app.post('/automation/api/v1/motion/axs/no/content', authenticateJWT, (req, res) => {
+    this.app.post('/automation/api/v2/nodes/motion/axs/no/content', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.send();
     });
@@ -245,7 +245,7 @@ class CtrlxMockup {
     //
     // Builtin Data Mockups - Read with parameter
     //
-    this.app.post('/automation/api/v1/test/add', authenticateJWT, (req, res) => {
+    this.app.post('/automation/api/v2/nodes/test/add', authenticateJWT, (req, res) => {
       let x1 = req.body.arg1;
       let x2 = req.body.arg2;
 
@@ -260,7 +260,93 @@ class CtrlxMockup {
         type: 'uint32'
       });
     });
+
+
+
+    //
+    // Builtin Data Mockups - Events/Subscription
+    //
+    this.app.get('/automation/api/v2/events', authenticateJWT, (req, res) => {
+
+      // Handle optional parameter publishIntervalMs
+      let publishIntervalMs = 1000;
+      if (typeof req.query.publishIntervalMs !== 'undefined') {
+        // @ts-ignore
+        publishIntervalMs = req.query.publishIntervalMs;
+      }
+
+      // Nodes are given as comma separate array
+       if (typeof req.query.nodes === 'undefined') {
+        res.statusCode = 400;
+        res.send();
+        return;
+      }
+      // @ts-ignore
+      let nodes = req.query.nodes.split(',');
+
+      // Create a mockup stream which returns the requested nodes
+      const SseStream = require('ssestream');
+      const sseStream = new SseStream(req)
+      sseStream.pipe(res)
+
+      let id = 0;
+      let pushers = new Array();
+
+      nodes.forEach(element => {
+
+        let pusher = setInterval(() => {
+
+          let data = {
+            node: element,
+            schema: undefined,
+            timestamp: Date.now() * 1e4 + 116444736e9  // expected format is FILETIME (100-nanosecond intervals since January 1, 1601 UTC)
+          }
+
+          switch(element) {
+            case 'framework/metrics/system/cpu-utilisation-percent':
+              data.value = Math.random() * 100;
+              data.type = 'double';
+              break;
+            case 'framework/bundles/com_boschrexroth_comm_datalayer/active':
+              data.value = (Math.random() > 0.5) ? true : false;
+              data.type = 'bool';
+              break;
+            case 'plc/app/Application/sym/PLC_PRG/i':
+              data.value = Math.round(Math.random() * 4096);
+              data.type = 'int16';
+              break;
+
+            default:
+              data.value = 'error: unknown value';
+              data.type = 'string';
+          }
+
+          sseStream.write({
+            id: id++,
+            event: 'update',
+            data: data
+          });
+
+        }, publishIntervalMs);
+
+        pushers.push(pusher);
+      });
+
+
+      res.on('close', () => {
+        pushers.forEach(pusher => {
+          clearInterval(pusher)
+        });
+        sseStream.unpipe(res)
+      });
+
+
+    })
+
+
   }
+
+
 
 
 
@@ -269,17 +355,19 @@ class CtrlxMockup {
   /**
    * Start the mockup server.
    *
+   * @param {string} hostname - The hostname for the server to listen on.
+   * @param {number} port - The port for the server to liston on.
    * @param {object} callback - Will be called when server is listening.
-   * @memberof CtrlxMockup
+   * @memberof CtrlxMockupV2
    */
-  startServer(callback) {
+  startServer(hostname = 'localhost', port = 443, callback) {
     const options = {
       key: fs.readFileSync('./test/certs/key.pem'),
       cert: fs.readFileSync('./test/certs/cert.pem')
     };
 
     this.httpsServer = https.createServer(options, this.app);
-    this.httpsServer.listen(443, 'localhost', () => {
+    this.httpsServer.listen(port, hostname, () => {
       callback();
     });
   }
@@ -289,7 +377,7 @@ class CtrlxMockup {
    * Stop the mockup server.
    *
    * @param {object} callback - Will be called, when server is shutdown.
-   * @memberof CtrlxMockup
+   * @memberof CtrlxMockupV2
    */
   stopServer(callback) {
     this.httpsServer.close(() => {
@@ -301,4 +389,4 @@ class CtrlxMockup {
 
 }
 
-module.exports = CtrlxMockup;
+module.exports = CtrlxMockupV2;

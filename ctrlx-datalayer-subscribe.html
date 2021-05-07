@@ -27,21 +27,20 @@
 
 <!--
 
-  ctrlx-datalayer-request -- A node to read data from the datalayer.
+  ctrlx-datalayer-subscribe -- A node to subscribe to the datalayer.
 
 -->
 <script type="text/javascript">
 
-  var treeList_Request;
+  var treeList_Subscribe;
 
-  function onEditPrepare_Request(node) {
-
-    console.log("TEST");
+  function onEditPrepare_Subscribe(node) {
+    console.log("SUBS");
 
     // Create a new TreeList widget.
     // See: https://nodered.org/docs/api/ui/treeList/
     //      https://discourse.nodered.org/t/select-form-with-tree-structure-in-custom-node/8348
-    treeList_Request = $("<div>")
+    treeList_Subscribe = $("<div>")
       .css({width: "100%", height: "100%"})
       .appendTo(".node-input-browse-row")
       .treeList({})
@@ -64,10 +63,9 @@
       expanded: true,
       children: function(done) {
 
-        console.log("TEST");
-
         // Get a reference to the config node settings.
-        let configNodeDevice = RED.nodes.node($('#node-input-device').val());
+        let configNodeSubscription = RED.nodes.node($('#node-input-subscription').val());
+        let configNodeDevice = RED.nodes.node(configNodeSubscription.device);
 
         // We need to browse the child items on the server(runtime of Node-RED). For this, the server needs to know the config node or username/password.
         let username = (configNodeDevice && configNodeDevice.credentials) ? configNodeDevice.credentials.username : undefined;
@@ -105,18 +103,19 @@
     // Show and fill the TreeView when button is clicked.
     $('#node-input-browse-button').click(function() {
 
-      treeList_Request.treeList('empty');
-      treeList_Request.treeList('data', items);
+      treeList_Subscribe.treeList('empty');
+      treeList_Subscribe.treeList('data', items);
       $(".node-input-browse-row").show()
 
       setTimeout(function() {
-        treeList_Request.treeList('show', '');
+        treeList_Subscribe.treeList('show', '');
       }, 100);
 
     });
+
   }
 
-  function resizeNodeList_Request() {
+  function resizeNodeList_Subscribe() {
       var rows = $("#dialog-form>div:not(.node-input-browse-row)");
       var height = $("#dialog-form").height();
       for (var i = 0; i < rows.length; i++) {
@@ -127,71 +126,54 @@
       $(".node-input-browse-row").css("height",height+"px");
   }
 
-  function generateName_Request(node) {
+  function generateName_Subscribe(node) {
     if (node.name) {
       return node.name;
-    } else if (node.path && node.method) {
+    } else if (node.path) {
       if (node.path.length < 50) {
-        return `${node.method}: ${node.path}`;
+        return `${node.path}`;
       } else {
         let shortPath = node.path.substr(node.path.length - 45);
         let shortPathStart = Math.max(shortPath.indexOf('/'), 0);
-        return `${node.method}: ...${shortPath.substr(shortPathStart)}`;
+        return `...${shortPath.substr(shortPathStart)}`;
       }
-    } else if (node.method && !node.path) {
-      return `${node.method}: <msg.path>`;
     } else {
-      return 'Data Layer Request';
+      return 'Data Layer Subscribe';
     }
   }
 
 
-  RED.nodes.registerType('ctrlx-datalayer-request', {
+  RED.nodes.registerType('ctrlx-datalayer-subscribe', {
       category: 'ctrlX AUTOMATION',
       color: '#C0DEED',
       icon: 'icons/core.png',
       defaults: {
-        device: {type: 'ctrlx-config', required: true},
-        method: {value: 'READ', required: true},
-        path: {value: '', required: false},
-        payloadFormat: {value: 'value', required: true},
-        name: {value: ''}
+        subscription: {type: 'ctrlx-config-subscription', required: true},
+        path: {value: '', required: true},
+        name: {value: '', required: false}
       },
-      inputs: 1,
+      inputs: 0,
       outputs: 1,
-      paletteLabel: 'Data Layer Request',
+      paletteLabel: 'Data Layer Subscribe',
       label: function() {
-        return generateName_Request(this);
+        return generateName_Subscribe(this);
       },
       oneditprepare: function() {
-        onEditPrepare_Request(this);
+        onEditPrepare_Subscribe(this);
       },
-      oneditresize: resizeNodeList_Request
+      oneditresize: resizeNodeList_Subscribe
   });
 </script>
 
 
 
 
-<script type="text/html" data-template-name="ctrlx-datalayer-request">
+
+<script type="text/html" data-template-name="ctrlx-datalayer-subscribe">
 
   <div class="form-row">
-    <label for="node-input-device"><i class="fa fa-sign-in"></i> Device</label>
-    <input type="text" id="node-input-device">
-  </div>
-
-  <div class="form-row">
-    <label for="node-input-method"><i class="fa fa-tasks"></i> Method</label>
-    <select type="text" id="node-input-method" style="width:70%;">
-    <option value="READ">READ</option>
-    <option value="WRITE">WRITE</option>
-    <option value="CREATE">CREATE</option>
-    <option value="DELETE">DELETE</option>
-    <option value="BROWSE">BROWSE</option>
-    <option value="METADATA">METADATA</option>
-    <option value="READ_WITH_ARG">READ_WITH_ARG</option>
-    <option value="msg">- set by msg.method -</option>
-    </select>
+    <label for="node-input-subscription"><i class="fa fa-envelope"></i> Subscription</label>
+    <input type="text" id="node-input-subscription">
   </div>
 
   <div class="form-row">
@@ -203,15 +185,6 @@
   <div class="form-row node-input-browse-row" hidden></div>
 
   <div class="form-row">
-    <label for="node-input-payloadFormat"><i class="fa fa-sign-out"></i> Payload</span></label>
-    <select id="node-input-payloadFormat" style="width:70%;">
-        <option value="value">value only</option>
-        <option value="value_type">value + type (json)</option>
-        <option value="v1">v1 (deprecated)</option>
-    </select>
-</div>
-
-  <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
   </div>
@@ -221,35 +194,22 @@
 
 
 
-<script type="text/html" data-help-name="ctrlx-datalayer-request">
+<script type="text/html" data-help-name="ctrlx-datalayer-subscribe">
 
-  <p>Use this node to read or write data to the ctrlX Data Layer.</p>
-
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt class="optional">path <span class="property-type">string</span></dt>
-    <dd>If not configured in the node, this optional property sets the path of the request.</dd>
-    <dt class="optional">method <span class="property-type">string</span></dt>
-    <dd>If not configured in the node, this optional property sets the method of the request.
-        Must be one of <code>READ</code>, <code>WRITE</code>, <code>CREATE</code>, <code>DELETE</code>, <code>BROWSE</code>, <code>READ_WITH_ARG</code> or <code>METADATA</code>.</dd>
-    <dt class="optional">payload <span class="property-type">object</span></dt>
-    <dd>Data to be sent in case of WRITE, READ_WITH_ARG or CREATE method.</dd>
-    <!-- TODO: implemented later
-    <dt class="optional">rejectUnauthorized</dt>
-    <dd>If set to <code>false</code>, allows requests to be made to https sites that use
-        self signed certificates.</dd>-->
-    <dt class="optional">requestTimeout <span class="property-type">number</span></dt>
-    <dd>If set to a positive number of milliseconds, will override the globally set <code>httpRequestTimeout</code> parameter.</dd>
-  </dl>
+  <p>Use this node to subscribe to the ctrlX Data Layer.</p>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-    <dt>payload <span class="property-type">string | object</span></dt>
-    <dd>The body of the response. The node can be configured to return only the value of the data
-        as a string or value and type as a json object.</dd>
+    <dt>payload <span class="property-type">any</span></dt>
+    <dd>The node returns the monitored data.</dd>
     <dt>topic <span class="property-type">string</span></dt>
-    <dd>If the <code>topic</code> property is not already set in the <code>msg</code> object as input, then it will be set to the effective
-        <code>path</code> of request.</dd>
+    <dd>The <code>topic</code> property is set to <code>path</code> of the data.</dd>
+    <dt>type <span class="property-type">string</span></dt>
+    <dd>Data type of the returned payload.</dd>
+    <dt>timestamp <span class="property-type">number</span></dt>
+    <dd>Timestamp of the latched data in javascript format as number. Can be directly converted to Date object (Contains number of milliseconds from Jan 1, 1970).</dd>
+    <dt>timestampFiletime <span class="property-type">number</span></dt>
+    <dd>Timestamp of the latched data as 100-nanoseconds since Jan 1 1601 (a.k.a FILETIME). This is the internal format as recorded by Data Layer.</dd>
   </dl>
 
   <h3>Details</h3>

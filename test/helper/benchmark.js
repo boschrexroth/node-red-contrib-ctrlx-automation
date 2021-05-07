@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020, Bosch Rexroth AG
+ * Copyright (c) 2020-2021, Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ const { assert } = require('console');
 // Test Connection
 //
 function getHostname() {
-  return process.env.TEST_HOSTNAME || '[fe80::260:34ff:fe08:322]';
+  return process.env.TEST_HOSTNAME || '[fe80::260:34ff:fe08:db2]';
 }
 function getUsername() {
   return process.env.TEST_USERNAME || 'boschrexroth';
@@ -107,8 +107,6 @@ function benchmarkSimple() {
  * how fast a simple ad-hoc requests takes to execute.
  */
 async function benchmarkSimpleAsync() {
-
-  let ctrlx = new CtrlxCore('[fe80::260:34ff:fe08:322]', 'boschrexroth', 'boschrexroth');
 
   try {
 
@@ -185,10 +183,51 @@ function benchmarkRequestsPerSecond() {
 
 }
 
+
+/**
+ * A simple benchmark to measure creation of a subscription and how long it takes to return the first event.
+ */
+async function benchmarkSubscriptionSimple() {
+
+  const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+
+  try {
+
+    await ctrlx.logIn();
+
+    performance.mark('A');
+    let sub = await ctrlx.datalayerSubscribe('framework/metrics/system/cpu-utilisation-percent');
+    performance.mark('B');
+
+    sub.on('update', (data) => {
+      performance.mark('C');
+      console.log(JSON.stringify(data));
+    });
+
+    await sleep(4000);
+
+    performance.measure('Create Subscription', 'A', 'B');
+    performance.measure('First update', 'B', 'C');
+
+    sub.close();
+  } catch(err) {
+    console.error('Housten we are in trouble: ' + err);
+  } finally {
+    await ctrlx.logOut();
+  }
+
+  console.log('DONE!');
+}
+
+
+
+
 exports.benchmarkSimple = benchmarkSimple;
 exports.benchmarkSimpleAsync = benchmarkSimpleAsync;
 exports.benchmarkRequestsPerSecond = benchmarkRequestsPerSecond;
+exports.benchmarkSubscriptionSimple = benchmarkSubscriptionSimple;
 
 //benchmarkSimple()
 //benchmarkSimpleAsync();
 //benchmarkRequestsPerSecond()
+//benchmarkSubscriptionSimple();
