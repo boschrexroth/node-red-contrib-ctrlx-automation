@@ -216,6 +216,16 @@ class CtrlxMockupV2 {
       });
     });
 
+    this.app.put('/automation/api/v2/nodes/diagnosis/confirm/error', authenticateJWT, (req, res) => {
+      if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+        res.statusCode = 200;
+        res.send();
+      }
+      res.statusCode = 400;
+      res.send();
+      return;
+    });
+
 
     //
     // Builtin Data Mockups - Create/Delete

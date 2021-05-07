@@ -296,15 +296,16 @@ Any use of the source code and related documents of this repository in applicati
 ## Changelog
 
 - 2020-09-29: 1.2.0 - Initial release with request node for ctrlX Data Layer.
-- 2020-11-28: 1.2.2 - FIX: msg.topic is not set to path if msg.topic is undefined.
+- 2020-11-28: 1.2.2 - fix: msg.topic is not set to path if msg.topic is undefined.
 - 2020-12-02: 1.2.3 - Only documentation and diagnosis improvements.
-- 2020-12-14: 1.2.4 - FIX: Error when request was triggered immediately after deploy.
+- 2020-12-14: 1.2.4 - fix: Error when request was triggered immediately after deploy.
 - 2020-12-20: 1.8.0 - Initial release which adds node to subscribe to ctrlX Data Layer.
                       Support custom port after hostname. E.g. 'localhost:8443'.
-- 2020-10-01: 1.8.1 - Fix automatic reconnect when device was not available on start of flow.
+- 2020-10-01: 1.8.1 - fix: automatic reconnect when device was not available on start of flow.
 - 2021-02-22: 1.8.2 - Switched to ctrlX Data Layer API version v2 which is only available with AutomationCore 1.8.0 or newer.
                       Introduced new setting to request node, which allows to set payload format to return only `value` or `value` and `type`.
 - 2021-03-10: 1.8.3 - Internal improvements for more compliant URI encoding of http requests.
+- 2021-05-07: 1.8.4 - fix: allow to make a write without arguments (msg.payload = null). E.g. for 'diagnosis/confirm/error'.
 
 ## About
 

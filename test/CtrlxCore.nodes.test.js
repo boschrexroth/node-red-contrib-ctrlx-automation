@@ -123,6 +123,20 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
     });
 
+    it('should write a value with empty argument list', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.datalayerWrite('diagnosis/confirm/error', null))
+        .then((data) => {
+            done();
+          })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
     it('should read with arguments', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
