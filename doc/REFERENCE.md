@@ -11,7 +11,7 @@ The document contains four main chapters. One for each node.
 
 ### Configuration dialog
 
-<img src="./doc/images/node-settings-config.png" alt="Configuration node settings" width="400px"/>
+<img src="./images/node-settings-config.png" alt="Configuration node settings" width="400px"/>
 
 ### Configuration properties
 
@@ -46,7 +46,7 @@ The visibility of the messages has to be activated via the dialogs **setup** ico
 <details>
   <summary>Expand for <strong>screenshot</strong></summary>
 
-<img src="./doc/images/node-red-ui-logbook-settings.png" alt="ctrlX CORE logbook settings" width="200px"/>
+<img src="./images/node-red-ui-logbook-settings.png" alt="ctrlX CORE logbook settings" width="200px"/>
 
 </details>
 
@@ -55,13 +55,13 @@ Additionally ***snap.rexroth-node-red.node-red.service*** has to be ckecked in t
 <details>
   <summary>Expand for <strong>screenshot</strong></summary>
 
-<img src="./doc/images/node-red-ui-logbook-filter-settings.png" alt="ctrlX CORE logbook filter settings" width="500px"/>
+<img src="./images/node-red-ui-logbook-filter-settings.png" alt="ctrlX CORE logbook filter settings" width="500px"/>
 
 </details>
 
 An example output is shown in the following figure:
 
-<img src="./doc/images/node-red-ui-logbook-output.png" alt="ctrlX CORE logbook output" width="800px"/>
+<img src="./images/node-red-ui-logbook-output.png" alt="ctrlX CORE logbook output" width="800px"/>
 
 <br>
 <br>
@@ -80,7 +80,7 @@ Access permissions are taken into account in respect to the underlying configura
 
 ### Configuration dialog
 
-<img src="./doc/images/node-settings-dl-request.png" alt="Data Layer Request node settings" width="400px"/>
+<img src="./images/node-settings-dl-request.png" alt="Data Layer Request node settings" width="400px"/>
 <br><br>
 
 ### Configuration properties
@@ -141,7 +141,7 @@ Default: 120000 (2 minutes)
 
 An example input `msg` containing the input values described above with `READ` access and no `msg.payload` data could be as follows:
 
-<img src="./doc/images/node-inputs-example.png" alt="Input message example" width="400px"/>
+<img src="./images/node-inputs-example.png" alt="Input message example" width="400px"/>
 <br><br>
 
 <details>
@@ -212,7 +212,7 @@ The node status gives some diagnostic information. The following messages may oc
 * Request failed
 * Request successful
 
-<img src="./doc/images/node-status.png" alt="Node status example" width="500px"/>
+<img src="./images/node-status.png" alt="Node status example" width="500px"/>
 <br><br>
 
 #### Node-RED debug panel output
@@ -220,7 +220,7 @@ The node status gives some diagnostic information. The following messages may oc
 In case of an error, the node will **not** emit a `msg` but throws an error, that can be caught by the ***catch*** node.  
 The errors and warnings are also visible in the Node-RED debug sidebar.
 
-<img src="./doc/images/node-error-debug-sidebar.png" alt="Node error debug output example" width="250px"/>
+<img src="./images/node-error-debug-sidebar.png" alt="Node error debug output example" width="250px"/>
 <br><br>
 
 The following **error** messages may occur:
