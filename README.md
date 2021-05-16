@@ -41,11 +41,11 @@ This node allows to subscribe to value changes of an item in the ctrlX Data Laye
 
 ## Usage - Reference Manual
 
-Besides this quick introduction, there is a [Reference Manual](./docs/REFERENCE.md) which describes the nodes in more detail. It covers all the different configuration options, error handling, troubleshouting and generals hints for usage.
+Besides this quick introduction, there is a [Reference Manual](./doc/REFERENCE.md) which describes the nodes in more detail. It covers all the different configuration options, error handling, troubleshouting and generals hints for usage.
 
 ## Examples
 
-It might be helpful to have a look at the [Examples](./docs/EXAMPLES.md) document to find various flows for different use-cases. They demonstrate the different ways how the nodes can be used. Most of the examples are also directly available from within the Node-RED editor.
+It might be helpful to have a look at the [Examples](./doc/EXAMPLES.md) document to find various flows for different use-cases. They demonstrate the different ways how the nodes can be used. Most of the examples are also directly available from within the Node-RED editor.
 They appear under the Examples section of the library import menu in Node-RED.
 
 ## Support
