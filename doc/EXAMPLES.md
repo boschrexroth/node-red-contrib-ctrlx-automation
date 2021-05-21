@@ -48,3 +48,58 @@ To confirm all errors in the diagnosis logbook you need to send an empty `WRITE`
 [{"id":"b5effce.db9fd","type":"comment","z":"8a1df649.999ee","name":"Example: Confirm all diagnosis in the logbook","info":"","x":230,"y":640,"wires":[]},{"id":"477443cd.9b7bd4","type":"debug","z":"8a1df649.999ee","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":730,"y":700,"wires":[]},{"id":"64d6212b.ba6cd","type":"ctrlx-datalayer-request","z":"8a1df649.999ee","device":"9bdd1ac6.4db1c8","method":"WRITE","path":"diagnosis/confirm/error","payloadFormat":"value_type","name":"","x":510,"y":700,"wires":[["477443cd.9b7bd4"]]},{"id":"226bf82.26e5e88","type":"inject","z":"8a1df649.999ee","name":"","repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":160,"y":700,"wires":[["d4a0a352.ae8488"]]},{"id":"d4a0a352.ae8488","type":"function","z":"8a1df649.999ee","name":"","func":"msg.payload = null;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":300,"y":700,"wires":[["64d6212b.ba6cd"]]},{"id":"9bdd1ac6.4db1c8","type":"ctrlx-config","name":"","hostname":"localhost","debug":false}]
 ```
 
+## PLC
+
+For reading and especially writing it might be necessary to better understand how the many types of the IEC61131-3 programming language are mapped to javascript types, which are used in Node-RED. Have a look at the [data type overview](DATATYPES.md) for this.
+
+### Read a PLC variable
+
+The following example shows how to read a PLC variable `i` of type `INT` of a program `PLC_PRG` which has been configured to be part of the symbolic variable configuration.
+
+  ```
+  PROGRAM PLC_PRG
+  VAR
+  	 i: INT;
+  END_VAR
+  ```
+
+![examples-plc-read-value.png](./images/examples-plc-read-value.png)
+
+```
+[{"id":"7467c58b.9bd5ac","type":"ctrlx-datalayer-request","z":"a87ae0cb.f9008","device":"f1d2bfcc.083bf","method":"READ","path":"plc/app/Application/sym/PLC_PRG/i","payloadFormat":"value_type","name":"","x":470,"y":200,"wires":[["8090a7bb.b361"]]},{"id":"8090a7bb.b361","type":"debug","z":"a87ae0cb.f9008","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":750,"y":200,"wires":[]},{"id":"f830ae36.91e878","type":"inject","z":"a87ae0cb.f9008","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":200,"wires":[["7467c58b.9bd5ac"]]},{"id":"76611ca.4da74e4","type":"comment","z":"a87ae0cb.f9008","name":"Example: Read a PLC variable","info":"","x":190,"y":120,"wires":[]},{"id":"f1d2bfcc.083bf","type":"ctrlx-config","name":"","hostname":"localhost","debug":false}]
+```
+
+The request returns in `msg.payload`:
+
+  ```JSON
+    {
+      "type": "int16", 
+      "value": 0
+    }
+  ```
+
+### Write a PLC variable (boolean)
+
+The following example shows how to wriate a boolean PLC variable `b` of type `BOOL` which has been configured for write access via the symbolic variable configuration. Please note, that for writing PLC variable you need to specify the exact type of the PLC variable in the `msg.payload`.
+
+  ```
+  PROGRAM PLC_PRG
+  VAR
+  	 b: BOOL;
+  END_VAR
+  ```
+
+![examples-plc-write-value-bool.png](./images/examples-plc-write-value-bool.png)
+
+```
+[{"id":"501f80f3.0e5068","type":"ctrlx-datalayer-request","z":"a87ae0cb.f9008","device":"f1d2bfcc.083bf","method":"WRITE","path":"plc/app/Application/sym/PLC_PRG/b","payloadFormat":"value_type","name":"","x":470,"y":400,"wires":[["37817780.db70c"]]},{"id":"37817780.db70c","type":"debug","z":"a87ae0cb.f9008","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":750,"y":400,"wires":[]},{"id":"5d059ae1.63156c","type":"inject","z":"a87ae0cb.f9008","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"{\"type\":\"bool8\",\"value\":true}","payloadType":"json","x":190,"y":400,"wires":[["501f80f3.0e5068"]]},{"id":"6466502e.8f8c","type":"comment","z":"a87ae0cb.f9008","name":"Example: Write a PLC variable (BOOL)","info":"","x":210,"y":320,"wires":[]},{"id":"f1d2bfcc.083bf","type":"ctrlx-config","name":"","hostname":"localhost","debug":false}]
+```
+
+The request returns in `msg.payload` the written value:
+
+  ```JSON
+    {
+      "type": "bool8", 
+      "value": true
+    }
+  ```

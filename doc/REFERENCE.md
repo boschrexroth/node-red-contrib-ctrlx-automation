@@ -5,6 +5,7 @@ The document contains four main chapters. One for each node.
 
 * `ctrlx-config` Configuration Node
 * `Data Layer Request` Node
+* `ctrlx-subscription` Configuration Node
 * `Data Layer Subscription` Node
 
 ## Configuration Node *ctrlx-config*
@@ -105,9 +106,22 @@ Possible values are:
 #### Path
 
 This property sets the **path to the Data Layer node** which shall be accessed. If it is not set, it has to be given via the input `msg.path` attribute.  
-Examples for a path are `framework/state` or `diagnosis/clear/error`
+Examples for a path are `framework/state` or `framework/metrics/system/cpu-utilisation-percent`
 
 The **magnifier symbol** opens a browsing dialog where all accessible Data Layer nodes are displayed.
+
+#### Payload
+
+This property allows to configure how the payload is returned in case of a `READ` or `READ_WITH_ARGS` method or how the payload is expected in case of a `WRITE` or `CREATE` method.
+Possible values are:
+
+* `value only`: In this case, only the value of the Data Layer node is returned as a javascript variable in the `msg.payload` variable.
+* `value + type (json)`: The `msg.payload` will hold a json object which contains an attribute `value` that contains the value of the Data Layer node and an attribute `type` which contains the Data Layer type encoded as a string.
+
+**Note:** The type-system of the ctrlX Data Layer is more fine granular than the type-system of javascript and Node-RED. For example, in javascript there is only `Number` for all kind of floating-point, signed or unsigned numbers. In the Data Layer exist different kind of distinct data types like in other programming languages. E.g. `int8` , `uint8`, .. ,`int64`, `uint64`, `float`, `double`. When returning the payload as `value only` you will lose the information about the original data value. So depending on your use-case you might chose the right payload format. E.g. if you want to forward the value for display in an user interface the original data type might not be of interest and it is more handy to already have the value in the `msg.payload` variables. In other use-cases, where you might want to do calculations or analytics on top of the values it might be necessary to know the original data type.
+For a detailed overview of the different data types and the mapping to javascript have a look at the [data type reference](DATATYPES.md).
+
+**Hint:** Some nodes in the Data Layer expect, that type of the value has to be explicitly specified in case of a `WRITE` request. In this case it is not possible to write the value with the payload setting of `value only` and the node will return a `DL_TYPE_MISMATCH` error. In this case the only chance is to set the payload setting to `value + type (json)` and to provide a json object with `value` and `type` attribute in `msg.payload`. In order to find out which type is expected by the node you can query the documentation of the specific Data Layer node or you may perform a `READ` request on the same node to find out what the returned data type is. Usually, the same data type is expected on a `WRITE` request.
 
 #### Name
 
@@ -149,10 +163,10 @@ An example input `msg` containing the input values described above with `READ` a
 
   ```JSON
   {
-    "method":"READ",
-    "path":"framework/metrics/system/cpu-utilisation-percent",
-    "requestTimeout":100,
-    "_msgid":"b424040c.6715c8"
+    "method": "READ",
+    "path": "framework/metrics/system/cpu-utilisation-percent",
+    "requestTimeout": 100,
+    "_msgid": "b424040c.6715c8"
   }
   ```
 
@@ -165,11 +179,7 @@ An example input `msg` containing the input values described above with `READ` a
 The `msg.payload` contains the data which is given back by the Data Layer Request operation.
 
 Rules exist how the Data Layer variant types are converted into the Node-RED JSON data types.  
-
-Examples:
-
-* Data Layer variant type **FLOAT64** is converted to JSON data type **double**
-* Data Layer variant type **ARRAY_OF_STRING** is converted to JSON array **arstring**
+A detailed overview is available in the [data type overview](./doc/DATATYPES.md).
 
 #### Output `msg.topic`
 
@@ -181,8 +191,8 @@ Example output `msg` when using ***Data Layer Request node properties***:
 
   ```JSON
   {
-    "_msgid":"7d10a368.35a33c",
-    "payload":{"type":"double","value":3.1}
+    "_msgid": "7d10a368.35a33c",
+    "payload": {"type": "double", "value": 3.1}
   }
   ```
 
@@ -190,12 +200,12 @@ Example output `msg` when using input `msg` attributes (with `msg.topic`):
 
   ```JSON
   {
-    "method":"READ",
-    "path":"framework/metrics/system/cpu-utilisation-percent",
-    "requestTimeout":100,
-    "topic":"framework/metrics/system/cpu-utilisation-percent",
-    "_msgid":"d6a822de.b10f7",
-    "payload":{"type":"double","value":3.1}
+    "method": "READ",
+    "path": "framework/metrics/system/cpu-utilisation-percent",
+    "requestTimeout": 100,
+    "topic": "framework/metrics/system/cpu-utilisation-percent",
+    "_msgid": "d6a822de.b10f7",
+    "payload": {"type": "double", "value": 3.1}
   }
   ```
 
@@ -239,6 +249,91 @@ The following **warnings** may occur:
 Further error messages which come directly from the Data Layer are also possible.  
 As an example, if the `msg.path` does not point to an existent Data Layer node, an error "*CtrlxProblemError: DL_INVALID_ADDRESS*" is emitted.
 
+## Configuration Node *ctrlx-config-subscription*
+
+A subscription groups multiple subscribed values to a group which share the same sample time and are processed within the same thread on server side. The *ctrlx-config-subscribe* configuration node represents a subscription of multiple nodes. It is automatically created when the first *Data Layer Subscribe* node is added to the flow and allows the following configuration.
+
+### Configuration dialog
+
+<img src="./images/node-settings-config-subscription.png" alt="Configuration node settings" width="400px"/>
+
+### Configuration properties
+
+#### Device
+
+The **ctrlX CORE device** which was creating with its *Configuration Node* (see above) has to be selected there.
+
+#### Name
+
+This is an arbitrary name which is displayed in the Node-RED editor.
+
+#### Publish Interval
+
+The Publish Interval is the minimum time in milliseconds that the server should use to send new updates. It is used to prevent the server from flooding the client, when the value changes to rapidly.
+
 ## Data Layer Subscribe
 
 This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. This node is very efficient, because it does not poll but only publish server sent events. Monitoring of the value is done on server side. Thus for continuous tracking of value in the ctrlX Data Layer, this node should be prefered of the *Data Layer Request* node.
+
+### Configuration dialog
+
+<img src="./images/node-settings-dl-subscribe.png" alt="Data Layer Subscribe node settings" width="400px"/>
+<br><br>
+
+### Configuration properties
+
+#### Subscription
+
+Every single subscribed node belongs to a subscription which groups multiple values to be sampled and published with the same interval inside the server. A subscription that is was creating as *Subscription Configuration Node* (see above) has to be selected there.
+
+#### Path
+
+This property sets the **path to the Data Layer node** which shall be subscribed to. 
+Examples for a path are `framework/state` or `framework/metrics/system/cpu-utilisation-percent`.
+
+The **magnifier symbol** opens a browsing dialog where all accessible Data Layer nodes are displayed.
+
+#### Name
+
+This is an arbitrary name which is displayed in the Node-RED editor.
+
+### Outputs of the *Data Layer Subscribe* node
+
+#### Output `msg.payload`
+
+The `msg.payload` contains the value which is given back by the Data Layer Subscribe node.
+
+Rules exist how the Data Layer variant types are converted into the Node-RED JSON data types.  
+A detailed overview is available in the [data type overview](./doc/DATATYPES.md).
+
+#### Output `msg.topic`
+
+The `msg.topic` will be set to the effective `path` of the request.
+
+#### Output `msg.type`
+
+The `msg.type` contains the [data type](./doc/DATATYPES.md) of the returned value.
+
+#### Output `msg.timestamp`
+
+The `msg.timestamp` contains the timestamp of the sampled value in milliseconds since January 1, 1970 00:00:00 UTC. It can be easily converted to a javascript `Date` object via `const ts = new Date(msg.timestamp);`.
+
+#### Output `msg.timestampFiletime`
+
+The `msg.timestampFiletime` contains the timestamp of the sampled value in 100-nanosecond intervals since January 1, 1601 00:00:00 UTC. This format is more accurate but rather uncommon in javascript.
+
+#### Example output `msg`
+
+Example output `msg`:
+
+  ```JSON
+  {
+    "topic": "framework/metrics/system/cpu-utilisation-percent",
+    "payload": 11.3,
+    "type": "double",
+    "timestamp": 1621583770901,
+    "timestampFiletime": 132660573709014640,
+    "_msgid":"3b670324.e6f9cc"
+  }  
+  ```
+

@@ -42,6 +42,7 @@ This node allows to subscribe to value changes of an item in the ctrlX Data Laye
 ## Usage - Reference Manual
 
 Besides this quick introduction, there is a [Reference Manual](./doc/REFERENCE.md) which describes the nodes in more detail. It covers all the different configuration options, error handling, troubleshouting and generals hints for usage.
+For working with different nodes in the Data Layer it might also be useful to have a look at the [data type overview](./doc/DATATYPES.md).
 
 ## Examples
 
