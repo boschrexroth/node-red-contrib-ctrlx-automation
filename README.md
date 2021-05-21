@@ -29,7 +29,7 @@ In addition to that, a configuration node will be added to the project as soon a
 
 ### Data Layer Request
 
-The `Data Layer Request` node can be triggered to execute read, write, browse, create or delete operations within the ctrlX Data Layer.
+This node can be triggered to execute read, write, browse, create or delete operations within the ctrlX Data Layer.
 
 ![usage_overview_request.png](./doc/images/usage_overview_request.png)
 
@@ -42,7 +42,7 @@ This node allows to subscribe to value changes of an item in the ctrlX Data Laye
 ## Usage - Reference Manual
 
 Besides this quick introduction, there is a [Reference Manual](./doc/REFERENCE.md) which describes the nodes in more detail. It covers all the different configuration options, error handling, troubleshouting and generals hints for usage.
-For working with different nodes in the Data Layer it might also be useful to have a look at the [data type overview](./doc/DATATYPES.md).
+For working with different nodes in the Data Layer it might also be useful to have a look at the [Data Type Overview](./doc/DATATYPES.md).
 
 ## Examples
 

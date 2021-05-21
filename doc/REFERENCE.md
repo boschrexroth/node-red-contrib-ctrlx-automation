@@ -88,11 +88,11 @@ Access permissions are taken into account in respect to the underlying configura
 
 #### Device
 
-The **ctrlX CORE device** which was creating with its *Configuration Node* (see above) has to be selected there.
+The ctrlX CORE device which was creating with its *Configuration Node* (see above) has to be selected there.
 
 #### Method
 
-This property sets the **method to be called**. If it is not set, it has to be given via the input `msg.method` attribute.  
+This property sets the method to be called. If it is not set, it has to be given via the input `msg.method` attribute.  
 Possible values are:
 
 * `READ`: ***Read data*** of the data node represented by the *Path* property.
@@ -105,10 +105,10 @@ Possible values are:
 
 #### Path
 
-This property sets the **path to the Data Layer node** which shall be accessed. If it is not set, it has to be given via the input `msg.path` attribute.  
+This property sets the path to the Data Layer node which shall be accessed. If it is not set, it has to be given via the input `msg.path` attribute.  
 Examples for a path are `framework/state` or `framework/metrics/system/cpu-utilisation-percent`
 
-The **magnifier symbol** opens a browsing dialog where all accessible Data Layer nodes are displayed.
+The magnifier symbol opens a browsing dialog where all accessible Data Layer nodes are displayed.
 
 #### Payload
 
@@ -261,7 +261,7 @@ A subscription groups multiple subscribed values to a group which share the same
 
 #### Device
 
-The **ctrlX CORE device** which was creating with its *Configuration Node* (see above) has to be selected there.
+The ctrlX CORE device which was creating with its *Configuration Node* (see above) has to be selected there.
 
 #### Name
 
@@ -288,10 +288,10 @@ Every single subscribed node belongs to a subscription which groups multiple val
 
 #### Path
 
-This property sets the **path to the Data Layer node** which shall be subscribed to. 
+This property sets the path to the Data Layer node which shall be subscribed to. 
 Examples for a path are `framework/state` or `framework/metrics/system/cpu-utilisation-percent`.
 
-The **magnifier symbol** opens a browsing dialog where all accessible Data Layer nodes are displayed.
+The magnifier symbol opens a browsing dialog where all accessible Data Layer nodes are displayed.
 
 #### Name
 
@@ -304,7 +304,7 @@ This is an arbitrary name which is displayed in the Node-RED editor.
 The `msg.payload` contains the value which is given back by the Data Layer Subscribe node.
 
 Rules exist how the Data Layer variant types are converted into the Node-RED JSON data types.  
-A detailed overview is available in the [data type overview](./doc/DATATYPES.md).
+A detailed overview is available in the [Data Type Overview](./doc/DATATYPES.md).
 
 #### Output `msg.topic`
 
@@ -323,8 +323,6 @@ The `msg.timestamp` contains the timestamp of the sampled value in milliseconds 
 The `msg.timestampFiletime` contains the timestamp of the sampled value in 100-nanosecond intervals since January 1, 1601 00:00:00 UTC. This format is more accurate but rather uncommon in javascript.
 
 #### Example output `msg`
-
-Example output `msg`:
 
   ```JSON
   {

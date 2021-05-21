@@ -1,4 +1,4 @@
-# Data Layer data types
+# Data Layer Data Types
 
 The following table shows the data types of the ctrlX Data Layer and the mapping to Node-RED (javascript) as well as to the types of the IEC61131-3 programming language of the PLC app.
 
@@ -32,11 +32,11 @@ The following table shows the data types of the ctrlX Data Layer and the mapping
 
 The first column is the datatype which is used for the attribute `type` in the `msg.payload` when reading or writing Data Layer Requests with the property of the payload format set to `value + type (json)`.
 
-For example, a `READ` request to the path `framework/metrics/system/cpu-utilisation-percent` might return the following json:
+For example, a `READ` request to the path `framework/metrics/system/cpu-utilisation-percent` might return the following json in `msg.payload`:
 
-    ```JSON
-    {
-      value: 17.5,
-      type: 'double'
-    }
-    ```
+  ```JSON
+  {
+    value: 17.5,
+    type: 'double'
+  }
+  ```

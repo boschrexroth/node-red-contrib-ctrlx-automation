@@ -50,7 +50,7 @@ To confirm all errors in the diagnosis logbook you need to send an empty `WRITE`
 
 ## PLC
 
-For reading and especially writing it might be necessary to better understand how the many types of the IEC61131-3 programming language are mapped to javascript types, which are used in Node-RED. Have a look at the [data type overview](DATATYPES.md) for this.
+For reading and especially writing it might be necessary to better understand how the many types of the IEC61131-3 programming language are mapped to javascript types, which are used in Node-RED. Have a look at the [Data Type Overview](DATATYPES.md) for this.
 
 ### Read a PLC variable
 
@@ -71,23 +71,23 @@ The following example shows how to read a PLC variable `i` of type `INT` of a pr
 
 The request returns in `msg.payload`:
 
-  ```JSON
-    {
-      "type": "int16", 
-      "value": 0
-    }
-  ```
+```JSON
+{
+  "type": "int16", 
+  "value": 0
+}
+```
 
 ### Write a PLC variable (boolean)
 
 The following example shows how to wriate a boolean PLC variable `b` of type `BOOL` which has been configured for write access via the symbolic variable configuration. Please note, that for writing PLC variable you need to specify the exact type of the PLC variable in the `msg.payload`.
 
-  ```
-  PROGRAM PLC_PRG
-  VAR
-  	 b: BOOL;
-  END_VAR
-  ```
+```
+PROGRAM PLC_PRG
+VAR
+  b: BOOL;
+END_VAR
+```
 
 ![examples-plc-write-value-bool.png](./images/examples-plc-write-value-bool.png)
 
@@ -97,9 +97,9 @@ The following example shows how to wriate a boolean PLC variable `b` of type `BO
 
 The request returns in `msg.payload` the written value:
 
-  ```JSON
-    {
-      "type": "bool8", 
-      "value": true
-    }
-  ```
+```JSON
+{
+  "type": "bool8", 
+  "value": true
+}
+```
