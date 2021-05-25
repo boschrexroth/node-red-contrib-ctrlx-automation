@@ -357,7 +357,19 @@
 
               send = send || function() { node.send.apply(node, arguments) }
 
-              msg.payload = data;
+              // Return only expected output data. Option 'v1' is for backward compatibility to
+              // deprecated Data Layer API v1.
+              switch(node.payloadFormat) {
+                case 'v1':
+                  msg.payload = data;
+                  break;
+                case 'value':
+                  msg.payload = data.value;
+                  break;
+                case 'value_type':
+                  msg.payload = data;
+                  break;
+              }
               send(msg);
 
               if (done) {
@@ -365,7 +377,6 @@
               }
 
               node.status({fill: "green", shape: "dot", text: "request successful"});
-
           });
 
         }else {

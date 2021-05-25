@@ -112,7 +112,7 @@ The magnifier symbol opens a browsing dialog where all accessible Data Layer nod
 
 #### Payload
 
-This property allows to configure how the payload is returned in case of a `READ` or `READ_WITH_ARGS` method or how the payload is expected in case of a `WRITE` or `CREATE` method.
+This property allows to configure how the payload is returned in case of a `BROWSE`, `READ` or `READ_WITH_ARGS` method or how the payload is expected in case of a `WRITE` or `CREATE` method.
 Possible values are:
 
 * `value only`: In this case, only the value of the Data Layer node is returned as a javascript variable in the `msg.payload` variable.

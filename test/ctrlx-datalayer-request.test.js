@@ -366,6 +366,43 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
+    it('should browse a node and return only values', function(done) {
+
+      let flow = [
+        {"id":"h1","type":"helper"},
+        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"BROWSE","path":"framework/metrics/system","name":"request","payloadFormat":"value","wires":[["h1"]]},
+        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+      ];
+      let credentials = {
+        c1: {
+            username: getUsername(),
+            password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            expect(msg.payload).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
+
+            done();
+          }
+          catch(err){
+            done(err);
+          }
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: "" });
+      });
+    });
+
+
     it('should read metadata', function(done) {
 
       let flow = [
