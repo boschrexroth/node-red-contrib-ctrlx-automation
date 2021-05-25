@@ -36,7 +36,7 @@ For example, a `READ` request to the path `framework/metrics/system/cpu-utilisat
 
   ```JSON
   {
-    value: 17.5,
-    type: 'double'
+    "value": 17.5,
+    "type": "double"
   }
   ```

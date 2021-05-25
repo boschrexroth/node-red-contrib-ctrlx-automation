@@ -51,6 +51,8 @@ They appear under the Examples section of the library import menu in Node-RED.
 
 ## Support
 
+There is a [troubleshooting section](./doc/TROUBLESHOOTING.md) which covers common problems and solutions.
+
 This repository is provided and maintained by [Bosch Rexroth](https://www.boschrexroth.com). Feel free to check out and be part of the [ctrlX AUTOMATION Community](https://ctrlx-automation.com/community). Get additional support, e.g. related to Bosch Rexroth Devices, Apps, SDKs and Services, or leave some ideas and feedback.
 
 To report bugs, request changes and discuss new ideas you may also have a look at the issue tracker of this repository:
