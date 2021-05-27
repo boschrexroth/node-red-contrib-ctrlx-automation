@@ -2,6 +2,10 @@
 
 This page contains solutions and hints to common known problems.
 
+## Request fails with `CtrlxProblemError: [404] Not Found` after upgrade of nodes to version 1.8.x
+
+Due to a major functional enhancement and the new subscription feature it is necessary to also update the `Automation Core` system to a version 1.8.x (XCR-V-0108, part of ReleaseMilestone 21.03) or newer.
+
 ## A `WRITE` request is resulting in a `DL_TYPE_MISMATCH`
 
 This error occurs, if the node you want to write to has a different data type, than the `msg.payload` that you provide and the App which owns the Data Layer node can not automatically convert the value.
