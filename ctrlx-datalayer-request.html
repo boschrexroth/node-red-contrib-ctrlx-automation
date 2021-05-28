@@ -36,8 +36,6 @@
 
   function onEditPrepare_Request(node) {
 
-    console.log("TEST");
-
     // Create a new TreeList widget.
     // See: https://nodered.org/docs/api/ui/treeList/
     //      https://discourse.nodered.org/t/select-form-with-tree-structure-in-custom-node/8348
@@ -64,7 +62,8 @@
       expanded: true,
       children: function(done) {
 
-        console.log("TEST");
+        // The current selected path of the node.
+        let path = $('#node-input-path').val();
 
         // Get a reference to the config node settings.
         let configNodeDevice = RED.nodes.node($('#node-input-device').val());
@@ -80,10 +79,12 @@
 
           // Create a new subitem for each browsed element
           let childs = result.map((val) => {
+            let childId = (this.id) ? this.id + '/' + val : val;
             return {
-              id: (this.id) ? this.id + '/' + val : val,
+              id: childId,
               label: val,
-              expanded: false,
+              expanded: path.startsWith(childId) ? true : false,
+              selected: (path === childId) ? true : undefined,
               children: this.children
             }
           });

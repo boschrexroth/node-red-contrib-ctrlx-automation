@@ -46,6 +46,7 @@ To handle subsciptions an additional config node `CtrlXConfigSubscription`is nec
 - [x] Implement: Unit tests for node-red
 - [x] Implement: Update documentation
 - [x] Feature: Support custom port after hostname. E.g. 'localhost:8443'.
+- [x] Feature: Different output types (value only, value + type)
 
 ### vX.X.0
 
@@ -60,7 +61,6 @@ To handle subsciptions an additional config node `CtrlXConfigSubscription`is nec
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Support typescript bindings
 - [ ] Feature: Find the device via UPnP
-- [ ] Feature: Different output types (value only, object, raw)
 
 ### vX.X.0
 
