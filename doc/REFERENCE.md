@@ -179,7 +179,7 @@ An example input `msg` containing the input values described above with `READ` a
 The `msg.payload` contains the data which is given back by the Data Layer Request operation.
 
 Rules exist how the Data Layer variant types are converted into the Node-RED JSON data types.  
-A detailed overview is available in the [data type overview](./doc/DATATYPES.md).
+A detailed overview is available in the [data type overview](./DATATYPES.md).
 
 #### Output `msg.topic`
 
@@ -304,7 +304,7 @@ This is an arbitrary name which is displayed in the Node-RED editor.
 The `msg.payload` contains the value which is given back by the Data Layer Subscribe node.
 
 Rules exist how the Data Layer variant types are converted into the Node-RED JSON data types.  
-A detailed overview is available in the [Data Type Overview](./doc/DATATYPES.md).
+A detailed overview is available in the [Data Type Overview](./DATATYPES.md).
 
 #### Output `msg.topic`
 
@@ -312,7 +312,7 @@ The `msg.topic` will be set to the effective `path` of the request.
 
 #### Output `msg.type`
 
-The `msg.type` contains the [data type](./doc/DATATYPES.md) of the returned value.
+The `msg.type` contains the [data type](./DATATYPES.md) of the returned value.
 
 #### Output `msg.timestamp`
 
