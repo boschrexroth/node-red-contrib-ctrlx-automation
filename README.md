@@ -80,6 +80,7 @@ Any use of the source code and related documents of this repository in applicati
                       Introduced new setting to request node, which allows to set payload format to return only `value` or `value` and `type`.
 - 2021-03-10: 1.8.3 - Internal improvements for more compliant URI encoding of http requests.
 - 2021-05-07: 1.8.4 - fix: allow to make a write without arguments (msg.payload = null). E.g. for 'diagnosis/confirm/error'.
+- 2021-05-28: 1.8.5 - feat: make path tree view selection in property window to automatically expand to current path
 
 ## About
 

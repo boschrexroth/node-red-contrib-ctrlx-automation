@@ -35,7 +35,6 @@
   var treeList_Subscribe;
 
   function onEditPrepare_Subscribe(node) {
-    console.log("SUBS");
 
     // Create a new TreeList widget.
     // See: https://nodered.org/docs/api/ui/treeList/
@@ -63,6 +62,9 @@
       expanded: true,
       children: function(done) {
 
+        // The current selected path of the node.
+        let path = $('#node-input-path').val();
+
         // Get a reference to the config node settings.
         let configNodeSubscription = RED.nodes.node($('#node-input-subscription').val());
         let configNodeDevice = RED.nodes.node(configNodeSubscription.device);
@@ -78,10 +80,12 @@
 
           // Create a new subitem for each browsed element
           let childs = result.map((val) => {
+            let childId = (this.id) ? this.id + '/' + val : val;
             return {
               id: (this.id) ? this.id + '/' + val : val,
               label: val,
-              expanded: false,
+              expanded: path.startsWith(childId) ? true : false,
+              selected: (path === childId) ? true : undefined,
               children: this.children
             }
           });
