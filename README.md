@@ -84,6 +84,7 @@ Any use of the source code and related documents of this repository in applicati
 - 2021-05-07: 1.8.4 - fix: allow to make a write without arguments (msg.payload = null). E.g. for 'diagnosis/confirm/error'.
 - 2021-05-25_ 1.8.5 - fix: make `BROWSE`requests to support the payload property `value only`.
 - 2021-05-28: 1.8.6 - feat: make path tree view selection in property window to automatically expand to current path.
+                    - fix: make subscribe node to emit an initial `msg` after deploy, even if value does not change.
 
 ## About
 
