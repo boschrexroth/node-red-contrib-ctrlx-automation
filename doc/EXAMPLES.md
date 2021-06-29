@@ -103,3 +103,15 @@ The request returns in `msg.payload` the written value:
   "value": true
 }
 ```
+
+## Script
+
+### Create a new script instance
+
+To run python scriots it is necessary to an interpreter instance. The following example shows how to create such an instance called `myInstance`. It can be used to run python scripts.
+
+![examples-script-create-instance.png](./images/examples-script-create-instance.png)
+
+```JSON
+[{"id":"41a67c09.9532e4","type":"comment","z":"4ff80d56.dd60fc","name":"Create a script instance for python","info":"","x":210,"y":760,"wires":[]},{"id":"d521f989.d0ec9","type":"debug","z":"4ff80d56.dd60fc","name":"","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","statusVal":"","statusType":"auto","x":590,"y":880,"wires":[]},{"id":"32d49076.f8923","type":"function","z":"4ff80d56.dd60fc","name":"make payload","func":"var newMsg = {};\nnewMsg.payload = {\n    \"value\": {\n        \"name\": \"MyInstance\",\n        \"language\": \"python\"\n    },\n    \"type\": \"object\"\n};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":360,"y":820,"wires":[["b3d753e.4376c3","d521f989.d0ec9"]]},{"id":"b3d753e.4376c3","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"9bdd1ac6.4db1c8","method":"CREATE","path":"script/instances","payloadFormat":"value_type","name":"Create Instance","x":620,"y":820,"wires":[["d521f989.d0ec9"]]},{"id":"3cf2344c.df7184","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":170,"y":820,"wires":[["32d49076.f8923"]]},{"id":"9bdd1ac6.4db1c8","type":"ctrlx-config","name":"","hostname":"192.168.17.201","debug":false}]
+```
