@@ -123,6 +123,32 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
     });
 
+    it('should read and write a string with Umlaut', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/str'))
+        .then((data) => {
+            assert.equal(data.value, 'vier');
+            assert.equal(data.type, 'string');
+          })
+        .then(() => ctrlx.datalayerWrite('plc/app/Application/sym/PLC_PRG/str', {type:'string', value: 'fünf'}))
+        .then((data) => {
+            assert.equal(data.value, 'fünf');
+            assert.equal(data.type, 'string');
+          })
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/str'))
+        .then((data) => {
+            assert.equal(data.value, 'fünf');
+            assert.equal(data.type, 'string');
+            done();
+          })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
     it('should write a value with empty argument list', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());

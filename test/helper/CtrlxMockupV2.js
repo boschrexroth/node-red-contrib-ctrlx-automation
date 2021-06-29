@@ -201,6 +201,28 @@ class CtrlxMockupV2 {
       });
     });
 
+    this.var_str = 'vier';
+    this.app.put('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/str', authenticateJWT, (req, res) => {
+      if (req.body.type !== 'string') {
+        res.statusCode = 405;
+        res.send();
+        return;
+      }
+      this.var_str = req.body.value;
+      res.statusCode = 200;
+      res.json({
+        value: this.var_str,
+        type: 'string'
+      });
+    });
+    this.app.get('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/str', authenticateJWT, (req, res) => {
+      res.statusCode = 200;
+      res.json({
+        value: this.var_str,
+        type: 'string'
+      });
+    });
+
     this.app.get('/automation/api/v2/nodes/nonexistent/path', authenticateJWT, (req, res) => {
       res.statusCode = 404;
       res.json({
