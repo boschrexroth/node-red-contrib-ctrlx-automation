@@ -16,7 +16,7 @@ For actual connection handling a class instance of `CtrlxCore` is used, which is
 
 ![Overview](https://www.plantuml.com/plantuml/svg/fLLDRzf04BtxLumuqJIEsXuZP8M0fIAL8XaaSbtR4x1OxxgxQz8qod_lU6tmuXYAr0DY_URhpSpp-a4RfaoPSrZiKUqpVF7qBXC5Koo7HEQ552ZCqhno1FBwvda5ItPiWv0OnN_3c-S199nf3PCAc4Y5XBpH3y1V6fM93HYvGs6HpqUduLPg8rYEjr1gLFMfe3mlKgMVQcSkDpCnR1yMfJayfSmmpbvHHSZIOS7CjiymHyCgeDTXhJA3rd8B5TYrJnIoYmvJvDWuT4sFIhxeVjEoZ7MYihYswihytXdYjEDRc4oAurJh6IOqGzVip9ELPYjLzeTLU3NKfWo5oWB5C66SnxJ51aku9AeDZ_TsmKAcw2jC_KGAscFisutxb5tcDdNFyiLpje7H27vMiL4u9GbPgCe5GT3sq2ZZGFe4FEZX13n8emPZAJca69UR4wScwhsNbpkjgpYwFQMupnBiAqQ0AFCO5HHbp3EzdGb3RnBZStsWWkG0fCMjJ9lSKJYUsiCwcgr2UveGrXoduO-mESx3rNWwNetjmsEqM2_3IuA9y5U9sfoqTtLV3SFS_dM6RxPdUfTY9ehslPHYuihfegnZl9hdoUxqwLjn9KsN5p4xodnGoVe99eie712VYauGM0erzU_657f96qLbuzpf3RuEuCRtxV_nPeFxIi4GUFsh6NovkxiPWEy7RfXDTmyADvac-T2bA9npcyufR3FKoVehKJuXJVRy2dJ9crAtEOXaXuRRfNV-4heGHjLmJzyAAaONPmwZVnBkMUrvoXzS_tUED8CgzaAlzv3OJy27LRRwTKYSuzbFvhh6pfKbXHMfmwmlIrUQvtgiX-8ze4Zf0_yN "Overview")
 
-To handle subsciptions an additional config node `CtrlXConfigSubscription`is necessary. I groups together multiple `CtrlxDatalayerSubscribe` nodes and registers itself also on a `CtrlxConfig` node. Dispatch of all incoming data updates via event stream (Server Sent Events) is also done in this node.
+To handle subsciptions an additional config node `CtrlXConfigSubscription`is necessary. It groups together multiple `CtrlxDatalayerSubscribe` nodes and registers itself also on a `CtrlxConfig` node. Dispatch of all incoming data updates via event stream (Server Sent Events) is also done in this node.
 
 ## Roadmap
 
@@ -52,19 +52,23 @@ To handle subsciptions an additional config node `CtrlXConfigSubscription`is nec
 
 - [ ] Feature: Support for read with arguments and methods
 - [ ] Feature: Allow custom certificate handling
-- [ ] Feature: Node for common https requests
-- [ ] Decision: How to name the node for common http requests? http vs. webapi
 - [ ] Feature: Support http proxy configuration
+- [ ] Feature: Add keep-alive mechanism to subscription to better detect network communication problems
 
 ### vX.X.0
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Support typescript bindings
-- [ ] Feature: Find the device via UPnP
+
+### vX.X.0
+
+- [ ] Feature: Node for common https requests
+- [ ] Decision: How to name the node for common http requests? http vs. webapi
 
 ### vX.X.0
 
 - [ ] Feature: i18n
+- [ ] Feature: Find the device via UPnP
 
 ## Test
 

@@ -261,7 +261,7 @@ A subscription groups multiple subscribed values to a group which share the same
 
 #### Device
 
-The ctrlX CORE device which was creating with its *Configuration Node* (see above) has to be selected there.
+The ctrlX CORE device which was created with its *Configuration Node* (see above) has to be selected there.
 
 #### Name
 
@@ -273,7 +273,7 @@ The Publish Interval is the minimum time in milliseconds that the server should 
 
 ## Data Layer Subscribe
 
-This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. This node is very efficient, because it does not poll but only publish server sent events. Monitoring of the value is done on server side. Thus for continuous tracking of value in the ctrlX Data Layer, this node should be prefered of the *Data Layer Request* node.
+This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. This node is very efficient, because it does not poll but only publish server sent events. Monitoring of the value is done on server side. Thus for continuous tracking of value in the ctrlX Data Layer, this node should be preferred of the *Data Layer Request* node.
 
 ### Configuration dialog
 
@@ -284,7 +284,7 @@ This node allows to subscribe to value changes of an item in the ctrlX Data Laye
 
 #### Subscription
 
-Every single subscribed node belongs to a subscription which groups multiple values to be sampled and published with the same interval inside the server. A subscription that is was creating as *Subscription Configuration Node* (see above) has to be selected there.
+Every single subscribed node belongs to a subscription which groups multiple values to be sampled and published with the same interval inside the server. A subscription that was created as *Subscription Configuration Node* (see above) has to be selected there.
 
 #### Path
 
