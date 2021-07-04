@@ -41,6 +41,7 @@
     this.configSubscription = RED.nodes.getNode(this.subscription);
     this.name = config.name;
     this.path = config.path;
+    this.eventCounter = 0;
 
 
     //
@@ -69,7 +70,8 @@
           node.status({fill: 'red', shape: 'ring', text: 'subscription failed'});
           node.error(err);
         } else {
-          node.status({fill: 'green', shape: 'dot', text: `received data #${lastEventId}`});
+          node.eventCounter++;
+          node.status({fill: 'green', shape: 'dot', text: `received data #${node.eventCounter}`});
           node.send({
             topic: data.node,
             payload: data.value,
@@ -86,6 +88,7 @@
       //
       this.on('close', function(done) {
         node.configSubscription.deregister(node, done);
+        node.eventCounter = 0;
       });
 
 
