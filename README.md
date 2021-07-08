@@ -87,6 +87,7 @@ Any use of the source code and related documents of this repository in applicati
                       fix: make subscribe node to emit an initial `msg` after deploy, even if value does not change.
 * 2021-06-29: 1.8.7 - fix: writing strings with non-ASCII symbols (e.g. 'ü') resulted in DL_TYPE_MISMATCH.
 * 2021-07-04: 1.8.8 - fix: give each of the subscribe nodes his own counter to show in the status text.
+                      fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
 
 ## About
 
