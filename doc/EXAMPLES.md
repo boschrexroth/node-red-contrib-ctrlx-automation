@@ -23,27 +23,27 @@ This page contains various examples for different use cases. Looking through the
 
 [Dashboard examples for ctrlX PLC](#dashboard-examples-for-ctrlx-plc)
 
-- [Example: Monitor and handle a boolean PLC variable "bBoolean"](#example-monitor-and-handle-a-boolean-plc-variable-"bboolean")
-- [Example: Monitor and handle an integer PLC variable "iInteger"](#example-monitor-and-handle-an-integer-plc-variable-"iinteger")
-- [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-"rreal")
-- [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-"sstring")
+- [Example: Monitor and handle a boolean PLC variable "bBoolean"](#example-monitor-and-handle-a-boolean-plc-variable-bboolean)
+- [Example: Monitor and handle an integer PLC variable "iInteger"](#example-monitor-and-handle-an-integer-plc-variable-iinteger)
+- [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-rreal)
+- [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-sstring)
 
 [Dashboard examples for ctrlX MOTION](#dashboard-examples-for-ctrlx-motion)
 
 - [Example: Monitor and switch motion state](#example-monitor-and-switch-motion-state)
 - [Example: Browse and show all available axes](#example-browse-and-show-all-available-axes)
-- [Example: Create an axis "AxisX"](#example-create-an-axis-"axisx")
-- [Example: Switch and monitor power of an axis "AxisX"](#example-switch-and-monitor-power-of-an-axis-"axisx")
-- [Example: Monitor position of an axis "AxisX"](#example-monitor-position-of-an-axis-"axisx")
-- [Example: Move an axis "AxisX"](#example-move-an-axis-"axisx")
+- [Example: Create an axis "AxisX"](#example-create-an-axis-axisx)
+- [Example: Switch and monitor power of an axis "AxisX"](#example-switch-and-monitor-power-of-an-axis-axisx)
+- [Example: Monitor position of an axis "AxisX"](#example-monitor-position-of-an-axis-axisx)
+- [Example: Move an axis "AxisX"](#example-move-an-axis-axisx)
 
 [Dashboard examples for script handler and ctrlX PYTHON](#dashboard-examples-for-script-handler-and-ctrlx-python)
 
-- [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-"myinstance"-for-python)
+- [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-myinstance-for-python)
 - [Example: Browse and show all available interpreter instances](#example-browse-and-show-all-available-interpreter-instances)
-- [Example: Monitor state of an interpreter instance "MyInstance"](#example-monitor-state-of-an-interpreter-instance-"myinstance")
-- [Example: Execute a python command in an interpreter instance "MyInstance"](#example-execute-a-python-command-in-an-interpreter-instance-"myinstance")
-- [Example: Execute a python file "test.py" in an interpreter instance "MyInstance"](#example-execute-a-python-file-"testpy"-in-an-interpreter-instance-"myinstance")
+- [Example: Monitor state of an interpreter instance "MyInstance"](#example-monitor-state-of-an-interpreter-instance-myinstance)
+- [Example: Execute a python command in an interpreter instance "MyInstance"](#example-execute-a-python-command-in-an-interpreter-instance-myinstance)
+- [Example: Execute a python file "test.py" in an interpreter instance "MyInstance"](#example-execute-a-python-file-testpy-in-an-interpreter-instance-myinstance)
 
 ## How to import examples
 
