@@ -168,7 +168,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       ctrlx.logIn()
-        .then(() => ctrlx.datalayerRead('test/add', {arg1: 17, arg2: 5}) )
+        .then(() => ctrlx.datalayerRead('test/add', { 'type': 'object', 'value': {'arg1': 17, 'arg2': 5} }) )
         .then((data) => {
           expect(data.type).to.equal('uint32');
           expect(data.value).to.equal(22);

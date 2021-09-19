@@ -274,7 +274,7 @@ describe('ctrlx-datalayer-request', function() {
         });
 
         // @ts-ignore
-        n1.receive({ payload: {arg1: 17, arg2: 5} });
+        n1.receive({ payload: { type: 'object', value: {arg1: 17, arg2: 5} }});
       });
     });
 
