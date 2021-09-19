@@ -23,27 +23,28 @@ This page contains various examples for different use cases. Looking through the
 
 [Dashboard examples for ctrlX PLC](#dashboard-examples-for-ctrlx-plc)
 
-- [Example: Monitor and handle a boolean PLC variable "bBoolean"](#example-monitor-and-handle-a-boolean-plc-variable-"bboolean")
-- [Example: Monitor and handle an integer PLC variable "iInteger"](#example-monitor-and-handle-an-integer-plc-variable-"iinteger")
-- [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-"rreal")
-- [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-"sstring")
+- [Example: Monitor and handle a boolean PLC variable "bBoolean"](#example-monitor-and-handle-a-boolean-plc-variable-bboolean)
+- [Example: Monitor and handle an integer PLC variable "iInteger"](#example-monitor-and-handle-an-integer-plc-variable-iinteger)
+- [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-rreal)
+- [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-sstring)
 
 [Dashboard examples for ctrlX MOTION](#dashboard-examples-for-ctrlx-motion)
 
 - [Example: Monitor and switch motion state](#example-monitor-and-switch-motion-state)
 - [Example: Browse and show all available axes](#example-browse-and-show-all-available-axes)
-- [Example: Create an axis "AxisX"](#example-create-an-axis-"axisx")
-- [Example: Switch and monitor power of an axis "AxisX"](#example-switch-and-monitor-power-of-an-axis-"axisx")
-- [Example: Monitor position of an axis "AxisX"](#example-monitor-position-of-an-axis-"axisx")
-- [Example: Move an axis "AxisX"](#example-move-an-axis-"axisx")
+- [Example: Create an axis "AxisX"](#example-create-an-axis-axisx)
+- [Example: Switch and monitor power of an axis "AxisX"](#example-switch-and-monitor-power-of-an-axis-axisx)
+- [Example: Monitor position of an axis "AxisX"](#example-monitor-position-of-an-axis-axisx)
+- [Example: Move an axis "AxisX"](#example-move-an-axis-axisx)
+- [Example: Abort an axis movement of "AxisX"](#example-abort-an-axis-movement-of-axisx)
 
 [Dashboard examples for script handler and ctrlX PYTHON](#dashboard-examples-for-script-handler-and-ctrlx-python)
 
-- [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-"myinstance"-for-python)
+- [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-myinstance-for-python)
 - [Example: Browse and show all available interpreter instances](#example-browse-and-show-all-available-interpreter-instances)
-- [Example: Monitor state of an interpreter instance "MyInstance"](#example-monitor-state-of-an-interpreter-instance-"myinstance")
-- [Example: Execute a python command in an interpreter instance "MyInstance"](#example-execute-a-python-command-in-an-interpreter-instance-"myinstance")
-- [Example: Execute a python file "test.py" in an interpreter instance "MyInstance"](#example-execute-a-python-file-"testpy"-in-an-interpreter-instance-"myinstance")
+- [Example: Monitor state of an interpreter instance "MyInstance"](#example-monitor-state-of-an-interpreter-instance-myinstance)
+- [Example: Execute a python command in an interpreter instance "MyInstance"](#example-execute-a-python-command-in-an-interpreter-instance-myinstance)
+- [Example: Execute a python file "test.py" in an interpreter instance "MyInstance"](#example-execute-a-python-file-testpy-in-an-interpreter-instance-myinstance)
 
 ## How to import examples
 
@@ -318,13 +319,24 @@ The following example shows how to monitor the interpolated position of a motion
 
 ### Example: Move an axis "AxisX"
 
-The following example shows how to move a motion axis "AxisX" in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `Standstill` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
+The following example shows how to move a motion axis "AxisX" in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `STANDSTILL` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
 
 ![example-motion-move-axis.png](./images/example-motion-move-axis.png)
 ![example-motion-move-axis-dashboard.png](./images/example-motion-move-axis-dashboard.png)
 
 ```JSON
 [{"id":"ef2f6f42.26f6b8","type":"function","z":"4ff80d56.dd60fc","name":"make pos command","func":"var newMsg = {};\nnewMsg.payload = {\n      \"type\":\"object\",\n      \"value\":{\n\t    \"axsPos\":\"10\",\"buffered\":false,\"lim\":{\"vel\":\"10\",\"acc\":\"10\",\"dec\":\"10\",\"jrkAcc\":\"0\",\"jrkDec\":\"0\"}\n\t    }\n     }\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":440,"y":1680,"wires":[["c27d8d3a.aba638"]]},{"id":"c27d8d3a.aba638","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/pos-abs","payloadFormat":"value_type","name":"\"AxisX\" pos abs","x":670,"y":1680,"wires":[[]]},{"id":"569584de.0946e4","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Move an axis \"AxisX\"","info":"","x":200,"y":1640,"wires":[]},{"id":"fcc3bed0.080f48","type":"ui_button","z":"4ff80d56.dd60fc","name":"","group":"eb7620ae.6f5d","order":3,"width":"2","height":"1","passthru":false,"label":"Move \"AxisX\"","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":220,"y":1720,"wires":[["ef2f6f42.26f6b8"]]},{"id":"14a61d63.0cf1ab","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":1680,"wires":[["ef2f6f42.26f6b8"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Example: Abort an axis movement of "AxisX"
+
+The following example shows how to abort an movement of a motion axis "AxisX" in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `DISCRETE_MOTION`.
+
+![example-motion-abort-axis-movement.png](./images/example-motion-abort-axis-movement.png)
+![example-motion-abort-axis-movement-dashboard.png](./images/example-motion-abort-axis-movement-dashboard.png)
+
+```JSON
+[{"id":"79e751dd.c8402","type":"function","z":"4ff80d56.dd60fc","name":"make abort command","func":"var newMsg = {};\nnewMsg.payload = {\n      \"type\":\"object\",\n      \"value\":{\"dec\":\"10\",\"jrkDec\":\"0\"}\n     }\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":440,"y":1840,"wires":[["7cb11da0.1916bc"]]},{"id":"7cb11da0.1916bc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/abort","payloadFormat":"value_type","name":"\"AxisX\" abort","x":660,"y":1840,"wires":[[]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Abort an axis movement of \"AxisX\"","info":"","x":240,"y":1800,"wires":[]},{"id":"a11e7b1a.b3a8d","type":"ui_button","z":"4ff80d56.dd60fc","name":"","group":"eb7620ae.6f5d","order":3,"width":"2","height":"1","passthru":false,"label":"Stop \"AxisX\"","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":210,"y":1880,"wires":[["79e751dd.c8402"]]},{"id":"690b0e68.ffc46","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":1840,"wires":[["79e751dd.c8402"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ## Dashboard examples for script handler and ctrlX PYTHON
