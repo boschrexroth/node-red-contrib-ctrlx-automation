@@ -272,6 +272,15 @@ class CtrlxMockupV2 {
       res.statusCode = 200;
       res.send();
     });
+    this.app.post('/automation/api/v2/nodes/motion/axs/axisx/cmd/reset', authenticateJWT, (req, res) => {
+      if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+        res.statusCode = 200;
+        res.send();
+      }
+      res.statusCode = 400;
+      res.send();
+      return;
+    });
 
 
     //

@@ -163,6 +163,20 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
     });
 
+    it('should create a value with empty argument list', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.datalayerCreate('motion/axs/axisx/cmd/reset', null))
+        .then((data) => {
+            done();
+          })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
     it('should read with arguments', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
