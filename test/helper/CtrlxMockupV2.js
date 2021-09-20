@@ -286,15 +286,23 @@ class CtrlxMockupV2 {
     //
     // Builtin Data Mockups - Read with parameter
     //
-    this.app.post('/automation/api/v2/nodes/test/add', authenticateJWT, (req, res) => {
-      let x1 = req.body.arg1;
-      let x2 = req.body.arg2;
-
-      if (typeof x1 === 'undefined' || typeof x2 === 'undefined') {
+    this.app.get('/automation/api/v2/nodes/test/add', authenticateJWT, (req, res) => {
+      if (typeof req.query.data === 'undefined') {
         res.statusCode = 405;
         res.send();
         return;
       }
+
+      let data = JSON.parse(req.query.data);
+      if (typeof data.value === 'undefined' || typeof data.value.arg1 === 'undefined' || typeof data.value.arg2 === 'undefined') {
+        res.statusCode = 405;
+        res.send();
+        return;
+      }
+
+      let x1 = data.value.arg1;
+      let x2 = data.value.arg2;
+
       res.statusCode = 200;
       res.json({
         value: x1 + x2,

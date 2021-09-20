@@ -88,6 +88,7 @@ Any use of the source code and related documents of this repository in applicati
 * 2021-06-29: 1.8.7 - fix: writing strings with non-ASCII symbols (e.g. 'ü') resulted in DL_TYPE_MISMATCH.
 * 2021-07-04: 1.8.8 - fix: give each of the subscribe nodes his own counter to show in the status text.
                       fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
+* 2021-09-20: 1.8.9 - fix: read with argument failed with error DL_TYPE_MISMATCH.
 
 ## About
 

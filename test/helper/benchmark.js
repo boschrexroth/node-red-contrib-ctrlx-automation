@@ -220,6 +220,35 @@ async function benchmarkSubscriptionSimple() {
 }
 
 
+/**
+ * For simple tests...
+ */
+async function test() {
+
+  try {
+
+    await ctrlx.logIn();
+
+    let fFieldbus = await ctrlx.datalayerRead(
+      'fieldbuses/ethercat/master/instances/ethercatmaster/device_access/slave_online_info',
+      {
+        "type": "object",
+        "value": {"request": {"addressType": "fixedphysical", "address": 1001}}
+      });
+
+    console.log(JSON.stringify(fFieldbus));
+
+  } catch(err) {
+    console.error('Housten we are in trouble: ' + err);
+  } finally {
+    await ctrlx.logOut();
+  }
+
+  console.log('DONE!');
+
+}
+
+
 
 
 exports.benchmarkSimple = benchmarkSimple;
@@ -231,3 +260,4 @@ exports.benchmarkSubscriptionSimple = benchmarkSubscriptionSimple;
 //benchmarkSimpleAsync();
 //benchmarkRequestsPerSecond()
 //benchmarkSubscriptionSimple();
+//test();
