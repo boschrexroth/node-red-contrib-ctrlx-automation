@@ -89,6 +89,7 @@ Any use of the source code and related documents of this repository in applicati
 * 2021-07-04: 1.8.8 - fix: give each of the subscribe nodes his own counter to show in the status text.
                       fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
 * 2021-09-20: 1.8.9 - fix: read with argument failed with error DL_TYPE_MISMATCH.
+* 2021-10-19: 1.9.10 - fix: support 64bit integer as BigInt to prevent rounding errors on big integer values.
 
 ## About
 
