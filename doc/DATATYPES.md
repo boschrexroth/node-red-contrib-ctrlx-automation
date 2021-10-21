@@ -11,8 +11,8 @@ The following table shows the data types of the ctrlX Data Layer and the mapping
 | `uint16`    | `number`                       | `UINT`, `WORD`    |
 | `int32`     | `number`                       | `DINT`            |
 | `uint32`    | `number`                       | `UDINT`, `DWORD`  |
-| `int64`     | `number`                       | `LINT`            |
-| `uint64`    | `number`                       | `ULINT`, `LWORD`  |
+| `int64`     | `BigInt`                       | `LINT`            |
+| `uint64`    | `BigInt`                       | `ULINT`, `LWORD`  |
 | `float`     | `number`                       | `REAL`            |
 | `double`    | `number`                       | `LREAL`           |
 | `string`    | `String`                       | `STRING`          |
@@ -23,8 +23,8 @@ The following table shows the data types of the ctrlX Data Layer and the mapping
 | `aruint16`  | `object` (`Array` of `number`) | `ARRAY OF UINT`, `ARRAY OF WORD`   |
 | `arint32`   | `object` (`Array` of `number`) | `ARRAY OF DINT`                    |
 | `aruint32`  | `object` (`Array` of `number`) | `ARRAY OF UDINT`, `ARRAY OF DWORD` |
-| `arint64`   | `object` (`Array` of `number`) | `ARRAY OF LINT`                    |
-| `aruint64`  | `object` (`Array` of `number`) | `ARRAY OF ULINT`, `ARRAY OF LWORD` |
+| `arint64`   | `object` (`Array` of `BigInt`) | `ARRAY OF LINT`                    |
+| `aruint64`  | `object` (`Array` of `BigInt`) | `ARRAY OF ULINT`, `ARRAY OF LWORD` |
 | `arfloat`   | `object` (`Array` of `number`) | `ARRAY OF REAL`                    |
 | `ardouble`  | `object` (`Array` of `number`) | `ARRAY OF LREAL`                   |
 | `arstring`  | `object` (`Array` of `string`) | `ARRAY OF STRING`                  |

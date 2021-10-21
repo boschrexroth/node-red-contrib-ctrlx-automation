@@ -28,6 +28,7 @@
 
 const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
+const CtrlxDatalayer = require('../lib/CtrlxDatalayerV2')
 
 
 
@@ -79,6 +80,27 @@ describe('CtrlxCore', function() {
       expect(CtrlxCore._parseHost('localhost:8443')).to.deep.equal({'hostname': 'localhost', 'port': 8443})
       expect(CtrlxCore._parseHost('ctrlx-server.com:8443')).to.deep.equal({'hostname': 'ctrlx-server.com', 'port': 8443})
       expect(CtrlxCore._parseHost('ctrlx-server.com')).to.deep.equal({'hostname': 'ctrlx-server.com', 'port': 443})
+
+      done();
+    });
+
+    it ('should parse BigInt', function(done) {
+
+      expect(CtrlxDatalayer._parseData(`{"type": "int64", "value": 9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "int64", "value":-9223372036854775807}`).value).to.equal(BigInt(-9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "int64", "value":9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "int64", "value":9223372036854775807  }`).value).to.equal(BigInt(9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"value":9223372036854775807, "type": "int64"}`).value).to.equal(BigInt(9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "uint64", "value":9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
+
+      expect(CtrlxDatalayer._parseData(`{"type": "arint64", "value": [9223372036854775807]}`).value[0]).to.equal(BigInt(9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "arint64", "value": [-9223372036854775807]}`).value[0]).to.equal(BigInt(-9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "arint64", "value": [-9223372036854775807, 9223372036854775807]}`).value).to.deep.equal([BigInt(-9223372036854775807n), BigInt(9223372036854775807n)])
+      expect(CtrlxDatalayer._parseData(`{"type": "arint64", "value": [9223372036854775807, 9223372036854775807, 1, 0, -1]}`).value).to.deep.equal([BigInt(9223372036854775807n), BigInt(9223372036854775807n), BigInt(1), BigInt(0), BigInt(-1)])
+      expect(CtrlxDatalayer._parseData(`{"type": "arint64", "value": [ 9223372036854775807, 9223372036854775807 , 1 , 0 , -1 ]}`).value).to.deep.equal([BigInt(9223372036854775807n), BigInt(9223372036854775807n), BigInt(1), BigInt(0), BigInt(-1)])
+
+      expect(CtrlxDatalayer._parseData(`{"type": "aruint64", "value": [9223372036854775807]}`).value[0]).to.equal(BigInt(9223372036854775807n))
+      expect(CtrlxDatalayer._parseData(`{"type": "aruint64", "value": [9223372036854775807, 9223372036854775807, 1, 0]}`).value).to.deep.equal([BigInt(9223372036854775807n), BigInt(9223372036854775807n), BigInt(1), BigInt(0)])
 
       done();
     });

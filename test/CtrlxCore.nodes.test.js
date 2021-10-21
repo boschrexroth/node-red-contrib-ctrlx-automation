@@ -283,6 +283,35 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
     });
 
+    it('should read and write a big integer value', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i64'))
+        .then((data) => {
+            assert.strictEqual(data.value, BigInt(9223372036854775807n));
+            assert.strictEqual(data.value.toString(), BigInt(9223372036854775807n).toString());
+            assert.equal(data.type, 'int64');
+          })
+        .then(() => ctrlx.datalayerWrite('plc/app/Application/sym/PLC_PRG/i64', {type:'int64', value: BigInt(9223372036854775899n)}))
+        .then((data) => {
+            assert.strictEqual(data.value, BigInt(9223372036854775899n));
+            assert.strictEqual(data.value.toString(), BigInt(9223372036854775899n).toString());
+            assert.equal(data.type, 'int64');
+          })
+        .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i64'))
+        .then((data) => {
+            assert.strictEqual(data.value, BigInt(9223372036854775899n));
+            assert.strictEqual(data.value.toString(), BigInt(9223372036854775899n).toString());
+            assert.equal(data.type, 'int64');
+            done();
+          })
+        .catch((err) => done(err))
+        .finally(() => {ctrlx.logOut()});
+
+    });
+
   });
 
 
