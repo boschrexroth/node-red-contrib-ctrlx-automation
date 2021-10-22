@@ -262,8 +262,11 @@ module.exports = function(RED) {
               }
             }
 
-            // Try again
-            setTimeout(node.connect, 500);
+            // Try again, except if the node has been closed in the meanwhile. E.g. because
+            // the node has been deleted or the flow has been reployed with new settings.
+            if (!node.closing) {
+              setTimeout(node.connect, 2000);
+            }
 
           });
 
