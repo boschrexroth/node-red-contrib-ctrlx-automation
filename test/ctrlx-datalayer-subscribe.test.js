@@ -250,6 +250,7 @@ describe('ctrlx-datalayer-subscribe', function() {
         // Reconnect shall happen after max 2 seconds retry and 2 seconds for reconnect
         setTimeout(() => {
           expect(numReceived).to.be.greaterThan(15);
+          s1.subscription.close();
           done();
         }, 5000);
       });
