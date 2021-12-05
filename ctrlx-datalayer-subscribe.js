@@ -68,7 +68,7 @@
 
         if (err) {
           node.status({fill: 'red', shape: 'ring', text: 'subscription failed'});
-          node.error(err);
+          node.error(err.message);
         } else {
           node.eventCounter++;
           node.status({fill: 'green', shape: 'dot', text: `received data #${node.eventCounter}`});

@@ -380,6 +380,16 @@ class CtrlxMockupV2 {
               data.value = Math.round(Math.random() * 4096);
               data.type = 'int16';
               break;
+            case 'test/broken/connection/i':
+              data.value = id;
+              data.type = 'int16';
+              // This is a special node. If included it will kill the connection after a second to
+              // mock a connection interruption.
+              setTimeout(() => {
+                sseStream.unpipe(res)
+                res.connection.destroy();
+              }, 1000);
+              break;
 
             default:
               data.value = 'error: unknown value';
