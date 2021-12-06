@@ -118,6 +118,40 @@ module.exports = function(RED) {
               }
             });
           });
+
+          // This is the handler which is called on error. E.g. on authorization errors
+          node.subscription.on('error', (err) => {
+
+            // Distribute the error to all registered nodes.
+            Object.values(node.users).forEach((element) => {
+              element.callback(err);
+            });
+
+            // To recover from the error state, let's reset the subscription.
+            node.dirty = true;
+            setTimeout(() => {
+              node.updateSubscription();
+            }, 2000);
+
+          });
+
+
+          // This is the handler if the connection gets closed by the server.
+          node.subscription.on('end', () => {
+
+            // Distribute the error to all registered nodes.
+            Object.values(node.users).forEach((element) => {
+              element.callback(new Error('Server closed connection'));
+            });
+
+            // To recover from the error state, let's reset the subscription.
+            node.dirty = true;
+            setTimeout(() => {
+              node.updateSubscription();
+            }, 2000);
+
+          });
+
         }
 
       });

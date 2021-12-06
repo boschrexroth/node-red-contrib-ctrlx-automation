@@ -91,6 +91,7 @@ Any use of the source code and related documents of this repository in applicati
 * 2021-09-20: 1.8.9 - fix: read with argument failed with error DL_TYPE_MISMATCH.
 * 2021-10-19: 1.9.10 - fix: support 64bit integer as BigInt to prevent rounding errors on big integer values.
 * 2021-10-22: 1.9.11 - fix: prevent "Failed login attempts" after flow gets redeployed with correct credentials (Bug392030).
+* 2021-10-22: 1.9.12 - fix: make subscription to properly report error and reconnect when authorization token expires (Bug405282).
 
 ## About
 
