@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+    - run: sudo setcap 'cap_net_bind_service=+ep' $(readlink -f $(which node))
     - run: npm install
     - run: npm run build --if-present
     - run: npm run test_with_coverage --unsafe-perm
