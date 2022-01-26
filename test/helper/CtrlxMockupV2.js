@@ -350,8 +350,8 @@ class CtrlxMockupV2 {
       let nodes = req.query.nodes.split(',');
 
       // Create a mockup stream which returns the requested nodes
-      const SseStream = require('ssestream');
-      const sseStream = new SseStream(req)
+      const SseStream = require('ssestream').default;
+      const sseStream = new SseStream(req);
       sseStream.pipe(res)
 
       let id = 0;
