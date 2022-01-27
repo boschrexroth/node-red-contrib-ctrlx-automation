@@ -89,13 +89,14 @@ Any use of the source code and related documents of this repository in applicati
 * 2021-07-04: 1.8.8 - fix: give each of the subscribe nodes his own counter to show in the status text.
                       fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
 * 2021-09-20: 1.8.9 - fix: read with argument failed with error DL_TYPE_MISMATCH.
-* 2021-10-19: 1.9.10 - fix: support 64bit integer as BigInt to prevent rounding errors on big integer values.
-* 2021-10-22: 1.9.11 - fix: prevent "Failed login attempts" after flow gets redeployed with correct credentials (Bug392030).
-* 2021-10-22: 1.9.12 - fix: make subscription to properly report error and reconnect when authorization token expires (Bug405282).
+* 2021-10-19: 1.8.10 - fix: support 64bit integer as BigInt to prevent rounding errors on big integer values.
+* 2021-10-22: 1.8.11 - fix: prevent "Failed login attempts" after flow gets redeployed with correct credentials (Bug392030).
+* 2021-10-22: 1.8.12 - fix: make subscription to properly report error and reconnect when authorization token expires (Bug405282).
+* 2022-01-27: 1.8.13 - refactor: update dependency versions. No functional change.
 
 ## About
 
-Copyright © 2020-2021 Bosch Rexroth AG. All rights reserved.
+Copyright © 2020-2022 Bosch Rexroth AG. All rights reserved.
 
 <https://www.boschrexroth.com>
 
@@ -108,7 +109,7 @@ GERMANY
 
 MIT License
 
-Copyright (c) 2020-2021 Bosch Rexroth AG
+Copyright (c) 2020-2022 Bosch Rexroth AG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
