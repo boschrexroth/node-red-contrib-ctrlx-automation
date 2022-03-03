@@ -93,6 +93,7 @@ Any use of the source code and related documents of this repository in applicati
 * 2021-10-22: 1.8.11 - fix: prevent "Failed login attempts" after flow gets redeployed with correct credentials (Bug392030).
 * 2021-10-22: 1.8.12 - fix: make subscription to properly report error and reconnect when authorization token expires (Bug405282).
 * 2022-01-27: 1.8.13 - refactor: update dependency versions. No functional change.
+* 2022-03-02: 1.8.14 - fix: improve diagnostics for misconfigured subscriptions. E.g. when a single node of a subscription is missing (Bug449366).
 
 ## About
 

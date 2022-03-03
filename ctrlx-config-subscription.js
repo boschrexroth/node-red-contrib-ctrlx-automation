@@ -24,7 +24,7 @@
  *
  */
 
-
+ const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
 module.exports = function(RED) {
   'use strict';
@@ -110,6 +110,8 @@ module.exports = function(RED) {
         } else {
           node.subscription = subscription;
 
+
+
           // This is the handler function which dispatches incoming update messages to the nodes.
           node.subscription.on('update', (data, lastEventId) => {
             Object.values(node.users).forEach((element) => {
@@ -119,21 +121,43 @@ module.exports = function(RED) {
             });
           });
 
-          // This is the handler which is called on error. E.g. on authorization errors
+
+
+          // This is the handler which is called on error. E.g. on authorization errors of the whole subscription
+          // or when a single node address has a problem.
           node.subscription.on('error', (err) => {
 
-            // Distribute the error to all registered nodes.
-            Object.values(node.users).forEach((element) => {
-              element.callback(err);
-            });
+            let isSingleNodeError = false;
 
-            // To recover from the error state, let's reset the subscription.
-            node.dirty = true;
-            setTimeout(() => {
-              node.updateSubscription();
-            }, 2000);
+            // Check if we have an error, that is only attached to a single node and
+            // not to the whole subscription
+            if (err instanceof CtrlxProblemError && err._instance) {
+
+              // Distribute the error to actual node.
+              Object.values(node.users).forEach((element) => {
+                if (element.path === err._instance) {
+                  element.callback(err);
+                  isSingleNodeError = true;
+                }
+              });
+
+            }
+
+            if (!isSingleNodeError) {
+              // Distribute the error to all registered nodes.
+              Object.values(node.users).forEach((element) => {
+                element.callback(err);
+              });
+
+              // To recover from the error state, let's reset the subscription.
+              node.dirty = true;
+              setTimeout(() => {
+                node.updateSubscription();
+              }, 2000);
+            }
 
           });
+
 
 
           // This is the handler if the connection gets closed by the server.

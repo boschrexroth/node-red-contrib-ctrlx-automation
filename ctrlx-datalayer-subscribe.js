@@ -24,6 +24,8 @@
  *
  */
 
+const CtrlxProblemError = require('./lib/CtrlxProblemError');
+
 
  module.exports = function(RED) {
   'use strict';
@@ -67,8 +69,13 @@
       node.configSubscription.register(node, node.path, (err, data, lastEventId) => {
 
         if (err) {
-          node.status({fill: 'red', shape: 'ring', text: 'subscription failed'});
-          node.error(err.message);
+          if (err.message) {
+            node.status({fill: 'red', shape: 'ring', text: `subscription failed: ${err.message}`});
+            node.error(err.message);
+          } else {
+            node.status({fill: 'red', shape: 'ring', text: `subscription failed`});
+            node.error('unknown error');
+          }
         } else {
           node.eventCounter++;
           node.status({fill: 'green', shape: 'dot', text: `received data #${node.eventCounter}`});
