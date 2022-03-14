@@ -19,7 +19,8 @@ The document contains four main chapters. One for each node.
 #### Address
 
 This configuration attribute is set to the address of the ctrlX AUTOMATION Node-RED device. It can be an IP address or a hostname.  
-In case that the node runs directly on a ctrlX CORE device, also *localhost* can be used.
+In case that the node runs directly on a ctrlX CORE device, also *localhost* can be used. It is also possible to define a different port
+by appending the port number after a colon. E.g. `192.168.1.1:8443`. By default the node is using port 443 (https).
 
 #### Username / Password
 
