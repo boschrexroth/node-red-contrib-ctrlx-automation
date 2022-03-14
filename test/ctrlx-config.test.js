@@ -40,7 +40,7 @@ const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 // The the server mockup to test against
 const CtrlxMockup = require('./helper/CtrlxMockupV2')
 
-
+const CtrlxCore = require('../lib/CtrlxCore')
 const expect = require('chai').expect;
 
 
@@ -65,7 +65,7 @@ describe('ctrlx-config', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer('localhost', 443, () => {
+    testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });

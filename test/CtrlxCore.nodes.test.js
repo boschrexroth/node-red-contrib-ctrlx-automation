@@ -52,7 +52,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer('localhost', 443, () => {
+    testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });

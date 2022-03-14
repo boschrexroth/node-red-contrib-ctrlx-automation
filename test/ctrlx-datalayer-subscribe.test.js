@@ -42,8 +42,9 @@ const ctrlxDatalayerSubscribeNode = require("../ctrlx-datalayer-subscribe.js");
 const CtrlxMockup = require('./helper/CtrlxMockupV2')
 const CtrlxDatalayerSubscription = require('../lib/CtrlxDatalayerSubscription');
 
+// Additional helper
 const expect = require('chai').expect;
-
+const CtrlxCore = require('../lib/CtrlxCore');
 
 
 
@@ -66,7 +67,7 @@ describe('ctrlx-datalayer-subscribe', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer('localhost', 443, () => {
+    testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
@@ -198,7 +199,7 @@ describe('ctrlx-datalayer-subscribe', function() {
           expect(numReceived).to.be.greaterThan(8);
           done();
           s1.subscription.close();
-        }, 1000);
+        }, 1200);
       });
     });
 

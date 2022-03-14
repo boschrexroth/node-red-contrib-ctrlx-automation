@@ -53,7 +53,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
   let testServer;
   before(function(done) {
     testServer = new CtrlxMockup();
-    testServer.startServer('localhost', 443, () => {
+    testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
@@ -252,6 +252,91 @@ describe('CtrlxCoreDataLayerEvents', function() {
 
 
 
+
+  });
+
+});
+
+
+
+/*
+ * This test group contains test cases for the subcription mechanism of the Data Layer
+ * which is mapped to server sent events, but run on a different port.
+ */
+describe('CtrlxCoreDataLayerEvents - With different port', function() {
+
+  function getHostname() {
+    return process.env.TEST_HOSTNAME || '127.0.0.1:8443';
+  }
+  function getUsername() {
+    return process.env.TEST_USERNAME || 'boschrexroth';
+  }
+  function getPassword() {
+    return process.env.TEST_PASSWORD || 'boschrexroth';
+  }
+
+  let testServer;
+  before(function(done) {
+    testServer = new CtrlxMockup();
+    testServer.startServer('localhost', 8443, () => {
+      done();
+    });
+  });
+
+  after(function(done) {
+    this.timeout(10000);
+    testServer.stopServer(() => {
+      done();
+    });
+  });
+
+
+  describe('CtrlxCoreSubscription: Subscription Interface', function() {
+
+
+    it('should subscribe to a single node', async function() {
+      this.timeout(5000);
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      try {
+
+        await ctrlx.logIn();
+
+        // Create the subscription
+        let subscription = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent']);
+        expect(subscription).to.exist;
+
+        // Check and count the updates
+        let numReceived = 0;
+        subscription.on('update', (data) => {
+
+          expect(data.node).to.be.a('string').eql('framework/metrics/system/cpu-utilisation-percent');
+          expect(data.timestamp).to.be.a('number');
+          expect(data.type).to.be.a('string').eql('double');
+          expect(data.value).to.be.a('number').within(0, 100);
+
+          const timestamp = CtrlxDatalayerSubscription.convertTimestamp2Date(data.timestamp);
+          const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
+          expect(deltaTime).to.be.below(500);
+
+          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          numReceived++;
+        });
+
+        // Give some time to receive the updates
+        await sleep(3000);
+        subscription.close();
+
+        // Check for the expected number of updates
+        expect(numReceived).to.be.greaterThan(1);
+
+      } catch(err) {
+        console.error('Housten we are in trouble: ' + err);
+        throw err;
+      } finally {
+        await ctrlx.logOut();
+      }
+    });
 
   });
 

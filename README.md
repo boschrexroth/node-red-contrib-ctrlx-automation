@@ -79,21 +79,23 @@ Any use of the source code and related documents of this repository in applicati
                       Support custom port after hostname. E.g. 'localhost:8443'.
 * 2020-10-01: 1.8.1 - fix: automatic reconnect when device was not available on start of flow.
 * 2021-02-22: 1.8.2 - Switched to ctrlX Data Layer API version v2 which is only available with AutomationCore 1.8.0 or newer.
-                      Introduced new setting to request node, which allows to set payload format to return only `value` or `value` and `type`.
+                      Introduced new setting to request node, which allows to set payload format to return only 'value' or 'value' and 'type'.
 * 2021-03-10: 1.8.3 - Internal improvements for more compliant URI encoding of http requests.
 * 2021-05-07: 1.8.4 - fix: allow to make a write without arguments (msg.payload = null). E.g. for 'diagnosis/confirm/error'.
-* 2021-05-25: 1.8.5 - fix: make `BROWSE`requests to support the payload property `value only`.
+* 2021-05-25: 1.8.5 - fix: make 'BROWSE' requests to support the payload property 'value only'.
 * 2021-05-28: 1.8.6 - feat: make path tree view selection in property window to automatically expand to current path.
-                      fix: make subscribe node to emit an initial `msg` after deploy, even if value does not change.
+                      fix: make subscribe node to emit an initial 'msg' after deploy, even if value does not change.
 * 2021-06-29: 1.8.7 - fix: writing strings with non-ASCII symbols (e.g. 'ü') resulted in DL_TYPE_MISMATCH.
 * 2021-07-04: 1.8.8 - fix: give each of the subscribe nodes his own counter to show in the status text.
                       fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
-* 2021-09-20: 1.8.9 - fix: read with argument failed with error DL_TYPE_MISMATCH.
+* 2021-09-20: 1.8.9 - fix: read with argument failed with error 'DL_TYPE_MISMATCH'.
 * 2021-10-19: 1.8.10 - fix: support 64bit integer as BigInt to prevent rounding errors on big integer values.
 * 2021-10-22: 1.8.11 - fix: prevent "Failed login attempts" after flow gets redeployed with correct credentials (Bug392030).
 * 2021-10-22: 1.8.12 - fix: make subscription to properly report error and reconnect when authorization token expires (Bug405282).
 * 2022-01-27: 1.8.13 - refactor: update dependency versions. No functional change.
 * 2022-03-02: 1.8.14 - fix: improve diagnostics for misconfigured subscriptions. E.g. when a single node of a subscription is missing (Bug449366).
+* 2022-03-14: 1.8.15 - fix: make subscribe node useable on other ports than 443 (Bug457112).
+                       fix: remove an uncaught exception which was introduced with version 1.8.14 (Bug454078).
 
 ## About
 
