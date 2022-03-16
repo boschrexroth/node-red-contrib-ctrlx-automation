@@ -54,16 +54,12 @@ To handle subsciptions an additional config node `CtrlXConfigSubscription`is nec
 - [ ] Feature: Allow custom certificate handling
 - [ ] Feature: Support http proxy configuration
 - [ ] Feature: Add keep-alive mechanism to subscription to better detect network communication problems
+- [ ] Feature: Implement dynamic subscriptions
 
 ### vX.X.0
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Support typescript bindings
-
-### vX.X.0
-
-- [ ] Feature: Node for common https requests
-- [ ] Decision: How to name the node for common http requests? http vs. webapi
 
 ### vX.X.0
 

@@ -17,12 +17,16 @@
         "www.boschrexroth.com"
     ],
     "node-red": {
+        "version": ">=2.0.0",
         "nodes": {
             "ctrlx-config": "ctrlx-config.js",
             "ctrlx-config-subscription": "ctrlx-config-subscription.js",
             "ctrlx-datalayer-request": "ctrlx-datalayer-request.js",
             "ctrlx-datalayer-subscribe": "ctrlx-datalayer-subscribe.js"
         }
+    },
+    "engines": {
+      "node": ">=14.0.0"
     },
     "author": {
         "name": "Bosch Rexroth AG",
