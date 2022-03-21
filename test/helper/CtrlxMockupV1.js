@@ -53,7 +53,7 @@ class CtrlxMockupV1 {
     // Authentication
     //
     this.sessionEstablished = false;
-    this.app.post('/identity-manager/api/v1/auth/token', (req, res) => {
+    this.app.post('/identity-manager/api/v2/auth/token', (req, res) => {
       if ( !req.body.name || req.body.name !== 'boschrexroth'
         || !req.body.password || req.body.password !== 'boschrexroth' ) {
         res.statusCode = 401;
@@ -73,7 +73,7 @@ class CtrlxMockupV1 {
       res.json(result);
     });
 
-    this.app.delete('/identity-manager/api/v1/auth/token', (req, res) => {
+    this.app.delete('/identity-manager/api/v2/auth/token', (req, res) => {
       this.sessionEstablished = false;
       res.statusCode = 204;
       res.send();
