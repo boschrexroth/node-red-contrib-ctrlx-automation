@@ -1,0 +1,17 @@
+{
+    "check-coverage": false,
+    "all": true,
+    "exclude": [
+        "test/**/*.*"
+    ],
+    "reporter": [
+        "cobertura",
+        "html",
+        "lcov",
+        "json",
+        "json-summary",
+        "text",
+        "text-summary"
+    ],
+    "report-dir": "coverage"
+}
