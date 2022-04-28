@@ -49,7 +49,7 @@ const expect = require('chai').expect;
 /*
  * This test group contains test cases for Node-RED nodes.
  */
-describe('ctrlx-config', function() {
+describe('ctrlx-config', function () {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -63,13 +63,13 @@ describe('ctrlx-config', function() {
 
   // Prepare the ctrlX Device Server Mockup
   let testServer;
-  before(function(done) {
+  before(function (done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
-  after(function(done) {
+  after(function (done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -78,24 +78,24 @@ describe('ctrlx-config', function() {
 
 
   // Prepare the Node-RED test framework
-  beforeEach(function(done) {
+  beforeEach(function (done) {
     helper.startServer(done);
   });
   afterEach(function (done) {
-    helper.unload().then(function() {
+    helper.unload().then(function () {
       helper.stopServer(done);
     });
   });
 
 
 
-  describe('ctrlx-config: Basic Functionality', function() {
+  describe('ctrlx-config: Basic Functionality', function () {
 
 
-    it('should open a browse backend and return browse info', function(done) {
+    it('should open a browse backend and return browse info', function (done) {
 
       let flow = [
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
@@ -135,12 +135,12 @@ describe('ctrlx-config', function() {
     });
 
 
-    it('should open a browse backend by node.id and return browse info', function(done) {
+    it('should open a browse backend by node.id and return browse info', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
@@ -161,23 +161,23 @@ describe('ctrlx-config', function() {
             expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('double');
 
             helper.request()
-            .get('/ctrlx/browse')
-            .query({
-              'id': 'c1',
-              'path': 'framework/metrics/system'
-            })
-            .expect(200)
-            .end((err, res) => {
-              if (err) {
-                return done(err);
-              }
-              expect(res.text).eql('["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]');
-              done();
-            });
+              .get('/ctrlx/browse')
+              .query({
+                'id': 'c1',
+                'path': 'framework/metrics/system'
+              })
+              .expect(200)
+              .end((err, res) => {
+                if (err) {
+                  return done(err);
+                }
+                expect(res.text).eql('["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]');
+                done();
+              });
 
             //done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -192,10 +192,10 @@ describe('ctrlx-config', function() {
 
 
 
-    it('should open a browse backend and return proper error', function(done) {
+    it('should open a browse backend and return proper error', function (done) {
 
       let flow = [
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {

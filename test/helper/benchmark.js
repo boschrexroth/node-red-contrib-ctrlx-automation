@@ -26,7 +26,7 @@
 'use strict'
 
 const CtrlxCore = require('../../lib/CtrlxCore')
-const {performance, PerformanceObserver} = require('perf_hooks')
+const { performance, PerformanceObserver } = require('perf_hooks')
 const async = require('async');
 const { assert } = require('console');
 
@@ -93,7 +93,7 @@ function benchmarkSimple() {
       performance.measure('Read 2', 'C', 'D');
       performance.measure('Read 3', 'D', 'E');
     })
-    .catch((err) => {console.error(err)})
+    .catch((err) => { console.error(err) })
     .finally(() => {
       ctrlx.logOut()
       performance.clearMarks();
@@ -124,7 +124,7 @@ async function benchmarkSimpleAsync() {
     performance.measure('Read 2', 'C', 'D');
     performance.measure('Read 3', 'D', 'E');
 
-  } catch(err) {
+  } catch (err) {
     console.error('Housten we are in trouble: ' + err);
   } finally {
     await ctrlx.logOut();
@@ -144,11 +144,11 @@ function benchmarkRequestsPerSecond() {
   function performRead(path, callback) {
 
     ctrlx.datalayerRead(path)
-    .then((data) => {
-      callback(null, data);
-    }).catch((err) => {
-      callback(err);
-    });
+      .then((data) => {
+        callback(null, data);
+      }).catch((err) => {
+        callback(err);
+      });
 
   }
 
@@ -160,26 +160,26 @@ function benchmarkRequestsPerSecond() {
 
   // We need to login, before we can start our benchmark measurements
   ctrlx.logIn()
-  .then(() => {
+    .then(() => {
 
-    // loop over asynchronous function and look how long it takes to get a result
-    performance.mark('A');
-    async.map(paths, performRead, function (err, res) {
-      performance.mark('B');
-      performance.measure('Complete Loop', 'A', 'B');
+      // loop over asynchronous function and look how long it takes to get a result
+      performance.mark('A');
+      async.map(paths, performRead, function (err, res) {
+        performance.mark('B');
+        performance.measure('Complete Loop', 'A', 'B');
 
-      assert(res.every((val) => {return val.value === true;}));
-      if (err) {
-        console.log('Async map failed with error:')
-        console.log(err);
-        return;
-      }
+        assert(res.every((val) => { return val.value === true; }));
+        if (err) {
+          console.log('Async map failed with error:')
+          console.log(err);
+          return;
+        }
 
-      console.log('DONE!');
-      ctrlx.logOut();
+        console.log('DONE!');
+        ctrlx.logOut();
+      })
+
     })
-
-  })
 
 }
 
@@ -210,7 +210,7 @@ async function benchmarkSubscriptionSimple() {
     performance.measure('First update', 'B', 'C');
 
     sub.close();
-  } catch(err) {
+  } catch (err) {
     console.error('Housten we are in trouble: ' + err);
   } finally {
     await ctrlx.logOut();
@@ -233,12 +233,12 @@ async function test() {
       'fieldbuses/ethercat/master/instances/ethercatmaster/device_access/slave_online_info',
       {
         "type": "object",
-        "value": {"request": {"addressType": "fixedphysical", "address": 1001}}
+        "value": { "request": { "addressType": "fixedphysical", "address": 1001 } }
       });
 
     console.log(JSON.stringify(fFieldbus));
 
-  } catch(err) {
+  } catch (err) {
     console.error('Housten we are in trouble: ' + err);
   } finally {
     await ctrlx.logOut();
