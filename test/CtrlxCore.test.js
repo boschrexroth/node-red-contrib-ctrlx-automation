@@ -35,7 +35,7 @@ const CtrlxDatalayer = require('../lib/CtrlxDatalayerV2')
 /*
  * This test group contains basic test cases
  */
-describe('CtrlxCore', function() {
+describe('CtrlxCore', function () {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -49,9 +49,9 @@ describe('CtrlxCore', function() {
 
 
 
-  describe('CtrlxCore: Basics', function() {
+  describe('CtrlxCore: Basics', function () {
 
-    it('should have working properties', function(done) {
+    it('should have working properties', function (done) {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       expect(ctrlx.autoReconnect).to.eql(false);
@@ -65,26 +65,28 @@ describe('CtrlxCore', function() {
       done();
     });
 
-    it ('should have a working hostname:port parser', function(done) {
+    it('should have a working hostname:port parser', function (done) {
 
       // ipv4
-      expect(CtrlxCore._parseHost('127.0.0.1')).to.deep.equal({'hostname': '127.0.0.1', 'port': 443})
+      expect(CtrlxCore._parseHost('127.0.0.1')).to.deep.equal({ 'hostname': '127.0.0.1', 'port': 443 })
       // ipv6
-      expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2]')).to.deep.equal({'hostname': '[fe80::260:34ff:fe08:db2]', 'port': 443})
-      expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2]:8443')).to.deep.equal({'hostname': '[fe80::260:34ff:fe08:db2]', 'port': 8443})
-      expect(CtrlxCore._parseHost('[::1]')).to.deep.equal({'hostname': '[::1]', 'port': 443})
-      expect(CtrlxCore._parseHost('[::1]:8443')).to.deep.equal({'hostname': '[::1]', 'port': 8443})
+      expect(CtrlxCore._parseHost('fe80::260:34ff:fe08:db2')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 443 })
+      expect(CtrlxCore._parseHost('fe80::260:34ff:fe08:db2:8443')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 8443 })
+      expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2]')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 443 })
+      expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2]:8443')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 8443 })
+      expect(CtrlxCore._parseHost('[::1]')).to.deep.equal({ 'hostname': '[::1]', 'port': 443 })
+      expect(CtrlxCore._parseHost('[::1]:8443')).to.deep.equal({ 'hostname': '[::1]', 'port': 8443 })
       // domain
-      expect(CtrlxCore._parseHost('localhost')).to.deep.equal({'hostname': 'localhost', 'port': 443})
-      expect(CtrlxCore._parseHost('localhost:443')).to.deep.equal({'hostname': 'localhost', 'port': 443})
-      expect(CtrlxCore._parseHost('localhost:8443')).to.deep.equal({'hostname': 'localhost', 'port': 8443})
-      expect(CtrlxCore._parseHost('ctrlx-server.com:8443')).to.deep.equal({'hostname': 'ctrlx-server.com', 'port': 8443})
-      expect(CtrlxCore._parseHost('ctrlx-server.com')).to.deep.equal({'hostname': 'ctrlx-server.com', 'port': 443})
+      expect(CtrlxCore._parseHost('localhost')).to.deep.equal({ 'hostname': 'localhost', 'port': 443 })
+      expect(CtrlxCore._parseHost('localhost:443')).to.deep.equal({ 'hostname': 'localhost', 'port': 443 })
+      expect(CtrlxCore._parseHost('localhost:8443')).to.deep.equal({ 'hostname': 'localhost', 'port': 8443 })
+      expect(CtrlxCore._parseHost('ctrlx-server.com:8443')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 8443 })
+      expect(CtrlxCore._parseHost('ctrlx-server.com')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 443 })
 
       done();
     });
 
-    it ('should parse BigInt', function(done) {
+    it('should parse BigInt', function (done) {
 
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value": 9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value":-9223372036854775807}`).value).to.equal(BigInt(-9223372036854775807n))
