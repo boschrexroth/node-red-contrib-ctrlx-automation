@@ -38,7 +38,7 @@ const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitT
  * This test group contains test cases for the subcription mechanism of the Data Layer
  * which is mapped to server sent events.
  */
-describe('CtrlxCoreDataLayerEvents', function () {
+describe('CtrlxCoreDataLayerEvents', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -51,14 +51,14 @@ describe('CtrlxCoreDataLayerEvents', function () {
   }
 
   let testServer;
-  before(function (done) {
+  before(function(done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
 
-  after(function (done) {
+  after(function(done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -69,10 +69,10 @@ describe('CtrlxCoreDataLayerEvents', function () {
 
 
 
-  describe('CtrlxCoreSubscription: Subscription Interface', function () {
+  describe('CtrlxCoreSubscription: Subscription Interface', function() {
 
 
-    it('should subscribe to a single node', async function () {
+    it('should subscribe to a single node', async function() {
       this.timeout(5000);
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -119,7 +119,7 @@ describe('CtrlxCoreDataLayerEvents', function () {
 
 
 
-    it('should subscribe to multiple nodes', async function () {
+    it('should subscribe to multiple nodes', async function() {
       this.timeout(5000);
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -164,7 +164,7 @@ describe('CtrlxCoreDataLayerEvents', function () {
 
 
 
-    it('should subscribe with low publishInterval', async function () {
+    it('should subscribe with low publishInterval', async function() {
       this.timeout(5000);
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -212,7 +212,7 @@ describe('CtrlxCoreDataLayerEvents', function () {
     });
 
 
-    it('should open a subscription only once', async function () {
+    it('should open a subscription only once', async function() {
       this.timeout(5000);
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -263,7 +263,7 @@ describe('CtrlxCoreDataLayerEvents', function () {
  * This test group contains test cases for the subcription mechanism of the Data Layer
  * which is mapped to server sent events, but run on a different port.
  */
-describe('CtrlxCoreDataLayerEvents - With different port', function () {
+describe('CtrlxCoreDataLayerEvents - With different port', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1:8443';
@@ -276,14 +276,14 @@ describe('CtrlxCoreDataLayerEvents - With different port', function () {
   }
 
   let testServer;
-  before(function (done) {
+  before(function(done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', 8443, () => {
       done();
     });
   });
 
-  after(function (done) {
+  after(function(done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -291,10 +291,10 @@ describe('CtrlxCoreDataLayerEvents - With different port', function () {
   });
 
 
-  describe('CtrlxCoreSubscription: Subscription Interface', function () {
+  describe('CtrlxCoreSubscription: Subscription Interface', function() {
 
 
-    it('should subscribe to a single node', async function () {
+    it('should subscribe to a single node', async function() {
       this.timeout(5000);
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 

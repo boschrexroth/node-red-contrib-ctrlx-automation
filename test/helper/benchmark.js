@@ -164,7 +164,7 @@ function benchmarkRequestsPerSecond() {
 
       // loop over asynchronous function and look how long it takes to get a result
       performance.mark('A');
-      async.map(paths, performRead, function (err, res) {
+      async.map(paths, performRead, function(err, res) {
         performance.mark('B');
         performance.measure('Complete Loop', 'A', 'B');
 

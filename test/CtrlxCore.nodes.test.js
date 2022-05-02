@@ -37,7 +37,7 @@ const CtrlxMockup = require('./helper/CtrlxMockupV2')
  * This test group contains test cases for acyclic access of the Data Layer via mapping
  * to REST protocol.
  */
-describe('CtrlxCoreDataLayerNodes', function () {
+describe('CtrlxCoreDataLayerNodes', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -50,14 +50,14 @@ describe('CtrlxCoreDataLayerNodes', function () {
   }
 
   let testServer;
-  before(function (done) {
+  before(function(done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
 
-  after(function (done) {
+  after(function(done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -66,9 +66,9 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
 
 
-  describe('CtrlxCore: Read/Write to Data Layer', function () {
+  describe('CtrlxCore: Read/Write to Data Layer', function() {
 
-    it('should return true when reading framework/bundles/com_boschrexroth_comm_datalayer/active', function (done) {
+    it('should return true when reading framework/bundles/com_boschrexroth_comm_datalayer/active', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -83,7 +83,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should read two values and then logout without error', function (done) {
+    it('should read two values and then logout without error', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -97,7 +97,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should read and write a value and then logout without error', function (done) {
+    it('should read and write a value and then logout without error', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -123,7 +123,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should read and write a string with Umlaut', function (done) {
+    it('should read and write a string with Umlaut', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -149,7 +149,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should write a value with empty argument list', function (done) {
+    it('should write a value with empty argument list', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -163,7 +163,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should create a value with empty argument list', function (done) {
+    it('should create a value with empty argument list', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -177,7 +177,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should read with arguments', function (done) {
+    it('should read with arguments', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -193,7 +193,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should read metadata', function (done) {
+    it('should read metadata', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -213,7 +213,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should browse data layer', function (done) {
+    it('should browse data layer', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -229,7 +229,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should automatically logout() before new login() and be successfully logged in', function (done) {
+    it('should automatically logout() before new login() and be successfully logged in', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -250,7 +250,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should automatically reconnect if session was closed by server', function (done) {
+    it('should automatically reconnect if session was closed by server', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
       ctrlx.autoReconnect = true;
@@ -283,7 +283,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should read and write a big integer value', function (done) {
+    it('should read and write a big integer value', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -319,9 +319,9 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
 
 
-  describe('CtrlxCore: Create/Delete to Data Layer', function () {
+  describe('CtrlxCore: Create/Delete to Data Layer', function() {
 
-    it('should create and delete a node and then logout without error', function (done) {
+    it('should create and delete a node and then logout without error', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -340,7 +340,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should not crash when no response is returned on create', function (done) {
+    it('should not crash when no response is returned on create', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -365,9 +365,9 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
 
 
-  describe('CtrlxCore: Check correct error handling', function () {
+  describe('CtrlxCore: Check correct error handling', function() {
 
-    it('should return an error when not authenticated', function (done) {
+    it('should return an error when not authenticated', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -391,7 +391,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
     });
 
 
-    it('should return an error on wrong username/password', function (done) {
+    it('should return an error on wrong username/password', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), 'xxx');
 
@@ -406,7 +406,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should return an error as CtrlxProblemError', function (done) {
+    it('should return an error as CtrlxProblemError', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -421,7 +421,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should return an error as CtrlxProblemError with additional problem properties', function (done) {
+    it('should return an error as CtrlxProblemError with additional problem properties', function(done) {
 
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -455,7 +455,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
 
     });
 
-    it('should create a CtrlxProblemError from http status code', function () {
+    it('should create a CtrlxProblemError from http status code', function() {
 
       let err = CtrlxProblemError.fromHttpStatuscode(404);
       expect(err.status).to.be.a('number').equal(404);
@@ -463,7 +463,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
       expect(err.toStringExtended()).to.include('[404] Not Found');
     });
 
-    it('should return CtrlxProblemError type only if set', function () {
+    it('should return CtrlxProblemError type only if set', function() {
 
       let err = CtrlxProblemError.fromHttpStatuscode(404);
       expect(err.type).to.equal('about:blank');
@@ -483,7 +483,7 @@ describe('CtrlxCoreDataLayerNodes', function () {
  * to REST protocol.
  */
 
-describe('CtrlxCoreDataLayerNodes - With different port', function () {
+describe('CtrlxCoreDataLayerNodes - With different port', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1:8443';
@@ -496,21 +496,21 @@ describe('CtrlxCoreDataLayerNodes - With different port', function () {
   }
 
   let testServer;
-  before(function (done) {
+  before(function(done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', 8443, () => {
       done();
     });
   });
 
-  after(function (done) {
+  after(function(done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
     });
   });
 
-  it('should return true when reading framework/bundles/com_boschrexroth_comm_datalayer/active', function (done) {
+  it('should return true when reading framework/bundles/com_boschrexroth_comm_datalayer/active', function(done) {
 
     let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
@@ -525,7 +525,7 @@ describe('CtrlxCoreDataLayerNodes - With different port', function () {
 
   });
 
-  it('should read two values and then logout without error', function (done) {
+  it('should read two values and then logout without error', function(done) {
 
     let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 

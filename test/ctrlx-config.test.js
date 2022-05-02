@@ -49,7 +49,7 @@ const expect = require('chai').expect;
 /*
  * This test group contains test cases for Node-RED nodes.
  */
-describe('ctrlx-config', function () {
+describe('ctrlx-config', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -63,13 +63,13 @@ describe('ctrlx-config', function () {
 
   // Prepare the ctrlX Device Server Mockup
   let testServer;
-  before(function (done) {
+  before(function(done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
-  after(function (done) {
+  after(function(done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -78,21 +78,21 @@ describe('ctrlx-config', function () {
 
 
   // Prepare the Node-RED test framework
-  beforeEach(function (done) {
+  beforeEach(function(done) {
     helper.startServer(done);
   });
-  afterEach(function (done) {
-    helper.unload().then(function () {
+  afterEach(function(done) {
+    helper.unload().then(function() {
       helper.stopServer(done);
     });
   });
 
 
 
-  describe('ctrlx-config: Basic Functionality', function () {
+  describe('ctrlx-config: Basic Functionality', function() {
 
 
-    it('should open a browse backend and return browse info', function (done) {
+    it('should open a browse backend and return browse info', function(done) {
 
       let flow = [
         { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
@@ -135,7 +135,7 @@ describe('ctrlx-config', function () {
     });
 
 
-    it('should open a browse backend by node.id and return browse info', function (done) {
+    it('should open a browse backend by node.id and return browse info', function(done) {
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -192,7 +192,7 @@ describe('ctrlx-config', function () {
 
 
 
-    it('should open a browse backend and return proper error', function (done) {
+    it('should open a browse backend and return proper error', function(done) {
 
       let flow = [
         { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
