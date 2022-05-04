@@ -256,8 +256,8 @@ exports.benchmarkSimpleAsync = benchmarkSimpleAsync;
 exports.benchmarkRequestsPerSecond = benchmarkRequestsPerSecond;
 exports.benchmarkSubscriptionSimple = benchmarkSubscriptionSimple;
 
-//benchmarkSimple()
-//benchmarkSimpleAsync();
-//benchmarkRequestsPerSecond()
-//benchmarkSubscriptionSimple();
-//test();
+// benchmarkSimple()
+// benchmarkSimpleAsync();
+// benchmarkRequestsPerSecond()
+// benchmarkSubscriptionSimple();
+// test();
