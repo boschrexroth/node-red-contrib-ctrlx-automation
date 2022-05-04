@@ -175,7 +175,7 @@ describe('ctrlx-config', function() {
                 done();
               });
 
-            //done();
+            // done();
           }
           catch (err) {
             done(err);

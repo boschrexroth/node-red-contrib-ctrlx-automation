@@ -97,7 +97,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -141,7 +141,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
 
           numReceived++;
         });
@@ -190,7 +190,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(100);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -319,7 +319,7 @@ describe('CtrlxCoreDataLayerEvents - With different port', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
