@@ -48,7 +48,7 @@ const expect = require('chai').expect;
 /*
  * This test group contains test cases for Node-RED nodes.
  */
-describe('ctrlx-datalayer-request', function() {
+describe('ctrlx-datalayer-request', function () {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -62,13 +62,13 @@ describe('ctrlx-datalayer-request', function() {
 
   // Prepare the ctrlX Device Server Mockup
   let testServer;
-  before(function(done) {
+  before(function (done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', 443, () => {
       done();
     });
   });
-  after(function(done) {
+  after(function (done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -77,25 +77,25 @@ describe('ctrlx-datalayer-request', function() {
 
 
   // Prepare the Node-RED test framework
-  beforeEach(function(done) {
+  beforeEach(function (done) {
     helper.startServer(done);
   });
   afterEach(function (done) {
-    helper.unload().then(function() {
+    helper.unload().then(function () {
       helper.stopServer(done);
     });
   });
 
 
 
-  describe('ctrlx-datalayer-request: Basic Functionality', function() {
+  describe('ctrlx-datalayer-request: Basic Functionality', function () {
 
-    it('should be loaded as imported by the flow', function(done) {
+    it('should be loaded as imported by the flow', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":"127.0.0.1","debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": "127.0.0.1", "debug": true }
       ];
       let credentials = {
         c1: {
@@ -124,17 +124,17 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
-    it('should read a value', function(done) {
+    it('should read a value', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -151,7 +151,7 @@ describe('ctrlx-datalayer-request', function() {
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -162,17 +162,17 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
-    it('should read a value and set the empty msg.topic', function(done) {
+    it('should read a value and set the empty msg.topic', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -190,7 +190,7 @@ describe('ctrlx-datalayer-request', function() {
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -202,17 +202,17 @@ describe('ctrlx-datalayer-request', function() {
 
 
 
-    it('should read a value and NOT set the pre-set msg.topic', function(done) {
+    it('should read a value and NOT set the pre-set msg.topic', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -230,7 +230,7 @@ describe('ctrlx-datalayer-request', function() {
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -241,17 +241,17 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
-    it('should read with arguments', function(done) {
+    it('should read with arguments', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"READ_WITH_ARG","path":"test/add","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ_WITH_ARG", "path": "test/add", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -268,28 +268,28 @@ describe('ctrlx-datalayer-request', function() {
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
 
         // @ts-ignore
-        n1.receive({ payload: { type: 'object', value: {arg1: 17, arg2: 5} }});
+        n1.receive({ payload: { type: 'object', value: { arg1: 17, arg2: 5 } } });
       });
     });
 
 
-    it('should write a value', function(done) {
+    it('should write a value', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"WRITE","path":"plc/app/Application/sym/PLC_PRG/i","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "WRITE", "path": "plc/app/Application/sym/PLC_PRG/i", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -309,36 +309,36 @@ describe('ctrlx-datalayer-request', function() {
             ctrlx.logIn()
               .then(() => ctrlx.datalayerRead('plc/app/Application/sym/PLC_PRG/i'))
               .then((data) => {
-                  expect(data).to.have.property('value').that.is.a('number').eql(23);
-                  expect(data).to.have.property('type').that.is.a('string').eql('int16');
-                  done();
-                })
+                expect(data).to.have.property('value').that.is.a('number').eql(23);
+                expect(data).to.have.property('type').that.is.a('string').eql('int16');
+                done();
+              })
               .catch((err) => done(err))
-              .finally(() => {ctrlx.logOut()});
+              .finally(() => { ctrlx.logOut() });
 
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
 
         // @ts-ignore
-        n1.receive({ payload: {type: 'int16', value: 23} });
+        n1.receive({ payload: { type: 'int16', value: 23 } });
       });
     });
 
 
-    it('should browse a node', function(done) {
+    it('should browse a node', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"BROWSE","path":"framework/metrics/system","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "BROWSE", "path": "framework/metrics/system", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -350,12 +350,12 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            expect(msg.payload).to.have.property('value').to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
+            expect(msg.payload).to.have.property('value').to.deep.equal(["cpu-utilisation-percent", "memavailable-mb", "membuffers-mb", "memcache-mb", "memfree-mb", "memtotal-mb", "memused-mb", "memused-percent"]);
             expect(msg.payload).to.have.property('type').to.equal('arstring');
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -366,17 +366,17 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
-    it('should browse a node and return only values', function(done) {
+    it('should browse a node and return only values', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"BROWSE","path":"framework/metrics/system","name":"request","payloadFormat":"value","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "BROWSE", "path": "framework/metrics/system", "name": "request", "payloadFormat": "value", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -388,11 +388,11 @@ describe('ctrlx-datalayer-request', function() {
         // @ts-ignore
         h1.on("input", (msg) => {
           try {
-            expect(msg.payload).to.deep.equal(["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]);
+            expect(msg.payload).to.deep.equal(["cpu-utilisation-percent", "memavailable-mb", "membuffers-mb", "memcache-mb", "memfree-mb", "memtotal-mb", "memused-mb", "memused-percent"]);
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -403,17 +403,17 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
-    it('should read metadata', function(done) {
+    it('should read metadata', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"METADATA","path":"framework/metrics/system/cpu-utilisation-percent","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "METADATA", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -434,7 +434,7 @@ describe('ctrlx-datalayer-request', function() {
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
@@ -445,17 +445,17 @@ describe('ctrlx-datalayer-request', function() {
     });
 
 
-    it('should create a node', function(done) {
+    it('should create a node', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"CREATE","path":"motion/axs","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "CREATE", "path": "motion/axs", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -472,28 +472,28 @@ describe('ctrlx-datalayer-request', function() {
 
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
 
         // @ts-ignore
-        n1.receive({ payload: {type: 'string', value: 'nostromo'} });
+        n1.receive({ payload: { type: 'string', value: 'nostromo' } });
       });
     });
 
 
-    it('should delete a node', function(done) {
+    it('should delete a node', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-request","device":"c1","method":"DELETE","path":"motion/axs/nostromo","name":"request","wires":[["h1"]]},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "DELETE", "path": "motion/axs/nostromo", "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
-            username: getUsername(),
-            password: getPassword()
+          username: getUsername(),
+          password: getPassword()
         }
       };
 
@@ -510,13 +510,13 @@ describe('ctrlx-datalayer-request', function() {
             expect(msg.payload).to.have.property('type').that.is.a('string').eql('string');
             done();
           }
-          catch(err){
+          catch (err) {
             done(err);
           }
         });
 
         // @ts-ignore
-        n1.receive({ payload: {type: 'string', value: 'nostromo'} });
+        n1.receive({ payload: { type: 'string', value: 'nostromo' } });
       });
     });
 

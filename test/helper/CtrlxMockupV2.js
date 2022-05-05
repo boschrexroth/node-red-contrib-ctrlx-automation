@@ -54,8 +54,8 @@ class CtrlxMockupV2 {
     //
     this.sessionEstablished = false;
     this.app.post('/identity-manager/api/v2/auth/token', (req, res) => {
-      if ( !req.body.name || req.body.name !== 'boschrexroth'
-        || !req.body.password || req.body.password !== 'boschrexroth' ) {
+      if (!req.body.name || req.body.name !== 'boschrexroth'
+        || !req.body.password || req.body.password !== 'boschrexroth') {
         res.statusCode = 401;
         res.send();
         return
@@ -88,23 +88,23 @@ class CtrlxMockupV2 {
 
       const authHeader = req.headers.authorization;
       if (authHeader) {
-          const token = authHeader.split(' ')[1];
+        const token = authHeader.split(' ')[1];
 
-          try {
-            let decoded = jwt.decode(token, 'secret');
-            let dateNow = Date.now().valueOf() / 1000;
-            if (dateNow < decoded.iat) {
-              return res.sendStatus(401);
-            }
-            if (dateNow > decoded.exp) {
-              return res.sendStatus(401);
-            }
-            next();
-          } catch (error) {
-            return res.sendStatus(403);
+        try {
+          let decoded = jwt.decode(token, 'secret');
+          let dateNow = Date.now().valueOf() / 1000;
+          if (dateNow < decoded.iat) {
+            return res.sendStatus(401);
           }
+          if (dateNow > decoded.exp) {
+            return res.sendStatus(401);
+          }
+          next();
+        } catch (error) {
+          return res.sendStatus(403);
+        }
       } else {
-          res.sendStatus(401);
+        res.sendStatus(401);
       }
     };
 
@@ -124,7 +124,7 @@ class CtrlxMockupV2 {
     this.app.get('/automation/api/v2/nodes/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
       switch (req.query.type) {
         case undefined:
-          // fallthrough intended
+        // fallthrough intended
         case 'data':
           res.statusCode = 200;
           res.json({
@@ -157,7 +157,7 @@ class CtrlxMockupV2 {
         case 'references':
           res.statusCode = 200;
           res.json({
-            "type":"arstring", "value":[""]
+            "type": "arstring", "value": [""]
           });
           break;
         default:
@@ -170,7 +170,7 @@ class CtrlxMockupV2 {
       if (req.query.type === 'browse') {
         res.statusCode = 200;
         res.json({
-          "type":"arstring", "value":["cpu-utilisation-percent","memavailable-mb","membuffers-mb","memcache-mb","memfree-mb","memtotal-mb","memused-mb","memused-percent"]
+          "type": "arstring", "value": ["cpu-utilisation-percent", "memavailable-mb", "membuffers-mb", "memcache-mb", "memfree-mb", "memtotal-mb", "memused-mb", "memused-percent"]
         });
         return;
       }
@@ -249,7 +249,7 @@ class CtrlxMockupV2 {
         instance: '/account/12345/msgs/abc',
         mainDiagnosisCode: 'F0360001',
         detailedDiagnosisCode: '00666001',
-        dynamicDescription : 'This could be a dynamic description',
+        dynamicDescription: 'This could be a dynamic description',
         severity: 'ERROR'
       });
     });
@@ -341,7 +341,7 @@ class CtrlxMockupV2 {
       }
 
       // Nodes are given as comma separate array
-       if (typeof req.query.nodes === 'undefined') {
+      if (typeof req.query.nodes === 'undefined') {
         res.statusCode = 400;
         res.send();
         return;
@@ -367,7 +367,7 @@ class CtrlxMockupV2 {
             timestamp: Date.now() * 1e4 + 116444736e9  // expected format is FILETIME (100-nanosecond intervals since January 1, 1601 UTC)
           }
 
-          switch(element) {
+          switch (element) {
             case 'framework/metrics/system/cpu-utilisation-percent':
               data.value = Math.random() * 100;
               data.type = 'double';

@@ -97,7 +97,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -108,7 +108,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
         // Check for the expected number of updates
         expect(numReceived).to.be.greaterThan(1);
 
-      } catch(err) {
+      } catch (err) {
         console.error('Housten we are in trouble: ' + err);
         throw err;
       } finally {
@@ -141,7 +141,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
 
           numReceived++;
         });
@@ -153,7 +153,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
         // Check for the expected number of updates
         expect(numReceived).to.be.greaterThan(3);
 
-      } catch(err) {
+      } catch (err) {
         console.error('Housten we are in trouble: ' + err);
         throw err;
       } finally {
@@ -190,7 +190,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(100);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -202,7 +202,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
         // We use a lower number to tolerate execution jitters.
         expect(numReceived).to.be.greaterThan(15);
 
-      } catch(err) {
+      } catch (err) {
         console.error('Housten we are in trouble: ' + err);
         throw err;
       } finally {
@@ -241,7 +241,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
 
         expect(numReceived).to.be.greaterThan(0);
 
-      } catch(err) {
+      } catch (err) {
         console.error('Housten we are in trouble: ' + err);
         throw err;
       } finally {
@@ -319,7 +319,7 @@ describe('CtrlxCoreDataLayerEvents - With different port', function() {
           const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
           expect(deltaTime).to.be.below(500);
 
-          //console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
+          // console.log(`update: node=${data.node} value=${data.value} timestampUTC=${timestamp.toISOString()}`);
           numReceived++;
         });
 
@@ -330,7 +330,7 @@ describe('CtrlxCoreDataLayerEvents - With different port', function() {
         // Check for the expected number of updates
         expect(numReceived).to.be.greaterThan(1);
 
-      } catch(err) {
+      } catch (err) {
         console.error('Housten we are in trouble: ' + err);
         throw err;
       } finally {

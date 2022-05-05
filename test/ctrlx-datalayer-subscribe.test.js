@@ -51,7 +51,7 @@ const CtrlxCore = require('../lib/CtrlxCore');
 /*
  * This test group contains test cases for Node-RED nodes.
  */
-describe('ctrlx-datalayer-subscribe', function() {
+describe('ctrlx-datalayer-subscribe', function () {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || '127.0.0.1';
@@ -65,13 +65,13 @@ describe('ctrlx-datalayer-subscribe', function() {
 
   // Prepare the ctrlX Device Server Mockup
   let testServer;
-  before(function(done) {
+  before(function (done) {
     testServer = new CtrlxMockup();
     testServer.startServer('localhost', CtrlxCore._parseHost(getHostname()).port, () => {
       done();
     });
   });
-  after(function(done) {
+  after(function (done) {
     this.timeout(10000);
     testServer.stopServer(() => {
       done();
@@ -80,26 +80,26 @@ describe('ctrlx-datalayer-subscribe', function() {
 
 
   // Prepare the Node-RED test framework
-  beforeEach(function(done) {
+  beforeEach(function (done) {
     helper.startServer(done);
   });
   afterEach(function (done) {
-    helper.unload().then(function() {
+    helper.unload().then(function () {
       helper.stopServer(done);
     });
   });
 
 
 
-  describe('ctrlx-datalayer-subscribe: Basic Functionality', function() {
+  describe('ctrlx-datalayer-subscribe: Basic Functionality', function () {
 
-    it('should be loaded as imported by the flow and receive an update', function(done) {
+    it('should be loaded as imported by the flow and receive an update', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-subscribe","subscription":"s1","path":"framework/metrics/system/cpu-utilisation-percent","name":"subscribe","wires":[["h1"]]},
-        {"id":"s1","type":"ctrlx-config-subscription","device":"c1","name":"sub1","publishIntervalMs":"100"},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "100" },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
@@ -146,7 +146,7 @@ describe('ctrlx-datalayer-subscribe', function() {
 
             s1.subscription.close();
           }
-          catch(err){
+          catch (err) {
             s1.subscription.close();
             done(err);
           }
@@ -156,13 +156,13 @@ describe('ctrlx-datalayer-subscribe', function() {
 
 
 
-    it('should be receive updates within 100ms publishTime', function(done) {
+    it('should be receive updates within 100ms publishTime', function (done) {
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-subscribe","subscription":"s1","path":"framework/metrics/system/cpu-utilisation-percent","name":"subscribe","wires":[["h1"]]},
-        {"id":"s1","type":"ctrlx-config-subscription","device":"c1","name":"sub1","publishIntervalMs":"100"},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "100" },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
@@ -188,7 +188,7 @@ describe('ctrlx-datalayer-subscribe', function() {
             expect(msg).to.have.property('payload').to.be.a('number').within(0, 100);
             numReceived++;
           }
-          catch(err){
+          catch (err) {
             s1.subscription.close();
             done(err);
           }
@@ -204,15 +204,15 @@ describe('ctrlx-datalayer-subscribe', function() {
     });
 
 
-    it('should be reconnecting and receive updates after connection got broken', function(done) {
+    it('should be reconnecting and receive updates after connection got broken', function (done) {
 
       this.timeout(8000);
 
       let flow = [
-        {"id":"h1","type":"helper"},
-        {"id":"n1","type":"ctrlx-datalayer-subscribe","subscription":"s1","path":"test/broken/connection/i","name":"subscribe","wires":[["h1"]]},
-        {"id":"s1","type":"ctrlx-config-subscription","device":"c1","name":"sub1","publishIntervalMs":"100"},
-        {"id":"c1","type":"ctrlx-config","name":"ctrlx","hostname":getHostname(),"debug":true}
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "test/broken/connection/i", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "100" },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
       ];
       let credentials = {
         c1: {
@@ -241,7 +241,7 @@ describe('ctrlx-datalayer-subscribe', function() {
             expect(msg).to.have.property('payload').to.be.a('number').within(0, 100);
             numReceived++;
           }
-          catch(err){
+          catch (err) {
             s1.subscription.close();
             done(err);
           }
