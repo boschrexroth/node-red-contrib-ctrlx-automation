@@ -54,9 +54,9 @@ module.exports = function(RED) {
       let ctrlx = new CtrlxCore(hostname, username, password);
 
       ctrlx.logIn()
-        .then(() => ctrlx.datalayerBrowse(path) )
+        .then(() => ctrlx.datalayerBrowse(path))
         .then((data) => {
-          if (!data || !data.value ) {
+          if (!data || !data.value) {
             return res.end('[]');
           }
           res.end(JSON.stringify(data.value));
@@ -70,7 +70,10 @@ module.exports = function(RED) {
             return res.end(err.message);
           }
         })
-        .finally(() => ctrlx.logOut());
+        .finally(() => {
+          // We have to catch, because this fails for bad credentials
+          ctrlx.logOut().catch((err) => console.log('Failed to log out with error ' + err.message));
+        });
 
     } else if (id) {
 
@@ -93,7 +96,7 @@ module.exports = function(RED) {
           return res.end(err.message);
         }
 
-        if (!data || !data.value ) {
+        if (!data || !data.value) {
           return res.end('[]');
         }
 
@@ -150,127 +153,127 @@ module.exports = function(RED) {
     this.register = function(ctrlxNode) {
       node.users[ctrlxNode.id] = ctrlxNode;
       if (Object.keys(node.users).length === 1) {
-          node.connect();
+        node.connect();
       }
     };
 
     // Unregister of attached ctrlX node. We log out of ctrlX when the last node unregistered.
     this.deregister = function(ctrlxNode, done) {
-        delete node.users[ctrlxNode.id];
-        if (node.closing) {
-            return done();
+      delete node.users[ctrlxNode.id];
+      if (node.closing) {
+        return done();
+      }
+      if (Object.keys(node.users).length === 0) {
+        if (node.ctrlX) {
+          node.ctrlX.logOut()
+            .then(() => done())
+            .catch(() => done());
         }
-        if (Object.keys(node.users).length === 0) {
-            if (node.ctrlX) {
-                node.ctrlX.logOut()
-                  .then(() => done())
-                  .catch(() => done());
-            }
-        } else {
-          done();
-        }
+      } else {
+        done();
+      }
     };
 
     // This function performs the login. Will be automatically called as soon as
     // the first node registers.
-    this.connect = function () {
+    this.connect = function() {
       if (!node.connected && !node.connecting) {
         node.connecting = true;
         try {
           node.ctrlX.logIn()
-          .then((data) => {
-            node.connecting = false;
-            node.connected = true;
+            .then((data) => {
+              node.connecting = false;
+              node.connected = true;
 
-            if (node.debug) {
-              node.log('Successfully logged in to: ' + node.hostname);
-              node.log('Token will expire at ' + new Date(data.token_expireTime).toLocaleString() + ' local time');
-            }
-
-            for (let id in node.users) {
-              if (Object.prototype.hasOwnProperty.call(node.users, id)) {
-                node.users[id].setStatus({fill: 'green', shape: 'dot', text: 'authenticated'});
+              if (node.debug) {
+                node.log('Successfully logged in to: ' + node.hostname);
+                node.log('Token will expire at ' + new Date(data.token_expireTime).toLocaleString() + ' local time');
               }
-            }
 
-            // Now execute all the pending requests
-            for (let id in node.pendingRequests) {
-              if (Object.prototype.hasOwnProperty.call(node.pendingRequests, id)) {
-
-                switch(node.pendingRequests[id].method) {
-                  case 'READ': {
-                    node.datalayerRead(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'READ_WITH_ARG': {
-                    node.datalayerReadWithArg(id, node.pendingRequests[id].path, node.pendingRequests[id].arg, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'WRITE': {
-                    node.datalayerWrite(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'CREATE': {
-                    node.datalayerCreate(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'DELETE': {
-                    node.datalayerDelete(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'METADATA': {
-                    node.datalayerReadMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'BROWSE': {
-                    node.datalayerBrowse(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  case 'SUBSCRIBE': {
-                    node.datalayerSubscribe(id, node.pendingRequests[id].paths, node.pendingRequests[id].publishIntervalMs, node.pendingRequests[id].callback);
-                    break;
-                  }
-                  default: {
-                    node.error('internal error: received invalid pending request!');
-                  }
+              for (let id in node.users) {
+                if (Object.prototype.hasOwnProperty.call(node.users, id)) {
+                  node.users[id].setStatus({ fill: 'green', shape: 'dot', text: 'authenticated' });
                 }
-
-                delete node.pendingRequests[id];
               }
-            }
 
-          })
-          .catch((err) => {
-            node.connecting = false;
-            node.connected = false;
+              // Now execute all the pending requests
+              for (let id in node.pendingRequests) {
+                if (Object.prototype.hasOwnProperty.call(node.pendingRequests, id)) {
 
-            if (node.debug) {
-              node.log('Failed to log in to ' + node.hostname + ' with error ' + err.message);
-            }
+                  switch (node.pendingRequests[id].method) {
+                    case 'READ': {
+                      node.datalayerRead(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'READ_WITH_ARG': {
+                      node.datalayerReadWithArg(id, node.pendingRequests[id].path, node.pendingRequests[id].arg, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'WRITE': {
+                      node.datalayerWrite(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'CREATE': {
+                      node.datalayerCreate(id, node.pendingRequests[id].path, node.pendingRequests[id].data, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'DELETE': {
+                      node.datalayerDelete(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'METADATA': {
+                      node.datalayerReadMetadata(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'BROWSE': {
+                      node.datalayerBrowse(id, node.pendingRequests[id].path, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    case 'SUBSCRIBE': {
+                      node.datalayerSubscribe(id, node.pendingRequests[id].paths, node.pendingRequests[id].publishIntervalMs, node.pendingRequests[id].callback);
+                      break;
+                    }
+                    default: {
+                      node.error('internal error: received invalid pending request!');
+                    }
+                  }
 
-            for (let id in node.users) {
-              if (Object.prototype.hasOwnProperty.call(node.users, id)) {
-                node.users[id].setStatus({fill: 'red', shape: 'ring', text: 'authentication failed'});
+                  delete node.pendingRequests[id];
+                }
               }
-            }
 
-            // Now cancel all the pending requests
-            for (let id in node.pendingRequests) {
-              if (Object.prototype.hasOwnProperty.call(node.pendingRequests, id)) {
-                node.pendingRequests[id].callback(err, null);
-                delete node.pendingRequests[id];
+            })
+            .catch((err) => {
+              node.connecting = false;
+              node.connected = false;
+
+              if (node.debug) {
+                node.log('Failed to log in to ' + node.hostname + ' with error ' + err.message);
               }
-            }
 
-            // Try again, except if the node has been closed in the meanwhile. E.g. because
-            // the node has been deleted or the flow has been reployed with new settings.
-            if (!node.closing) {
-              setTimeout(node.connect, 5000);
-            }
+              for (let id in node.users) {
+                if (Object.prototype.hasOwnProperty.call(node.users, id)) {
+                  node.users[id].setStatus({ fill: 'red', shape: 'ring', text: 'authentication failed' });
+                }
+              }
 
-          });
+              // Now cancel all the pending requests
+              for (let id in node.pendingRequests) {
+                if (Object.prototype.hasOwnProperty.call(node.pendingRequests, id)) {
+                  node.pendingRequests[id].callback(err, null);
+                  delete node.pendingRequests[id];
+                }
+              }
 
-        }catch(err) {
+              // Try again, except if the node has been closed in the meanwhile. E.g. because
+              // the node has been deleted or the flow has been reployed with new settings.
+              if (!node.closing) {
+                setTimeout(node.connect, 5000);
+              }
+
+            });
+
+        } catch (err) {
           node.error(err);
         }
       }
@@ -440,8 +443,8 @@ module.exports = function(RED) {
 
   RED.nodes.registerType("ctrlx-config", CtrlxConfig, {
     credentials: {
-        username: {type:"text"},
-        password: {type:"password"}
-      }
+      username: { type: "text" },
+      password: { type: "password" }
+    }
   });
 };
