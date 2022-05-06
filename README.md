@@ -97,7 +97,8 @@ Any use of the source code and related documents of this repository in applicati
 * 2022-03-14: 1.8.15 - fix: make subscribe node useable on other ports than 443 (Bug457112).
                        fix: remove an uncaught exception which was introduced with version 1.8.14 (Bug454078).
 * 2022-04-26: 1.8.16 - fix: possible connection break on heavy load for commands: create, delete, write.
-* 2022-05-28: 1.8.17 - feat: added support for IPv6.
+* 2022-05-05: 1.8.17 - feat: added support for IPv6.
+* 2022-05-06: 1.8.18 - fix: possible node crash on browsing with bad credentials
   
 ## About
 
