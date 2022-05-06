@@ -27,7 +27,7 @@
 const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
 
- module.exports = function(RED) {
+module.exports = function(RED) {
   'use strict';
   const CtrlxDatalayerSubscription = require('./lib/CtrlxDatalayerSubscription');
 
@@ -56,10 +56,10 @@ const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
 
     if (this.configSubscription) {
-      node.status({fill: 'red', shape: 'ring', text: 'not logged in'});
+      node.status({ fill: 'red', shape: 'ring', text: 'not logged in' });
 
       if (this.configSubscription.configNodeDevice.connected) {
-        node.status({fill:'green', shape:'dot', text:'authenticated'});
+        node.status({ fill: 'green', shape: 'dot', text: 'authenticated' });
       }
 
 
@@ -70,15 +70,15 @@ const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
         if (err) {
           if (err.message) {
-            node.status({fill: 'red', shape: 'ring', text: `subscription failed: ${err.message}`});
+            node.status({ fill: 'red', shape: 'ring', text: `subscription failed: ${err.message}` });
             node.error(err.message);
           } else {
-            node.status({fill: 'red', shape: 'ring', text: `subscription failed`});
+            node.status({ fill: 'red', shape: 'ring', text: `subscription failed` });
             node.error('unknown error');
           }
         } else {
           node.eventCounter++;
-          node.status({fill: 'green', shape: 'dot', text: `received data #${node.eventCounter}`});
+          node.status({ fill: 'green', shape: 'dot', text: `received data #${node.eventCounter}` });
           node.send({
             topic: data.node,
             payload: data.value,

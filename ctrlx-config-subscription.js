@@ -24,7 +24,7 @@
  *
  */
 
- const CtrlxProblemError = require('./lib/CtrlxProblemError');
+const CtrlxProblemError = require('./lib/CtrlxProblemError');
 
 module.exports = function(RED) {
   'use strict';
