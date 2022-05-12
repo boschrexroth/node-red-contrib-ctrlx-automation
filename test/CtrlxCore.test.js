@@ -79,12 +79,24 @@ describe('CtrlxCore', function() {
       expect(CtrlxCore._parseHost('[::1]')).to.deep.equal({ 'hostname': '::1', 'port': 443 })
       expect(CtrlxCore._parseHost('[::1]:8443')).to.deep.equal({ 'hostname': '::1', 'port': 8443 })
 
-      // domain
+      // domain: localhost
       expect(CtrlxCore._parseHost('localhost')).to.deep.equal({ 'hostname': 'localhost', 'port': 443 })
+      expect(CtrlxCore._parseHost('LOCALHOST')).to.deep.equal({ 'hostname': 'localhost', 'port': 443 })
+      expect(CtrlxCore._parseHost('LoCaLhOsT')).to.deep.equal({ 'hostname': 'localhost', 'port': 443 })
+
+      // domain: localhost:port
       expect(CtrlxCore._parseHost('localhost:443')).to.deep.equal({ 'hostname': 'localhost', 'port': 443 })
       expect(CtrlxCore._parseHost('localhost:8443')).to.deep.equal({ 'hostname': 'localhost', 'port': 8443 })
-      expect(CtrlxCore._parseHost('ctrlx-server.com:8443')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 8443 })
+
+      // domain: other
       expect(CtrlxCore._parseHost('ctrlx-server.com')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 443 })
+      expect(CtrlxCore._parseHost('ctrlx-server.com:8443')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 8443 })
+
+      // domain with trailing slash(es)
+      expect(CtrlxCore._parseHost('ctrlx-server.com/')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 443 })
+      expect(CtrlxCore._parseHost('ctrlx-server.com//')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 443 })
+      expect(CtrlxCore._parseHost('ctrlx-server.com///')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 443 })
+      expect(CtrlxCore._parseHost('https://ctrlx-server.com/')).to.deep.equal({ 'hostname': 'ctrlx-server.com', 'port': 443 })
 
       done();
     });
