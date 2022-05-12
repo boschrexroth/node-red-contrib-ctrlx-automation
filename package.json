@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-ctrlx-automation",
-  "version": "1.8.17",
+  "version": "1.8.18",
   "description": "Node-RED nodes for ctrlX AUTOMATION",
   "repository": {
     "type": "git",
