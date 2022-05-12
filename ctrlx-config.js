@@ -38,8 +38,8 @@ module.exports = function(RED) {
 
   // https://discourse.nodered.org/t/create-an-admin-configuration-api-https-endpoint/4423/7
   // https://discourse.nodered.org/t/accessing-server-side-from-client-side/26022/4
-  RED.httpAdmin.get('/ctrlx/browse', function(req, res/*, next*/) {
-    //console.log(req.query);
+  RED.httpAdmin.get('/ctrlx/browse', function(req, res) {
+    // console.log(req.query);
 
     const id = req.query.id;
     const username = req.query.username;
@@ -72,7 +72,7 @@ module.exports = function(RED) {
         })
         .finally(() => {
           // We have to catch, because this fails for bad credentials
-          ctrlx.logOut().catch((err) => console.log('Failed to log out with error ' + err.message));
+          ctrlx.logOut().catch((err) => RED.log.warn('Failed to log out when trying to browse with error ' + err.message));
         });
 
     } else if (id) {
