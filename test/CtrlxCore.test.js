@@ -25,7 +25,7 @@
  */
 
 
-
+const net = require('net');
 const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
 const CtrlxDatalayer = require('../lib/CtrlxDatalayerV2')
