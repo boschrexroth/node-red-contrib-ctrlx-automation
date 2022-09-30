@@ -43,6 +43,7 @@ This page contains various examples for different use cases. Looking through the
 - [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-myinstance-for-python)
 - [Example: Browse and show all available interpreter instances](#example-browse-and-show-all-available-interpreter-instances)
 - [Example: Monitor state of an interpreter instance "MyInstance"](#example-monitor-state-of-an-interpreter-instance-myinstance)
+- [Example: Reset interpreter instance "MyInstance"](#example-reset-interpreter-instance-myinstance)
 - [Example: Execute a python command in an interpreter instance "MyInstance"](#example-execute-a-python-command-in-an-interpreter-instance-myinstance)
 - [Example: Execute a python file "test.py" in an interpreter instance "MyInstance"](#example-execute-a-python-file-testpy-in-an-interpreter-instance-myinstance)
 
@@ -376,9 +377,20 @@ The following example shows how to monitor the state of an instances "MyInstance
 [{"id":"9b9e6fbd.7416e8","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Monitor state of an interpreter instance \"MyInstance\"","info":"","x":250,"y":2280,"wires":[]},{"id":"59b3f37.f33bf0c","type":"ctrlx-datalayer-subscribe","z":"4ff80d56.dd60fc","subscription":"632bcc2.eddf134","path":"script/instances/MyInstance/state/opstate","name":"Read instance state","x":170,"y":2320,"wires":[["4d250434.d9cf1c"]]},{"id":"4d250434.d9cf1c","type":"ui_text","z":"4ff80d56.dd60fc","group":"f675e9d2.c9935","order":4,"width":"4","height":"1","name":"","label":"\"MyInstance\" state","format":"{{msg.payload}}","layout":"col-center","x":410,"y":2320,"wires":[]},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
+### Example: Reset interpreter instance "MyInstance"
+
+The following example shows how to reset a script interpreter instance "MyInstance". The corresponding instance has to be present and in state "ERROR". 
+
+![example-interpreter-python-reset-instance.png](./images/example-interpreter-python-reset-instance.png)
+![example-interpreter-python-reset-instance-dashboard.png](./images/example-interpreter-python-reset-instance-dashboard.png)
+
+```JSON
+[{"id":"79e751dd.c8402","type":"function","z":"5480b2f5a22f3525","name":"make reset command","func":"var newMsg = {};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":660,"y":220,"wires":[["7cb11da0.1916bc"]]},{"id":"7cb11da0.1916bc","type":"ctrlx-datalayer-request","z":"5480b2f5a22f3525","device":"7b877229.678964","method":"CREATE","path":"script/instances/MyInstance/cmd/reset","payloadFormat":"value_type","name":"Reset \"MyInstance\"","x":900,"y":220,"wires":[[]]},{"id":"a11e7b1a.b3a8d","type":"ui_button","z":"5480b2f5a22f3525","name":"","group":"f675e9d2.c9935","order":3,"width":"3","height":"1","passthru":false,"label":"Reset instance","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":420,"y":220,"wires":[["79e751dd.c8402"]]},{"id":"690b0e68.ffc46","type":"inject","z":"5480b2f5a22f3525","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":420,"y":260,"wires":[["79e751dd.c8402"]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"5480b2f5a22f3525","name":"Example: Reset interpreter instance \"MyInstance\"","info":"","x":500,"y":180,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
 ### Example: Execute a python command in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python command script in an  script interpreter instance "MyInstance". The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to execute a python command script in n script interpreter instance "MyInstance". The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
 
 ![example-interpreter-python-execute-command.png](./images/example-interpreter-python-execute-command.png)
 ![example-interpreter-python-execute-command-dashboard.png](./images/example-interpreter-python-execute-command-dashboard.png)
@@ -389,7 +401,7 @@ The following example shows how to execute a python command script in an  script
 
 ### Example: Execute a python file "test.py" in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python script file in an  script interpreter instance "MyInstance". The corresponding instance has to be present and in state "INIT" or "READY". The file "test.py" has to be present in the root folder of the active configuration.
+The following example shows how to execute a python script file in a script interpreter instance "MyInstance". The corresponding instance has to be present and in state "INIT" or "READY". The file "test.py" has to be present in the root folder of the active configuration.
 
 Content of "test.py":
 
