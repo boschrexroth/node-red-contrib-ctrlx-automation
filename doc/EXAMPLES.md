@@ -38,7 +38,7 @@ This page contains various examples for different use cases. Looking through the
 - [Example: Move an axis "AxisX"](#example-move-an-axis-axisx)
 - [Example: Abort an axis movement of "AxisX"](#example-abort-an-axis-movement-of-axisx)
 
-[Dashboard examples for script handler and ctrlX PYTHON](#dashboard-examples-for-script-handler-and-ctrlx-python)
+[Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App](#dashboard-examples-for-script-handler-and-ctrlx-python)
 
 - [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-myinstance-for-python)
 - [Example: Browse and show all available interpreter instances](#example-browse-and-show-all-available-interpreter-instances)
@@ -153,7 +153,7 @@ The request returns in `msg.payload` the written value:
 
 ## Dashboard examples for ctrlX PLC
 
-Please note that for these examples the installation of the ctrlX PLC app is expected. See corresponding [documentation of the ctrlX PLC app](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
+Please note that for these examples the installation of the ctrlX PLC app is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX PLC app](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
 
 ### Example: Monitor and handle a boolean PLC variable "bBoolean"
 
@@ -259,9 +259,9 @@ sString;
 [{"id":"52f3b28.7154acc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"WRITE","path":"plc/app/Application/sym/GVL/sString","payloadFormat":"value_type","name":"Write \"sString\" value","x":780,"y":580,"wires":[[]]},{"id":"a84a6218.d8fa38","type":"ui_text_input","z":"4ff80d56.dd60fc","name":"","label":"sString","tooltip":"","group":"938bb9af.bc8108","order":1,"width":0,"height":0,"passthru":false,"mode":"text","delay":"0","topic":"topic","topicType":"msg","x":400,"y":580,"wires":[["b77fcdb1.bb59e"]]},{"id":"b77fcdb1.bb59e","type":"function","z":"4ff80d56.dd60fc","name":"make value","func":"var newMsg = {}\nnewMsg.payload = {\"type\":\"string\",\"value\":msg.payload}\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":570,"y":580,"wires":[["52f3b28.7154acc"]]},{"id":"7fd8a2ba.130acc","type":"ctrlx-datalayer-subscribe","z":"4ff80d56.dd60fc","subscription":"632bcc2.eddf134","path":"plc/app/Application/sym/GVL/sString","name":"Read \"sString\" value","x":200,"y":580,"wires":[["a84a6218.d8fa38"]]},{"id":"efa71414.90e038","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Monitor and handle a string PLC variable \"sString\"","info":"","x":310,"y":540,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"938bb9af.bc8108","type":"ui_group","name":"PLC Variable handling","tab":"9cba2148.8c9148","order":1,"disp":true,"width":"4","collapse":false},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for ctrlX MOTION
+## Dashboard examples for ctrlX MOTION app
 
-Please note that for these examples the installation of the ctrlX MOTION app is expected. See corresponding [documentation of the ctrlX MOTION app](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
+Please note that for these examples the installation of the ctrlX MOTION app is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX MOTION app](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
 
 ### Example: Monitor and switch motion state
 
@@ -340,9 +340,9 @@ The following example shows how to abort an movement of a motion axis "AxisX" in
 [{"id":"79e751dd.c8402","type":"function","z":"4ff80d56.dd60fc","name":"make abort command","func":"var newMsg = {};\nnewMsg.payload = {\n      \"type\":\"object\",\n      \"value\":{\"dec\":\"10\",\"jrkDec\":\"0\"}\n     }\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":440,"y":1840,"wires":[["7cb11da0.1916bc"]]},{"id":"7cb11da0.1916bc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/abort","payloadFormat":"value_type","name":"\"AxisX\" abort","x":660,"y":1840,"wires":[[]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Abort an axis movement of \"AxisX\"","info":"","x":240,"y":1800,"wires":[]},{"id":"a11e7b1a.b3a8d","type":"ui_button","z":"4ff80d56.dd60fc","name":"","group":"eb7620ae.6f5d","order":3,"width":"2","height":"1","passthru":false,"label":"Stop \"AxisX\"","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":210,"y":1880,"wires":[["79e751dd.c8402"]]},{"id":"690b0e68.ffc46","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":1840,"wires":[["79e751dd.c8402"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for script handler and ctrlX PYTHON
+## Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App
 
-Please note that for these examples the installation of the ctrlX PYTHON app is expected. See corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
+Please note that for these examples the installation of the "ctrlX CORE - Python Runtime App" is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
 
 ### Example: Create an interpreter instance "MyInstance" for python
 
