@@ -157,11 +157,13 @@ Please note that for these examples the installation of the ctrlX PLC app is exp
 
 ### Example: Monitor and handle a boolean PLC variable "bBoolean"
 
-The following example shows how to read, write and monitor a PLC variable "bBoolean" of type `BOOL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program. Note: A digital IO can be treated the same way.
+The following example shows how to read, write and monitor a PLC variable `bBoolean` of type `BOOL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma. 
+Note: A digital IO can be treated the same way.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   bBoolean : BOOL;
@@ -183,11 +185,12 @@ bBoolean;
 
 ### Example: Monitor and handle an integer PLC variable "iInteger"
 
-The following example shows how to read, write and monitor a PLC variable "iInteger" of type `INT` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program.
+The following example shows how to read, write and monitor a PLC variable `iInteger` of type `INT` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   iInteger : BOOL;
@@ -209,11 +212,12 @@ iInteger;
 
 ### Example: Monitor and handle a real PLC variable "rReal"
 
-The following example shows how to read, write and monitor a PLC variable "rReal" of type `REAL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program.
+The following example shows how to read, write and monitor a PLC variable `rReal` of type `REAL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   rReal : BOOL;
@@ -235,11 +239,12 @@ rReal;
 
 ### Example: Monitor and handle a string PLC variable "sString"
 
-The following example shows how to read, write and monitor a PLC variable "sString" of type `STRING` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program.
+The following example shows how to read, write and monitor a PLC variable `sString` of type `STRING` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   sString : BOOL;
@@ -287,7 +292,7 @@ The following example shows how to browse and show all available axes of the ctr
 
 ### Example: Create an axis "AxisX"
 
-The following example shows how to create a motion object of the type axis with the name "AxisX" in the ctrlX MOTION. The state of the ctrlX MOTION has to be `Configuration`.
+The following example shows how to create a motion object of the type axis with the name `AxisX` in the ctrlX MOTION. The state of the ctrlX MOTION has to be `Configuration`.
 
 ![example-motion-create-axis.png](./images/example-motion-create-axis.png)
 ![example-motion-create-axis-dashboard.png](./images/example-motion-create-axis-dashboard.png)
@@ -298,7 +303,7 @@ The following example shows how to create a motion object of the type axis with 
 
 ### Example: Switch and monitor power of an axis "AxisX"
 
-The following example shows how to switch and monitor the power state of a motion axis "AxisX" in the ctrlX MOTION. The motion object "AxisX" has to be present and the state of the ctrlX MOTION has to be `Running`.
+The following example shows how to switch and monitor the power state of a motion axis `AxisX` in the ctrlX MOTION. The corresponding motion object has to be present and the state of the ctrlX MOTION has to be `Running`.
 
 ![example-motion-power-axis.png](./images/example-motion-power-axis.png)
 ![example-motion-power-axis-dashboard.png](./images/example-motion-power-axis-dashboard.png)
@@ -309,7 +314,7 @@ The following example shows how to switch and monitor the power state of a motio
 
 ### Example: Monitor position of an axis "AxisX"
 
-The following example shows how to monitor the interpolated position of a motion axis "AxisX" in the ctrlX MOTION. The motion object "AxisX" has to be present and the state of the ctrlX MOTION has to be `Running`.
+The following example shows how to monitor the interpolated position of a motion axis `AxisX` in the ctrlX MOTION. The corresponding motion object has to be present and the state of the ctrlX MOTION has to be `Running`.
 
 ![example-motion-monitor-position-axes.png](./images/example-motion-monitor-position-axes.png)
 ![example-motion-monitor-position-axes-dashboard.png](./images/example-motion-monitor-position-axes-dashboard.png)
@@ -320,7 +325,7 @@ The following example shows how to monitor the interpolated position of a motion
 
 ### Example: Move an axis "AxisX"
 
-The following example shows how to move a motion axis "AxisX" in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `STANDSTILL` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
+The following example shows how to move a motion axis `AxisX` in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `STANDSTILL` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
 
 ![example-motion-move-axis.png](./images/example-motion-move-axis.png)
 ![example-motion-move-axis-dashboard.png](./images/example-motion-move-axis-dashboard.png)
@@ -331,7 +336,7 @@ The following example shows how to move a motion axis "AxisX" in the ctrlX MOTIO
 
 ### Example: Abort an axis movement of "AxisX"
 
-The following example shows how to abort an movement of a motion axis "AxisX" in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `DISCRETE_MOTION`.
+The following example shows how to abort an movement of a motion axis `AxisX` in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `DISCRETE_MOTION`.
 
 ![example-motion-abort-axis-movement.png](./images/example-motion-abort-axis-movement.png)
 ![example-motion-abort-axis-movement-dashboard.png](./images/example-motion-abort-axis-movement-dashboard.png)
@@ -368,7 +373,7 @@ The following example shows how to browse and show all available instances of th
 
 ### Example: Monitor state of an interpreter instance "MyInstance"
 
-The following example shows how to monitor the state of an instances "MyInstance" of the ctrlX script manager ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to monitor the state of an instances `MyInstance` of the ctrlX script manager ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
 
 ![example-motion-monitor-state-instance.png](./images/example-motion-monitor-state-instance.png)
 ![example-motion-monitor-state-instance-dashboard.png](./images/example-motion-monitor-state-instance-dashboard.png)
@@ -379,7 +384,7 @@ The following example shows how to monitor the state of an instances "MyInstance
 
 ### Example: Reset interpreter instance "MyInstance"
 
-The following example shows how to reset a script interpreter instance "MyInstance". The corresponding instance has to be present and in state "ERROR". 
+The following example shows how to reset a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `ERROR`. 
 
 ![example-interpreter-python-reset-instance.png](./images/example-interpreter-python-reset-instance.png)
 ![example-interpreter-python-reset-instance-dashboard.png](./images/example-interpreter-python-reset-instance-dashboard.png)
@@ -390,7 +395,7 @@ The following example shows how to reset a script interpreter instance "MyInstan
 
 ### Example: Execute a python command in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python command script in n script interpreter instance "MyInstance". The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to execute a python command script in n script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
 
 ![example-interpreter-python-execute-command.png](./images/example-interpreter-python-execute-command.png)
 ![example-interpreter-python-execute-command-dashboard.png](./images/example-interpreter-python-execute-command-dashboard.png)
@@ -401,7 +406,7 @@ The following example shows how to execute a python command script in n script i
 
 ### Example: Execute a python file "test.py" in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python script file in a script interpreter instance "MyInstance". The corresponding instance has to be present and in state "INIT" or "READY". The file "test.py" has to be present in the root folder of the active configuration.
+The following example shows how to execute a python script file in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY`. The file `test.py` has to be present in the root folder of the active configuration.
 
 Content of "test.py":
 
