@@ -52,7 +52,7 @@ This page contains various examples for different use cases. Looking through the
 
 The example flows can either be imported via the clipboard or by importing directly in the Node-RED editor via the **Import Nodes** Dialog.
 
-![usage_overview_request.png](./images/examples_import_nodes.png)
+![examples_import_nodes.png](./images/examples_import_nodes.png)
 
 Keep in mind, that you need to insert valid credentials (username and password) for your device and t adjust your hostname.
 
