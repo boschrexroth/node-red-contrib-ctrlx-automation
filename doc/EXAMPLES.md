@@ -29,7 +29,7 @@ This page contains various examples for different use cases. Looking through the
 - [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-rreal)
 - [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-sstring)
 
-[Dashboard examples for ctrlX MOTION](#dashboard-examples-for-ctrlx-motion)
+[Dashboard examples for ctrlX MOTION app](#dashboard-examples-for-ctrlx-motion-app)
 
 - [Example: Monitor and switch motion state](#example-monitor-and-switch-motion-state)
 - [Example: Browse and show all available axes](#example-browse-and-show-all-available-axes)
@@ -39,7 +39,7 @@ This page contains various examples for different use cases. Looking through the
 - [Example: Move an axis "AxisX"](#example-move-an-axis-axisx)
 - [Example: Abort an axis movement of "AxisX"](#example-abort-an-axis-movement-of-axisx)
 
-[Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App](#dashboard-examples-for-script-handler-and-ctrlx-python)
+[Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App](#dashboard-examples-for-script-interpreter-and-ctrlx-core---python-runtime-app)
 
 - [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-myinstance-for-python)
 - [Example: Browse and show all available interpreter instances](#example-browse-and-show-all-available-interpreter-instances)
@@ -54,7 +54,9 @@ The example flows can either be imported via the clipboard or by importing direc
 
 ![examples_import_nodes.png](./images/examples_import_nodes.png)
 
-Keep in mind, that you need to insert valid credentials (username and password) for your device and t adjust your hostname.
+Keep in mind, that you need to insert valid credentials (username and password) for your device and adjust your hostname inside of the communication nodes.
+When importing several examples after each other a message `Some of the nodes you are importing already exist in your workspace.` appears. Please choose `View nodes...` and click on `Import selected`. Otherwise you could overwrite existing settings nodes.
+
 
 ## General examples
 
@@ -82,7 +84,7 @@ The following example shows how to subscribe to the current CPU utilisation and 
 ![example-monitor-cpu-utilisation-linechart-dashboard.png](./images/example-monitor-cpu-utilisation-linechart-dashboard.png)
 
 ```JSON
-[{"id":"fc358c7bab410d9d","type":"ui_chart","z":"5480b2f5a22f3525","name":"","group":"a4ba432c81cdab8a","order":0,"width":"0","height":"0","label":"CPU utilisation","chartType":"line","legend":"false","xformat":"HH:mm:ss","interpolate":"linear","nodata":"","dot":true,"ymin":"0","ymax":"100","removeOlder":1,"removeOlderPoints":"","removeOlderUnit":"60","cutout":0,"useOneColor":false,"useUTC":false,"colors":["#3eb31e","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"outputs":1,"useDifferentColor":false,"className":"","x":760,"y":560,"wires":[[]]},{"id":"beb3ea051cd65ac2","type":"ctrlx-datalayer-subscribe","z":"5480b2f5a22f3525","subscription":"632bcc2.eddf134","path":"framework/metrics/system/cpu-utilisation-percent","name":"","x":300,"y":560,"wires":[["f283f038cc73dafc"]]},{"id":"f283f038cc73dafc","type":"function","z":"5480b2f5a22f3525","name":"","func":"let value10 = context.get(\"value10\")\nlet value9 = context.get(\"value9\")\nlet value8 = context.get(\"value8\")\nlet value7 = context.get(\"value7\")\nlet value6 = context.get(\"value6\")\nlet value5 = context.get(\"value5\")\nlet value4 = context.get(\"value4\")\nlet value3 = context.get(\"value3\")\nlet value2 = context.get(\"value2\")\nlet value1 = context.get(\"value1\")\n\ncontext.set(\"value1\", value2)\ncontext.set(\"value2\", value3)\ncontext.set(\"value3\", value4)\ncontext.set(\"value4\", value5)\ncontext.set(\"value5\", value6)\ncontext.set(\"value6\", value7)\ncontext.set(\"value7\", value8)\ncontext.set(\"value8\", value9)\ncontext.set(\"value9\", value10)\ncontext.set(\"value10\", msg.payload)\n\nlet time10 = context.get(\"time10\")\nlet time9 = context.get(\"time9\")\nlet time8 = context.get(\"time8\")\nlet time7 = context.get(\"time7\")\nlet time6 = context.get(\"time6\")\nlet time5 = context.get(\"time5\")\nlet time4 = context.get(\"time4\")\nlet time3 = context.get(\"time3\")\nlet time2 = context.get(\"time2\")\nlet time1 = context.get(\"time1\")\n\ncontext.set(\"time1\", time2)\ncontext.set(\"time2\", time3)\ncontext.set(\"time3\", time4)\ncontext.set(\"time4\", time5)\ncontext.set(\"time5\", time6)\ncontext.set(\"time6\", time7)\ncontext.set(\"time7\", time8)\ncontext.set(\"time8\", time9)\ncontext.set(\"time9\", time10)\ncontext.set(\"time10\", msg.timestamp)\n\nvar chart = [{\n    \"series\": [\"CPU\"],\n    \"data\": [[{ \"x\": time1, \"y\": value1 },\n                { \"x\": time2, \"y\": value2 },\n                { \"x\": time3, \"y\": value3 },\n                { \"x\": time4, \"y\": value4 },\n                { \"x\": time5, \"y\": value5 },\n                { \"x\": time6, \"y\": value6 },\n                { \"x\": time7, \"y\": value7 },\n                { \"x\": time8, \"y\": value8 },\n                { \"x\": time9, \"y\": value9 },\n                { \"x\": msg.timestamp, \"y\": msg.payload}]],\n    \"labels\": [\"mylabeltest\"]\n}];\nmsg.payload = chart;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":580,"y":560,"wires":[["fc358c7bab410d9d"]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"5480b2f5a22f3525","name":"Example: Monitor CPU utilisation in line chart","info":"","x":290,"y":500,"wires":[]},{"id":"a4ba432c81cdab8a","type":"ui_group","name":"General","tab":"9cba2148.8c9148","order":2,"disp":true,"width":"6","collapse":false,"className":""},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
+[{"id":"beb3ea051cd65ac2","type":"ctrlx-datalayer-subscribe","z":"5480b2f5a22f3525","subscription":"632bcc2.eddf134","path":"framework/metrics/system/cpu-utilisation-percent","name":"","x":300,"y":560,"wires":[["be8fc64ed0c8ea73"]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"5480b2f5a22f3525","name":"Example: Monitor CPU utilisation in line chart","info":"","x":290,"y":520,"wires":[]},{"id":"be8fc64ed0c8ea73","type":"ui_chart","z":"5480b2f5a22f3525","name":"","group":"a4ba432c81cdab8a","order":0,"width":"0","height":"0","label":"CPU utilisation","chartType":"line","legend":"false","xformat":"auto","interpolate":"linear","nodata":"","dot":true,"ymin":"0","ymax":"100","removeOlder":1,"removeOlderPoints":"10","removeOlderUnit":"60","cutout":0,"useOneColor":false,"useUTC":false,"colors":["#3eb31e","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"outputs":1,"useDifferentColor":false,"className":"","x":620,"y":560,"wires":[[]]},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"a4ba432c81cdab8a","type":"ui_group","name":"General","tab":"9cba2148.8c9148","order":2,"disp":true,"width":"6","collapse":false,"className":""},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ### Catch an error in case a node is missing or the node path is invalid
@@ -359,11 +361,11 @@ The following example shows how to abort an movement of a motion axis `AxisX` in
 
 ## Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App
 
-Please note that for these examples the installation of the "ctrlX CORE - Python Runtime App" is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
+Please note that for these examples the installation of the `ctrlX CORE - Python Runtime App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
 
 ### Example: Create an interpreter instance "MyInstance" for python
 
-The following example shows how to create an interpreter instance "MyInstance" for executing python code/scripts.
+The following example shows how to create an interpreter instance `MyInstance` for executing python code/scripts.
 
 ![example-interpreter-create-instance.png](./images/example-interpreter-create-instance.png)
 ![example-interpreter-create-instance-dashboard.png](./images/example-interpreter-create-instance-dashboard.png)
@@ -420,7 +422,7 @@ The following example shows how to execute a python command script in n script i
 
 The following example shows how to execute a python script file in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY`. The file `test.py` has to be present in the root folder of the active configuration.
 
-Content of "test.py":
+Content of `test.py`:
 
 ```python
 import time
