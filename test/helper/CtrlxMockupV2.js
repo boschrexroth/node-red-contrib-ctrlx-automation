@@ -346,6 +346,14 @@ class CtrlxMockupV2 {
         res.send();
         return;
       }
+
+      // URL characters (e.g. '^') must be encoded
+      if (req.url.includes("^")) {
+        res.statusCode = 400;
+        res.send();
+        return;
+      }
+
       // @ts-ignore
       let nodes = req.query.nodes.split(',');
 
@@ -380,6 +388,10 @@ class CtrlxMockupV2 {
               data.value = Math.round(Math.random() * 4096);
               data.type = 'int16';
               break;
+            case 'motion/axs/Axis_X/state/values/actual/acc/cm-per-s^2':
+                data.value = 42;
+                data.type = 'double';
+                break;
             case 'test/broken/connection/i':
               data.value = id;
               data.type = 'int16';
