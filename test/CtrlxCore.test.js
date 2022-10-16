@@ -25,7 +25,7 @@
  */
 
 
-
+const net = require('net');
 const expect = require('chai').expect;
 const CtrlxCore = require('../lib/CtrlxCore')
 const CtrlxDatalayer = require('../lib/CtrlxDatalayerV2')
@@ -71,9 +71,18 @@ describe('CtrlxCore', function() {
       expect(CtrlxCore._parseHost('127.0.0.1')).to.deep.equal({ 'hostname': '127.0.0.1', 'port': 443 })
 
       // IPv6
+      expect(net.isIPv6('::1')).to.equal(true)
+      expect(net.isIPv6('::1%eth0')).to.equal(true)
+      expect(net.isIPv6('fe80::260:34ff:fe08:db2')).to.equal(true)
+      expect(net.isIPv6('fe80::260:34ff:fe08:db2%eth0')).to.equal(true)
+
       expect(CtrlxCore._parseHost('fe80::260:34ff:fe08:db2')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 443 })
       expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2]')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 443 })
       expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2]:8443')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2', 'port': 8443 })
+
+      expect(CtrlxCore._parseHost('fe80::260:34ff:fe08:db2%eth0')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2%eth0', 'port': 443 })
+      expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2%eth0]')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2%eth0', 'port': 443 })
+      expect(CtrlxCore._parseHost('[fe80::260:34ff:fe08:db2%eth0]:8443')).to.deep.equal({ 'hostname': 'fe80::260:34ff:fe08:db2%eth0', 'port': 8443 })
 
       expect(CtrlxCore._parseHost('::1')).to.deep.equal({ 'hostname': '::1', 'port': 443 })
       expect(CtrlxCore._parseHost('[::1]')).to.deep.equal({ 'hostname': '::1', 'port': 443 })
