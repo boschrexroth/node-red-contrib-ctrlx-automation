@@ -118,6 +118,36 @@ describe('CtrlxCoreDataLayerEvents', function() {
     });
 
 
+    it('should subscribe to a single node with escaped characters', function(done) {
+      this.timeout(5000);
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn().then(() => {
+        // Create the subscription
+        return ctrlx.datalayerSubscribe(['motion/axs/Axis_X/state/values/actual/acc/cm-per-s^2']);
+      }).then((subscription) => {
+        // Check and count the updates
+        expect(subscription).to.exist;
+        subscription.on('update', (data) => {
+
+          expect(data.node).to.be.a('string').eql('motion/axs/Axis_X/state/values/actual/acc/cm-per-s^2');
+          expect(data.timestamp).to.be.a('number');
+          expect(data.type).to.be.a('string').eql('double');
+          expect(data.value).to.be.a('number').eql(42);
+
+          const timestamp = CtrlxDatalayerSubscription.convertTimestamp2Date(data.timestamp);
+          const deltaTime = Math.abs(timestamp.valueOf() - Date.now());
+          expect(deltaTime).to.be.below(500);
+
+          subscription.close();
+          done();
+        });
+      })
+      .catch((err) => done(err))
+      .finally(() => ctrlx.logOut());
+
+    });
+
 
     it('should subscribe to multiple nodes', async function() {
       this.timeout(5000);

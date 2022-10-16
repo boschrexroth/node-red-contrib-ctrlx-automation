@@ -71,6 +71,7 @@ Any use of the source code and related documents of this repository in applicati
 
 ## Changelog
 
+```text
 * 2020-09-29: 1.2.0 - Initial release with request node for ctrlX Data Layer.
 * 2020-11-28: 1.2.2 - fix: msg.topic is not set to path if msg.topic is undefined.
 * 2020-12-02: 1.2.3 - Only documentation and diagnosis improvements.
@@ -98,7 +99,11 @@ Any use of the source code and related documents of this repository in applicati
                        fix: remove an uncaught exception which was introduced with version 1.8.14 (Bug454078).
 * 2022-04-26: 1.8.16 - fix: possible connection break on heavy load for commands: create, delete, write.
 * 2022-05-05: 1.8.17 - feat: added support for IPv6.
-* 2022-05-06: 1.8.18 - fix: possible node crash on browsing with bad credentials
+* 2022-05-06: 1.8.18 - fix: possible node crash on browsing with bad credentials.
+* 2022-10-16: 1.8.19 - fix: make IPv6 work on device.
+                     - fix: support addresses with special characters (e.g. '^' in 'mm/s^2').
+                     - docs: updated and extended the example flows.
+```
   
 ## About
 
