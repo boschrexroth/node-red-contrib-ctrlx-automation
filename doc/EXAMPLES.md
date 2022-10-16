@@ -10,6 +10,7 @@ This page contains various examples for different use cases. Looking through the
 
 - [Read the current CPU utilisation on request](#read-the-current-cpu-utilisation-on-request)
 - [Subscribe to the current CPU utilisation](#subscribe-to-the-current-cpu-utilisation)
+- [Example: Monitor CPU utilisation in line chart](#example-monitor-cpu-utilisation-in-line-chart)
 - [Catch an error in case a node is missing or the node path is invalid](#catch-an-error-in-case-a-node-is-missing-or-the-node-path-is-invalid)
 
 [Diagnosis Logbook examples](#diagnosis-logbook-examples)
@@ -21,14 +22,14 @@ This page contains various examples for different use cases. Looking through the
 - [Read a PLC variable](#read-a-plc-variable)
 - [Write a PLC variable (boolean)](#write-a-plc-variable-boolean)
 
-[Dashboard examples for ctrlX PLC](#dashboard-examples-for-ctrlx-plc)
+[Dashboard examples for ctrlX PLC App](#dashboard-examples-for-ctrlx-plc)
 
 - [Example: Monitor and handle a boolean PLC variable "bBoolean"](#example-monitor-and-handle-a-boolean-plc-variable-bboolean)
 - [Example: Monitor and handle an integer PLC variable "iInteger"](#example-monitor-and-handle-an-integer-plc-variable-iinteger)
 - [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-rreal)
 - [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-sstring)
 
-[Dashboard examples for ctrlX MOTION](#dashboard-examples-for-ctrlx-motion)
+[Dashboard examples for ctrlX MOTION App](#dashboard-examples-for-ctrlx-motion-app)
 
 - [Example: Monitor and switch motion state](#example-monitor-and-switch-motion-state)
 - [Example: Browse and show all available axes](#example-browse-and-show-all-available-axes)
@@ -38,11 +39,12 @@ This page contains various examples for different use cases. Looking through the
 - [Example: Move an axis "AxisX"](#example-move-an-axis-axisx)
 - [Example: Abort an axis movement of "AxisX"](#example-abort-an-axis-movement-of-axisx)
 
-[Dashboard examples for script handler and ctrlX PYTHON](#dashboard-examples-for-script-handler-and-ctrlx-python)
+[Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App](#dashboard-examples-for-script-interpreter-and-ctrlx-core---python-runtime-app)
 
 - [Example: Create an interpreter instance "MyInstance" for python](#example-create-an-interpreter-instance-myinstance-for-python)
 - [Example: Browse and show all available interpreter instances](#example-browse-and-show-all-available-interpreter-instances)
 - [Example: Monitor state of an interpreter instance "MyInstance"](#example-monitor-state-of-an-interpreter-instance-myinstance)
+- [Example: Reset interpreter instance "MyInstance"](#example-reset-interpreter-instance-myinstance)
 - [Example: Execute a python command in an interpreter instance "MyInstance"](#example-execute-a-python-command-in-an-interpreter-instance-myinstance)
 - [Example: Execute a python file "test.py" in an interpreter instance "MyInstance"](#example-execute-a-python-file-testpy-in-an-interpreter-instance-myinstance)
 
@@ -50,9 +52,11 @@ This page contains various examples for different use cases. Looking through the
 
 The example flows can either be imported via the clipboard or by importing directly in the Node-RED editor via the **Import Nodes** Dialog.
 
-![usage_overview_request.png](./images/examples_import_nodes.png)
+![examples_import_nodes.png](./images/examples_import_nodes.png)
 
-Keep in mind, that you need to insert valid credentials (username and password) for your device and t adjust your hostname.
+Keep in mind, that you need to insert valid credentials (username and password) for your device and adjust your hostname inside of the communication nodes.
+When importing several examples after each other a message `Some of the nodes you are importing already exist in your workspace.` appears. Please choose `View nodes...` and click on `Import selected`. Otherwise you could overwrite existing settings nodes.
+
 
 ## General examples
 
@@ -70,6 +74,17 @@ Keep in mind, that you need to insert valid credentials (username and password) 
 
 ```JSON
 [{"id":"872cd634.800108","type":"comment","z":"8a1df649.999ee","name":"Example: Subscribe to current CPU utilisation from the ctrX Data Layer and print to debug log","info":"","x":340,"y":240,"wires":[]},{"id":"d921bdd6.1d0b9","type":"ctrlx-datalayer-subscribe","z":"8a1df649.999ee","subscription":"6979a099.efcb18","path":"framework/metrics/system/cpu-utilisation-percent","name":"","x":220,"y":300,"wires":[["ffa838b8.e6db98"]]},{"id":"ffa838b8.e6db98","type":"debug","z":"8a1df649.999ee","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":530,"y":300,"wires":[]},{"id":"6979a099.efcb18","type":"ctrlx-config-subscription","device":"9bdd1ac6.4db1c8","name":"sub1","publishIntervalMs":""},{"id":"9bdd1ac6.4db1c8","type":"ctrlx-config","name":"","hostname":"localhost","debug":false}]
+```
+
+### Example: Monitor CPU utilisation in line chart
+
+The following example shows how to subscribe to the current CPU utilisation and monitor the last 10 values in a line chart.
+
+![example-monitor-cpu-utilisation-linechart.png](./images/example-monitor-cpu-utilisation-linechart.png)
+![example-monitor-cpu-utilisation-linechart-dashboard.png](./images/example-monitor-cpu-utilisation-linechart-dashboard.png)
+
+```JSON
+[{"id":"beb3ea051cd65ac2","type":"ctrlx-datalayer-subscribe","z":"5480b2f5a22f3525","subscription":"632bcc2.eddf134","path":"framework/metrics/system/cpu-utilisation-percent","name":"","x":300,"y":560,"wires":[["be8fc64ed0c8ea73"]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"5480b2f5a22f3525","name":"Example: Monitor CPU utilisation in line chart","info":"","x":290,"y":520,"wires":[]},{"id":"be8fc64ed0c8ea73","type":"ui_chart","z":"5480b2f5a22f3525","name":"","group":"a4ba432c81cdab8a","order":0,"width":"0","height":"0","label":"CPU utilisation","chartType":"line","legend":"false","xformat":"auto","interpolate":"linear","nodata":"","dot":true,"ymin":"0","ymax":"100","removeOlder":1,"removeOlderPoints":"10","removeOlderUnit":"60","cutout":0,"useOneColor":false,"useUTC":false,"colors":["#3eb31e","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"outputs":1,"useDifferentColor":false,"className":"","x":620,"y":560,"wires":[[]]},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"a4ba432c81cdab8a","type":"ui_group","name":"General","tab":"9cba2148.8c9148","order":2,"disp":true,"width":"6","collapse":false,"className":""},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ### Catch an error in case a node is missing or the node path is invalid
@@ -152,15 +167,17 @@ The request returns in `msg.payload` the written value:
 
 ## Dashboard examples for ctrlX PLC
 
-Please note that for these examples the installation of the ctrlX PLC app is expected. See corresponding [documentation of the ctrlX PLC app](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
+Please note that for these examples the installation of the ctrlX PLC app is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX PLC app](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
 
 ### Example: Monitor and handle a boolean PLC variable "bBoolean"
 
-The following example shows how to read, write and monitor a PLC variable "bBoolean" of type `BOOL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program. Note: A digital IO can be treated the same way.
+The following example shows how to read, write and monitor a PLC variable `bBoolean` of type `BOOL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma. 
+Note: A digital IO can be treated the same way.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   bBoolean : BOOL;
@@ -182,11 +199,12 @@ bBoolean;
 
 ### Example: Monitor and handle an integer PLC variable "iInteger"
 
-The following example shows how to read, write and monitor a PLC variable "iInteger" of type `INT` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program.
+The following example shows how to read, write and monitor a PLC variable `iInteger` of type `INT` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   iInteger : BOOL;
@@ -208,11 +226,12 @@ iInteger;
 
 ### Example: Monitor and handle a real PLC variable "rReal"
 
-The following example shows how to read, write and monitor a PLC variable "rReal" of type `REAL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program.
+The following example shows how to read, write and monitor a PLC variable `rReal` of type `REAL` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   rReal : BOOL;
@@ -234,11 +253,12 @@ rReal;
 
 ### Example: Monitor and handle a string PLC variable "sString"
 
-The following example shows how to read, write and monitor a PLC variable "sString" of type `STRING` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program.
+The following example shows how to read, write and monitor a PLC variable `sString` of type `STRING` via the dashboard. A symbol configuration has to be present in the PLC project and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
 
 `GVL`
 
 ```IEC61131-3
+{attribute 'linkalways'}
 {attribute 'symbol' := 'readwrite'}
 VAR_GLOBAL
   sString : BOOL;
@@ -258,9 +278,9 @@ sString;
 [{"id":"52f3b28.7154acc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"WRITE","path":"plc/app/Application/sym/GVL/sString","payloadFormat":"value_type","name":"Write \"sString\" value","x":780,"y":580,"wires":[[]]},{"id":"a84a6218.d8fa38","type":"ui_text_input","z":"4ff80d56.dd60fc","name":"","label":"sString","tooltip":"","group":"938bb9af.bc8108","order":1,"width":0,"height":0,"passthru":false,"mode":"text","delay":"0","topic":"topic","topicType":"msg","x":400,"y":580,"wires":[["b77fcdb1.bb59e"]]},{"id":"b77fcdb1.bb59e","type":"function","z":"4ff80d56.dd60fc","name":"make value","func":"var newMsg = {}\nnewMsg.payload = {\"type\":\"string\",\"value\":msg.payload}\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":570,"y":580,"wires":[["52f3b28.7154acc"]]},{"id":"7fd8a2ba.130acc","type":"ctrlx-datalayer-subscribe","z":"4ff80d56.dd60fc","subscription":"632bcc2.eddf134","path":"plc/app/Application/sym/GVL/sString","name":"Read \"sString\" value","x":200,"y":580,"wires":[["a84a6218.d8fa38"]]},{"id":"efa71414.90e038","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Monitor and handle a string PLC variable \"sString\"","info":"","x":310,"y":540,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"938bb9af.bc8108","type":"ui_group","name":"PLC Variable handling","tab":"9cba2148.8c9148","order":1,"disp":true,"width":"4","collapse":false},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for ctrlX MOTION
+## Dashboard examples for ctrlX MOTION app
 
-Please note that for these examples the installation of the ctrlX MOTION app is expected. See corresponding [documentation of the ctrlX MOTION app](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
+Please note that for these examples the installation of the ctrlX MOTION app is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX MOTION app](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
 
 ### Example: Monitor and switch motion state
 
@@ -286,7 +306,7 @@ The following example shows how to browse and show all available axes of the ctr
 
 ### Example: Create an axis "AxisX"
 
-The following example shows how to create a motion object of the type axis with the name "AxisX" in the ctrlX MOTION. The state of the ctrlX MOTION has to be `Configuration`.
+The following example shows how to create a motion object of the type axis with the name `AxisX` in the ctrlX MOTION. The state of the ctrlX MOTION has to be `Configuration`.
 
 ![example-motion-create-axis.png](./images/example-motion-create-axis.png)
 ![example-motion-create-axis-dashboard.png](./images/example-motion-create-axis-dashboard.png)
@@ -297,7 +317,7 @@ The following example shows how to create a motion object of the type axis with 
 
 ### Example: Switch and monitor power of an axis "AxisX"
 
-The following example shows how to switch and monitor the power state of a motion axis "AxisX" in the ctrlX MOTION. The motion object "AxisX" has to be present and the state of the ctrlX MOTION has to be `Running`.
+The following example shows how to switch and monitor the power state of a motion axis `AxisX` in the ctrlX MOTION. The corresponding motion object has to be present and the state of the ctrlX MOTION has to be `Running`.
 
 ![example-motion-power-axis.png](./images/example-motion-power-axis.png)
 ![example-motion-power-axis-dashboard.png](./images/example-motion-power-axis-dashboard.png)
@@ -308,7 +328,7 @@ The following example shows how to switch and monitor the power state of a motio
 
 ### Example: Monitor position of an axis "AxisX"
 
-The following example shows how to monitor the interpolated position of a motion axis "AxisX" in the ctrlX MOTION. The motion object "AxisX" has to be present and the state of the ctrlX MOTION has to be `Running`.
+The following example shows how to monitor the interpolated position of a motion axis `AxisX` in the ctrlX MOTION. The corresponding motion object has to be present and the state of the ctrlX MOTION has to be `Running`.
 
 ![example-motion-monitor-position-axes.png](./images/example-motion-monitor-position-axes.png)
 ![example-motion-monitor-position-axes-dashboard.png](./images/example-motion-monitor-position-axes-dashboard.png)
@@ -319,7 +339,7 @@ The following example shows how to monitor the interpolated position of a motion
 
 ### Example: Move an axis "AxisX"
 
-The following example shows how to move a motion axis "AxisX" in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `STANDSTILL` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
+The following example shows how to move a motion axis `AxisX` in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `STANDSTILL` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
 
 ![example-motion-move-axis.png](./images/example-motion-move-axis.png)
 ![example-motion-move-axis-dashboard.png](./images/example-motion-move-axis-dashboard.png)
@@ -330,7 +350,7 @@ The following example shows how to move a motion axis "AxisX" in the ctrlX MOTIO
 
 ### Example: Abort an axis movement of "AxisX"
 
-The following example shows how to abort an movement of a motion axis "AxisX" in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The motion object "AxisX" has to be present and its state has to be `DISCRETE_MOTION`.
+The following example shows how to abort an movement of a motion axis `AxisX` in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `DISCRETE_MOTION`.
 
 ![example-motion-abort-axis-movement.png](./images/example-motion-abort-axis-movement.png)
 ![example-motion-abort-axis-movement-dashboard.png](./images/example-motion-abort-axis-movement-dashboard.png)
@@ -339,13 +359,13 @@ The following example shows how to abort an movement of a motion axis "AxisX" in
 [{"id":"79e751dd.c8402","type":"function","z":"4ff80d56.dd60fc","name":"make abort command","func":"var newMsg = {};\nnewMsg.payload = {\n      \"type\":\"object\",\n      \"value\":{\"dec\":\"10\",\"jrkDec\":\"0\"}\n     }\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":440,"y":1840,"wires":[["7cb11da0.1916bc"]]},{"id":"7cb11da0.1916bc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/abort","payloadFormat":"value_type","name":"\"AxisX\" abort","x":660,"y":1840,"wires":[[]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Abort an axis movement of \"AxisX\"","info":"","x":240,"y":1800,"wires":[]},{"id":"a11e7b1a.b3a8d","type":"ui_button","z":"4ff80d56.dd60fc","name":"","group":"eb7620ae.6f5d","order":3,"width":"2","height":"1","passthru":false,"label":"Stop \"AxisX\"","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":210,"y":1880,"wires":[["79e751dd.c8402"]]},{"id":"690b0e68.ffc46","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":1840,"wires":[["79e751dd.c8402"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for script handler and ctrlX PYTHON
+## Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App
 
-Please note that for these examples the installation of the ctrlX PYTHON app is expected. See corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
+Please note that for these examples the installation of the `ctrlX CORE - Python Runtime App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
 
 ### Example: Create an interpreter instance "MyInstance" for python
 
-The following example shows how to create an interpreter instance "MyInstance" for executing python code/scripts.
+The following example shows how to create an interpreter instance `MyInstance` for executing python code/scripts.
 
 ![example-interpreter-create-instance.png](./images/example-interpreter-create-instance.png)
 ![example-interpreter-create-instance-dashboard.png](./images/example-interpreter-create-instance-dashboard.png)
@@ -367,7 +387,7 @@ The following example shows how to browse and show all available instances of th
 
 ### Example: Monitor state of an interpreter instance "MyInstance"
 
-The following example shows how to monitor the state of an instances "MyInstance" of the ctrlX script manager ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to monitor the state of an instances `MyInstance` of the ctrlX script manager ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
 
 ![example-motion-monitor-state-instance.png](./images/example-motion-monitor-state-instance.png)
 ![example-motion-monitor-state-instance-dashboard.png](./images/example-motion-monitor-state-instance-dashboard.png)
@@ -376,9 +396,20 @@ The following example shows how to monitor the state of an instances "MyInstance
 [{"id":"9b9e6fbd.7416e8","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Monitor state of an interpreter instance \"MyInstance\"","info":"","x":250,"y":2280,"wires":[]},{"id":"59b3f37.f33bf0c","type":"ctrlx-datalayer-subscribe","z":"4ff80d56.dd60fc","subscription":"632bcc2.eddf134","path":"script/instances/MyInstance/state/opstate","name":"Read instance state","x":170,"y":2320,"wires":[["4d250434.d9cf1c"]]},{"id":"4d250434.d9cf1c","type":"ui_text","z":"4ff80d56.dd60fc","group":"f675e9d2.c9935","order":4,"width":"4","height":"1","name":"","label":"\"MyInstance\" state","format":"{{msg.payload}}","layout":"col-center","x":410,"y":2320,"wires":[]},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
+### Example: Reset interpreter instance "MyInstance"
+
+The following example shows how to reset a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `ERROR`. 
+
+![example-interpreter-python-reset-instance.png](./images/example-interpreter-python-reset-instance.png)
+![example-interpreter-python-reset-instance-dashboard.png](./images/example-interpreter-python-reset-instance-dashboard.png)
+
+```JSON
+[{"id":"79e751dd.c8402","type":"function","z":"5480b2f5a22f3525","name":"make reset command","func":"var newMsg = {};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":660,"y":220,"wires":[["7cb11da0.1916bc"]]},{"id":"7cb11da0.1916bc","type":"ctrlx-datalayer-request","z":"5480b2f5a22f3525","device":"7b877229.678964","method":"CREATE","path":"script/instances/MyInstance/cmd/reset","payloadFormat":"value_type","name":"Reset \"MyInstance\"","x":900,"y":220,"wires":[[]]},{"id":"a11e7b1a.b3a8d","type":"ui_button","z":"5480b2f5a22f3525","name":"","group":"f675e9d2.c9935","order":3,"width":"3","height":"1","passthru":false,"label":"Reset instance","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":420,"y":220,"wires":[["79e751dd.c8402"]]},{"id":"690b0e68.ffc46","type":"inject","z":"5480b2f5a22f3525","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":420,"y":260,"wires":[["79e751dd.c8402"]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"5480b2f5a22f3525","name":"Example: Reset interpreter instance \"MyInstance\"","info":"","x":500,"y":180,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
 ### Example: Execute a python command in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python command script in an  script interpreter instance "MyInstance". The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to execute a python command script in n script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
 
 ![example-interpreter-python-execute-command.png](./images/example-interpreter-python-execute-command.png)
 ![example-interpreter-python-execute-command-dashboard.png](./images/example-interpreter-python-execute-command-dashboard.png)
@@ -389,9 +420,9 @@ The following example shows how to execute a python command script in an  script
 
 ### Example: Execute a python file "test.py" in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python script file in an  script interpreter instance "MyInstance". The corresponding instance has to be present and in state "INIT" or "READY". The file "test.py" has to be present in the root folder of the active configuration.
+The following example shows how to execute a python script file in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY`. The file `test.py` has to be present in the root folder of the active configuration.
 
-Content of "test.py":
+Content of `test.py`:
 
 ```python
 import time
