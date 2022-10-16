@@ -22,14 +22,14 @@ This page contains various examples for different use cases. Looking through the
 - [Read a PLC variable](#read-a-plc-variable)
 - [Write a PLC variable (boolean)](#write-a-plc-variable-boolean)
 
-[Dashboard examples for ctrlX PLC](#dashboard-examples-for-ctrlx-plc)
+[Dashboard examples for ctrlX PLC App](#dashboard-examples-for-ctrlx-plc)
 
 - [Example: Monitor and handle a boolean PLC variable "bBoolean"](#example-monitor-and-handle-a-boolean-plc-variable-bboolean)
 - [Example: Monitor and handle an integer PLC variable "iInteger"](#example-monitor-and-handle-an-integer-plc-variable-iinteger)
 - [Example: Monitor and handle a real PLC variable "rReal"](#example-monitor-and-handle-a-real-plc-variable-rreal)
 - [Example: Monitor and handle a string PLC variable "sString"](#example-monitor-and-handle-a-string-plc-variable-sstring)
 
-[Dashboard examples for ctrlX MOTION app](#dashboard-examples-for-ctrlx-motion-app)
+[Dashboard examples for ctrlX MOTION App](#dashboard-examples-for-ctrlx-motion-app)
 
 - [Example: Monitor and switch motion state](#example-monitor-and-switch-motion-state)
 - [Example: Browse and show all available axes](#example-browse-and-show-all-available-axes)
