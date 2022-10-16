@@ -40,7 +40,7 @@ const CtrlxMockup = require('./helper/CtrlxMockupV2')
 describe('CtrlxCoreDataLayerNodes', function() {
 
   function getHostname() {
-    return process.env.TEST_HOSTNAME || '127.0.0.1';
+    return process.env.TEST_HOSTNAME || 'localhost';
   }
   function getUsername() {
     return process.env.TEST_USERNAME || 'boschrexroth';
@@ -486,7 +486,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
 describe('CtrlxCoreDataLayerNodes - With different port', function() {
 
   function getHostname() {
-    return process.env.TEST_HOSTNAME || '127.0.0.1:8443';
+    return process.env.TEST_HOSTNAME || 'localhost:8443';
   }
   function getUsername() {
     return process.env.TEST_USERNAME || 'boschrexroth';

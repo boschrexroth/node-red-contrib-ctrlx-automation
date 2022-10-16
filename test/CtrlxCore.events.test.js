@@ -41,7 +41,7 @@ const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitT
 describe('CtrlxCoreDataLayerEvents', function() {
 
   function getHostname() {
-    return process.env.TEST_HOSTNAME || '127.0.0.1';
+    return process.env.TEST_HOSTNAME || 'localhost';
   }
   function getUsername() {
     return process.env.TEST_USERNAME || 'boschrexroth';
@@ -266,7 +266,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
 describe('CtrlxCoreDataLayerEvents - With different port', function() {
 
   function getHostname() {
-    return process.env.TEST_HOSTNAME || '127.0.0.1:8443';
+    return process.env.TEST_HOSTNAME || 'localhost:8443';
   }
   function getUsername() {
     return process.env.TEST_USERNAME || 'boschrexroth';

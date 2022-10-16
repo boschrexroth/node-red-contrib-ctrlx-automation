@@ -54,7 +54,7 @@ const CtrlxCore = require('../lib/CtrlxCore');
 describe('ctrlx-datalayer-subscribe', function () {
 
   function getHostname() {
-    return process.env.TEST_HOSTNAME || '127.0.0.1';
+    return process.env.TEST_HOSTNAME || 'localhost';
   }
   function getUsername() {
     return process.env.TEST_USERNAME || 'boschrexroth';

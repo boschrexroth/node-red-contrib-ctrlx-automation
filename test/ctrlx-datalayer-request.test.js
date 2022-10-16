@@ -51,7 +51,7 @@ const expect = require('chai').expect;
 describe('ctrlx-datalayer-request', function () {
 
   function getHostname() {
-    return process.env.TEST_HOSTNAME || '127.0.0.1';
+    return process.env.TEST_HOSTNAME || 'localhost';
   }
   function getUsername() {
     return process.env.TEST_USERNAME || 'boschrexroth';
@@ -95,7 +95,7 @@ describe('ctrlx-datalayer-request', function () {
       let flow = [
         { "id": "h1", "type": "helper" },
         { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "framework/metrics/system/cpu-utilisation-percent", "name": "request", "wires": [["h1"]] },
-        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": "127.0.0.1", "debug": true }
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": "localhost", "debug": true }
       ];
       let credentials = {
         c1: {
@@ -108,7 +108,7 @@ describe('ctrlx-datalayer-request', function () {
 
         let c1 = helper.getNode("c1");
         c1.should.have.property('name', 'ctrlx');
-        c1.should.have.property('hostname', '127.0.0.1');
+        c1.should.have.property('hostname', 'localhost');
         c1.should.have.property('credentials', {
           username: "boschrexroth",
           password: "boschrexroth"
