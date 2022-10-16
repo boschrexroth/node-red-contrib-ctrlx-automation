@@ -8,7 +8,7 @@
           "name": "Run Node-RED",
           "type": "node",
           "request": "launch",
-          "program": "C:/Apps/node-red-1.2.6/node-red/red.js",
+          "program": "C:/Apps/node-red-3.0.2/node-red/red.js",
           "runtimeArgs": ["--preserve-symlinks"],
           "env": {
             "DEBUG": "ctrlxcore,ctrlxcore:*",
