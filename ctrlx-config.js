@@ -295,7 +295,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -312,7 +312,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -329,7 +329,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -346,7 +346,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -362,7 +362,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -378,7 +378,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -394,7 +394,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
@@ -411,7 +411,7 @@ module.exports = function(RED) {
           callback: callback
         };
       } else {
-        callback(new Error('No session available!'), null);
+        callback(new Error('No session available! Please check connection and credentials.'), null);
       }
     }
 
