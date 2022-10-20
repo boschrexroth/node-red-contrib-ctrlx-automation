@@ -103,6 +103,7 @@ Any use of the source code and related documents of this repository in applicati
 * 2022-10-16: 1.8.19 - fix: make IPv6 work on device.
                      - fix: support addresses with special characters (e.g. '^' in 'mm/s^2').
                      - docs: updated and extended the example flows.
+* 2022-10-20: 1.8.20 - fix: throw correct error on password change and dropped session (Bug534347). 
 ```
   
 ## About
