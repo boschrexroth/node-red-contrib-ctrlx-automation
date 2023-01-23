@@ -187,7 +187,7 @@ The request returns in `msg.payload` the written value:
 
 ## Dashboard examples for ctrlX CORE - PLC App
 
-Please note that for these examples the installation of the ctrlX PLC app is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX PLC app](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
+Please note that for these examples the installation of the ctrlX CORE - PLC App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX CORE - PLC App](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
 
 ### Monitor and handle a boolean PLC variable "bBoolean"
 
@@ -300,7 +300,7 @@ sString;
 
 ## Dashboard examples for ctrlX CORE - MOTION App
 
-Please note that for these examples the installation of the ctrlX MOTION app is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX MOTION app](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
+Please note that for these examples the installation of the ctrlX CORE - MOTION App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX CORE - MOTION App](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
 
 ### Monitor and switch motion state
 
