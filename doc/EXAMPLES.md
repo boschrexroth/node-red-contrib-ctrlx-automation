@@ -49,6 +49,7 @@ This page contains various examples for different use cases. Looking through the
 - [Reset interpreter instance "MyInstance"]( #reset-interpreter-instance-myinstance)
 - [Execute a python command in an interpreter instance "MyInstance"]( #execute-a-python-command-in-an-interpreter-instance-myinstance)
 - [Execute a python file "test.py" in an interpreter instance "MyInstance"]( #execute-a-python-file-testpy-in-an-interpreter-instance-myinstance)
+- [Abort an interpreter instance "MyInstance"](#abort-an-interpreter-instance-myinstance)
 
 ## How to import examples
 
@@ -72,12 +73,12 @@ When importing several examples after each other a message `Some of the nodes yo
 
 ### Get web token from authentication server
 
-The following example shows how to get a web token from ctrlX COREs authentication server. The username and password has to be adapted in the `make header` function.
+The following example shows how to get a web token from ctrlX COREs authentication server. The username and password has to be adapted in the `make headers` function.
 
 ![examples_get_token.png](./images/examples_get_token.png)
 
 ```JSON
-[{"id":"af22af4db424ebc6","type":"function","z":"b7f42922c8391768","name":"make header","func":"var newMsg = {};\nnewMsg.header = {};\nnewMsg.header[\"Content-Type\"] = \"application/json\"\nnewMsg.payload =\n    { name: \"boschrexroth\", password: \"boschrexroth\" }\nnewMsg.url = \"https://localhost/identity-manager/api/v2/auth/token\";\nreturn newMsg;\n","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":330,"y":140,"wires":[["0a76057a199ca617"]]},{"id":"0a76057a199ca617","type":"http request","z":"b7f42922c8391768","name":"Get token","method":"POST","ret":"obj","paytoqs":"ignore","url":"","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[],"x":500,"y":140,"wires":[["ee4def3e07376b8d"]]},{"id":"ee4def3e07376b8d","type":"debug","z":"b7f42922c8391768","name":"debug 1","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":660,"y":140,"wires":[]},{"id":"c485adb93723e929","type":"inject","z":"b7f42922c8391768","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":160,"y":140,"wires":[["af22af4db424ebc6"]]},{"id":"056e75fc0e45614d","type":"comment","z":"b7f42922c8391768","name":"Get web token from authentication server","info":"","x":240,"y":80,"wires":[]}]
+[{"id":"af22af4db424ebc6","type":"function","z":"b7f42922c8391768","name":"make headers","func":"var newMsg = {};\nnewMsg.headers = {};\nnewMsg.headers[\"Content-Type\"] = \"application/json\"\nnewMsg.payload =\n    { name: \"boschrexroth\", password: \"boschrexroth\" }\nnewMsg.url = \"https://localhost/identity-manager/api/v2/auth/token\";\nreturn newMsg;\n","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":330,"y":140,"wires":[["0a76057a199ca617"]]},{"id":"0a76057a199ca617","type":"http request","z":"b7f42922c8391768","name":"Get token","method":"POST","ret":"obj","paytoqs":"ignore","url":"","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[],"x":500,"y":140,"wires":[["ee4def3e07376b8d"]]},{"id":"ee4def3e07376b8d","type":"debug","z":"b7f42922c8391768","name":"debug 1","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":660,"y":140,"wires":[]},{"id":"c485adb93723e929","type":"inject","z":"b7f42922c8391768","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":160,"y":140,"wires":[["af22af4db424ebc6"]]},{"id":"056e75fc0e45614d","type":"comment","z":"b7f42922c8391768","name":"Get web token from authentication server","info":"","x":240,"y":80,"wires":[]}]
 ```
 
 ### Read the current CPU utilisation on request
@@ -187,7 +188,7 @@ The request returns in `msg.payload` the written value:
 
 ## Dashboard examples for ctrlX CORE - PLC App
 
-Please note that for these examples the installation of the ctrlX CORE - PLC App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX CORE - PLC App](https://docs.automation.boschrexroth.com/document/version/1.0/PLC-App_-Application-Manual/documentRoot/7239751866761051~en/).
+Please note that for these examples the installation of the ctrlX CORE - PLC App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX CORE - PLC App](https://docs.automation.boschrexroth.com/doc/729184690/plc-app-plc-runtime-environment-for-ctrlx-core-application-manual/latest/en/).
 
 ### Monitor and handle a boolean PLC variable "bBoolean"
 
@@ -300,7 +301,7 @@ sString;
 
 ## Dashboard examples for ctrlX CORE - MOTION App
 
-Please note that for these examples the installation of the ctrlX CORE - MOTION App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX CORE - MOTION App](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/documentRoot/7249282556584996~en/).
+Please note that for these examples the installation of the ctrlX CORE - MOTION App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX CORE - MOTION App](https://docs.automation.boschrexroth.com/doc/1993836051/motion-app-motion-laufzeitumgebung-fuer-ctrlx-core-anwendungsbeschreibung/latest/en/).
 
 ### Monitor and switch motion state
 
@@ -359,7 +360,7 @@ The following example shows how to monitor the interpolated position of a motion
 
 ### Move an axis "AxisX"
 
-The following example shows how to move a motion axis `AxisX` in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `STANDSTILL` (powered on, [see state machine documentation](https://docs.automation.boschrexroth.com/document/version/1.0/R911403791_01_Motion_App_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-ad91cfe627c8cf7c0a347e880bebcac6-3-en-US~en/?sel=IwelHYQFhAGNogEwC5YBpQUfUNXBRA%3D%3D)).
+The following example shows how to move a motion axis `AxisX` in the ctrlX MOTION to position = 10 with velocity, acceleration, deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `STANDSTILL` (powered on, [see axis state machine documentation](https://docs.automation.boschrexroth.com/doc/359516816/axis-objects/latest/en/)).
 
 ![example-motion-move-axis.png](./images/example-motion-move-axis.png)
 ![example-motion-move-axis-dashboard.png](./images/example-motion-move-axis-dashboard.png)
@@ -370,7 +371,7 @@ The following example shows how to move a motion axis `AxisX` in the ctrlX MOTIO
 
 ### Abort an axis movement of "AxisX"
 
-The following example shows how to abort an movement of a motion axis `AxisX` in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `DISCRETE_MOTION`.
+The following example shows how to abort an movement of a motion axis `AxisX` in the ctrlX MOTION with deceleration = 10 and jerk = 0. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `DISCRETE_MOTION` ([see axis state machine documentation](https://docs.automation.boschrexroth.com/doc/359516816/axis-objects/latest/en/)).
 
 ![example-motion-abort-axis-movement.png](./images/example-motion-abort-axis-movement.png)
 ![example-motion-abort-axis-movement-dashboard.png](./images/example-motion-abort-axis-movement-dashboard.png)
@@ -381,7 +382,7 @@ The following example shows how to abort an movement of a motion axis `AxisX` in
 
 ## Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App
 
-Please note that for these examples the installation of the `ctrlX CORE - Python Runtime App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=IwegDCAs49BMAuMAaUFoXSRBmSQ%3D).
+Please note that for these examples the installation of the `ctrlX CORE - Python Runtime App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/doc/2758030364/script-parser-interpreter-python/latest/en/).
 
 ### Create an interpreter instance "MyInstance" for python
 
@@ -407,7 +408,7 @@ The following example shows how to browse and show all available instances of th
 
 ### Monitor state of an interpreter instance "MyInstance"
 
-The following example shows how to monitor the state of an instances `MyInstance` of the ctrlX script manager ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to monitor the state of an instances `MyInstance` of the ctrlX script manager ([see instance state machine](https://docs.automation.boschrexroth.com/doc/2359488747/user-interface-via-data-layer/latest/en/)).
 
 ![example-motion-monitor-state-instance.png](./images/example-motion-monitor-state-instance.png)
 ![example-motion-monitor-state-instance-dashboard.png](./images/example-motion-monitor-state-instance-dashboard.png)
@@ -418,7 +419,7 @@ The following example shows how to monitor the state of an instances `MyInstance
 
 ### Reset interpreter instance "MyInstance"
 
-The following example shows how to reset a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `ERROR`. 
+The following example shows how to reset a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `ERROR` ([see instance state machine](https://docs.automation.boschrexroth.com/doc/2359488747/user-interface-via-data-layer/latest/en/)). 
 
 ![example-interpreter-python-reset-instance.png](./images/example-interpreter-python-reset-instance.png)
 ![example-interpreter-python-reset-instance-dashboard.png](./images/example-interpreter-python-reset-instance-dashboard.png)
@@ -429,7 +430,7 @@ The following example shows how to reset a script interpreter instance `MyInstan
 
 ### Execute a python command in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python command script in n script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY` ([see state machine](https://docs.automation.boschrexroth.com/document/version/1.0/R911403767_ctrlX-CORE_-Base_-1_-en_US/chapter/metadata.boschrexroth.de~iiDC~Topic-0e3a24c48bafe9140a347e880b4e0362-2-en-US~en/?sel=AwegjCAs6tqyATALmAGlBaYHyk5RAdiA)).
+The following example shows how to execute a python command script in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY` ([see instance state machine](https://docs.automation.boschrexroth.com/doc/2359488747/user-interface-via-data-layer/latest/en/)).
 
 ![example-interpreter-python-execute-command.png](./images/example-interpreter-python-execute-command.png)
 ![example-interpreter-python-execute-command-dashboard.png](./images/example-interpreter-python-execute-command-dashboard.png)
@@ -440,7 +441,7 @@ The following example shows how to execute a python command script in n script i
 
 ### Execute a python file "test.py" in an interpreter instance "MyInstance"
 
-The following example shows how to execute a python script file in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY`. The file `test.py` has to be present in the root folder of the active configuration.
+The following example shows how to execute a python script file in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `INIT` or `READY` ([see instance state machine](https://docs.automation.boschrexroth.com/doc/2359488747/user-interface-via-data-layer/latest/en/)). The file `test.py` has to be present in the root folder of the active configuration.
 
 Content of `test.py`:
 
@@ -456,4 +457,30 @@ while True:
 
 ```JSON
 [{"id":"9df4d3fd.3d9218","type":"function","z":"4ff80d56.dd60fc","name":"make file execute command","func":"var newMsg = {};\nnewMsg.payload = {\n    \"type\":\"object\",\n    \"value\":{\n        \"name\":\"activeConfiguration/test.py\" //File test.py expected at root of the active configuration\n        }\n    }\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":440,"y":2320,"wires":[["374d357d.cb126a"]]},{"id":"d4d2cc18.9e9c1","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":180,"y":2360,"wires":[["9df4d3fd.3d9218"]]},{"id":"374d357d.cb126a","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"CREATE","path":"script/instances/MyInstance/cmd/file","payloadFormat":"value_type","name":"Execute File \"test.py\"","x":700,"y":2320,"wires":[[]]},{"id":"c0963556.392e7","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Execute a python file \"test.py\" in an interpreter instance \"MyInstance\"","info":"","x":320,"y":2280,"wires":[]},{"id":"9df3a70d.0d6f68","type":"ui_button","z":"4ff80d56.dd60fc","name":"","group":"f675e9d2.c9935","order":1,"width":"3","height":"1","passthru":false,"label":"Execute file","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":190,"y":2320,"wires":[["9df4d3fd.3d9218"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Abort an interpreter instance "MyInstance"
+
+The following example shows how to abort a running script or command in a script interpreter instance `MyInstance`. The corresponding instance has to be present and in state `BUSY` ([see instance state machine](https://docs.automation.boschrexroth.com/doc/2359488747/user-interface-via-data-layer/latest/en/)).
+
+![example-interpreter-python-abort-instance.png](./images/example-interpreter-python-abort-instance.png)
+![example-interpreter-python-abort-instance-dashboard.png](./images/example-interpreter-python-abort-instance-dashboard.png)
+
+```JSON
+[{"id":"0f30727715f9f47e","type":"function","z":"244b5a539daa7df9","name":"make abort command","func":"var newMsg = {};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":360,"y":1220,"wires":[["73c8c291c5af4037"]]},{"id":"73c8c291c5af4037","type":"ctrlx-datalayer-request","z":"244b5a539daa7df9","device":"7b877229.678964","method":"CREATE","path":"script/instances/MyInstance/cmd/abort","payloadFormat":"value_type","name":"Abort \"MyInstance\"","x":590,"y":1220,"wires":[[]]},{"id":"0ff7dae9e392de65","type":"ui_button","z":"244b5a539daa7df9","name":"","group":"f675e9d2.c9935","order":1,"width":"3","height":"1","passthru":false,"label":"Abort instance","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":120,"y":1220,"wires":[["0f30727715f9f47e"]]},{"id":"9b7ad38852b20c26","type":"inject","z":"244b5a539daa7df9","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":120,"y":1260,"wires":[["0f30727715f9f47e"]]},{"id":"5048f7d0ef2fe811","type":"comment","z":"244b5a539daa7df9","name":"Example: Abort interpreter instance \"MyInstance\"","info":"","x":200,"y":1180,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+## Dashboard examples for ctrlX CORE - EtherCat Master App
+
+Please note that for these examples the installation of the `ctrlX CORE - EtherCat Master App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-EtherCAT-Master-App/ba-p/13282) and the corresponding [documentation of the EtherCat Master App](https://docs.automation.boschrexroth.com/doc/3229083526/ethercat-master-app-ethercat-master-for-ctrlx-core-application-manual/latest/en/).
+
+### Monitor and switch state of an EtherCat master instance `ethercatmaster`
+
+The following example shows how to monitor and switch the state of an EtherCat master instance `ethercatmaster` ([see EtherCat state machine](https://docs.automation.boschrexroth.com/doc/2260062686/state-machine/latest/en/)). The corresponding instance has to be present .
+
+![example-ethercat-monitor-switch-state.png](./images/example-ethercat-monitor-switch-state.png)
+![example-ethercat-monitor-switch-state-dashboard.png](./images/example-ethercat-monitor-switch-state-dashboard.png)
+
+```JSON
+[{"id":"ffc99584.58bbd","type":"comment","z":"244b5a539daa7df9","name":"Example: Monitor and switch EtherCat state","info":"","x":190,"y":380,"wires":[]},{"id":"cac2d7f4.22c55","type":"ctrlx-datalayer-request","z":"244b5a539daa7df9","device":"7b877229.678964","method":"WRITE","path":"fieldbuses/ethercat/master/instances/ethercatmaster/admin/fieldbus_status/master_state","payloadFormat":"value_type","name":"Switch EtherCat state","x":700,"y":440,"wires":[[]]},{"id":"3f74d73d.b1514","type":"ctrlx-datalayer-subscribe","z":"244b5a539daa7df9","subscription":"632bcc2.eddf134","path":"fieldbuses/ethercat/master/instances/ethercatmaster/admin/fieldbus_status/master_state","name":"Read EtherCat state","x":110,"y":440,"wires":[["9c708078.0c74f","f9f42567c8a7a1fa"]]},{"id":"9c708078.0c74f","type":"ui_text","z":"244b5a539daa7df9","group":"c686d3e8294c5a12","order":2,"width":"3","height":"1","name":"","label":"EtherCat state","format":"{{msg.payload.response.currentState}}","layout":"row-spread","className":"","x":340,"y":500,"wires":[]},{"id":"f9f42567c8a7a1fa","type":"ui_dropdown","z":"244b5a539daa7df9","name":"Switch state to","label":"","tooltip":"","place":"Switch state to","group":"c686d3e8294c5a12","order":1,"width":"3","height":"1","passthru":false,"multiple":false,"options":[{"label":"OP","value":"{\"type\": \"object\", \"value\": {\"request\": {\"newState\": \"op\"}}}","type":"str"},{"label":"Safe-OP","value":"{\"type\": \"object\", \"value\": {\"request\": {\"newState\": \"safeop\"}}}","type":"str"},{"label":"Pre-OP","value":"{\"type\": \"object\", \"value\": {\"request\": {\"newState\": \"preop\"}}}","type":"str"},{"label":"Init","value":"{\"type\": \"object\", \"value\": {\"request\": {\"newState\": \"init\"}}}","type":"str"}],"payload":"","topic":"topic","topicType":"msg","className":"","x":340,"y":440,"wires":[["65ab8f57b581cc7b"]]},{"id":"65ab8f57b581cc7b","type":"json","z":"244b5a539daa7df9","name":"","property":"payload","action":"obj","pretty":false,"x":510,"y":440,"wires":[["cac2d7f4.22c55"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"c686d3e8294c5a12","type":"ui_group","name":"EtherCat","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
