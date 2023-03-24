@@ -140,9 +140,11 @@ To confirm all pending errors in the system diagnostic you need to send an empty
 
 This Example shows how to confirm a single pending error in the system diagnostic. Following error is expected to present in the pending diagnostics:
 
-```JSON
-Main Diagnosis Number : "091F2006"
-Detailed Diagnosis Number : "0C560107"
+```
+Main diagnosis number : "091F2006"
+Main diagnosis text : "Axis limit exceeded"
+Detailed diagnosis number : "0C560107"
+Detailed diagnosis text : "TargetPos max limit exceeded"
 Entity : "motion/axs/AxisX" 
 ```
 
