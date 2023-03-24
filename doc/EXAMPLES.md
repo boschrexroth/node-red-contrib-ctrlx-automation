@@ -15,23 +15,24 @@ This page contains various examples for different use cases. Looking through the
 - [Monitor CPU utilisation in line chart](#monitor-cpu-utilisation-in-line-chart)
 - [Use a catch node to handle errors](#use-a-catch-node-to-handle-errors)
 
-[Diagnosis Logbook examples](#diagnosis-logbook-examples)
+[Diagnosis and Logbook examples](#diagnosis-and-logbook-examples)
 
-- [Confirm all errors in the diagnosis logbook](#confirm-all-errors-in-the-diagnosis-logbook)
+- [Confirm all pending errors in the system diagnostic](#confirm-all-pending-errors-in-the-system-diagnostic)
+- [Confirm single pending error in the system diagnostic](#confirm-single-pending-error-in-the-system-diagnostic)
 
 [PLC examples](#plc-examples)
 
 - [Read a PLC variable](#read-a-plc-variable)
 - [Write a PLC variable (boolean)](#write-a-plc-variable-boolean)
 
-[Dashboard examples for ctrlX CORE - PLC App](#dashboard-examples-for-ctrlx-core---plc-app)
+[ctrlX CORE - PLC App dashboard examples](#dashboard-examples-for-ctrlx-core---plc-app)
 
 - [Monitor and handle a boolean PLC variable "bBoolean"]( #monitor-and-handle-a-boolean-plc-variable-bboolean)
 - [Monitor and handle an integer PLC variable "iInteger"]( #monitor-and-handle-an-integer-plc-variable-iinteger)
 - [Monitor and handle a real PLC variable "rReal"]( #monitor-and-handle-a-real-plc-variable-rreal)
 - [Monitor and handle a string PLC variable "sString"]( #monitor-and-handle-a-string-plc-variable-sstring)
 
-[Dashboard examples for ctrlX CORE - MOTION App](#dashboard-examples-for-ctrlx-core---motion-app)
+[ctrlX CORE - MOTION App dashboard examples](#dashboard-examples-for-ctrlx-core---motion-app)
 
 - [Monitor and switch motion state]( #monitor-and-switch-motion-state)
 - [Browse and show all available axes]( #browse-and-show-all-available-axes)
@@ -40,8 +41,9 @@ This page contains various examples for different use cases. Looking through the
 - [Monitor position of an axis "AxisX"]( #monitor-position-of-an-axis-axisx)
 - [Move an axis "AxisX"]( #move-an-axis-axisx)
 - [Abort an axis movement of "AxisX"]( #abort-an-axis-movement-of-axisx)
+- [Reset an error of "AxisX"](#reset-an-error-of-axisx)
 
-[Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App](#dashboard-examples-for-script-interpreter-and-ctrlx-core---python-runtime-app)
+[Script interpreter and ctrlX CORE - Python Runtime App dashboard examples](#dashboard-examples-for-script-interpreter-and-ctrlx-core---python-runtime-app)
 
 - [Create an interpreter instance "MyInstance" for python]( #create-an-interpreter-instance-myinstance-for-python)
 - [Browse and show all available interpreter instances]( #browse-and-show-all-available-interpreter-instances)
@@ -50,6 +52,10 @@ This page contains various examples for different use cases. Looking through the
 - [Execute a python command in an interpreter instance "MyInstance"]( #execute-a-python-command-in-an-interpreter-instance-myinstance)
 - [Execute a python file "test.py" in an interpreter instance "MyInstance"]( #execute-a-python-file-testpy-in-an-interpreter-instance-myinstance)
 - [Abort an interpreter instance "MyInstance"](#abort-an-interpreter-instance-myinstance)
+
+[ctrlX CORE - EtherCat Master App dashboard examples](#ctrlx-core---ethercat-master-app-dashboard-examples)
+
+- [Monitor and switch state of an EtherCat master instance "ethercatmaster"](#monitor-and-switch-state-of-an-ethercat-master-instance-ethercatmaster)
 
 ## How to import examples
 
@@ -118,16 +124,33 @@ Errors in the nodes e.g. node is missing or node path is invalid can be catched 
 [{"id":"3984d15c.b6a4be","type":"comment","z":"b7f42922c8391768","name":"Example: Use a catch node to handle errors.","info":"","x":430,"y":540,"wires":[]},{"id":"adcdeb72.352b88","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":890,"y":600,"wires":[]},{"id":"bf808c7e.2b56a","type":"ctrlx-datalayer-request","z":"b7f42922c8391768","device":"7b877229.678964","method":"READ","path":"invalid/path/value/to/force/error","name":"","x":610,"y":600,"wires":[["adcdeb72.352b88"]]},{"id":"eda269ff.f06d88","type":"inject","z":"b7f42922c8391768","name":"","repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":360,"y":600,"wires":[["bf808c7e.2b56a"]]},{"id":"b55ac3d1.719b1","type":"catch","z":"b7f42922c8391768","name":"","scope":["bf808c7e.2b56a"],"uncaught":false,"x":420,"y":680,"wires":[["e91439fb.0fa298"]]},{"id":"e91439fb.0fa298","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":650,"y":680,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
 ```
 
-## Diagnosis Logbook examples
+## Diagnosis and Logbook examples
 
-### Confirm all errors in the diagnosis logbook
+### Confirm all pending errors in the system diagnostic
 
-To confirm all errors in the diagnosis logbook you need to send an empty `WRITE` request to `diagnosis/confirm/error`. This can be done by setting the `payload` to null.
+To confirm all pending errors in the system diagnostic you need to send an empty `WRITE` request to `diagnosis/confirm/error`. This can be done by setting the `payload` to null.
 
-![examples_diagnosis_confirm_error.png](./images/examples_diagnosis_confirm_error.png)
+![examples_diagnosis_confirm_errors.png](./images/examples_diagnosis_confirm_errors.png)
+![examples_diagnosis_confirm_errors_dashboard.png](./images/examples_diagnosis_confirm_errors_dashboard.png)
 
 ```JSON
-[{"id":"b5effce.db9fd","type":"comment","z":"b7f42922c8391768","name":"Example: Confirm all diagnosis in the logbook","info":"","x":430,"y":720,"wires":[]},{"id":"477443cd.9b7bd4","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":930,"y":780,"wires":[]},{"id":"64d6212b.ba6cd","type":"ctrlx-datalayer-request","z":"b7f42922c8391768","device":"7b877229.678964","method":"WRITE","path":"diagnosis/confirm/error","payloadFormat":"value_type","name":"","x":710,"y":780,"wires":[["477443cd.9b7bd4"]]},{"id":"226bf82.26e5e88","type":"inject","z":"b7f42922c8391768","name":"","repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":360,"y":780,"wires":[["d4a0a352.ae8488"]]},{"id":"d4a0a352.ae8488","type":"function","z":"b7f42922c8391768","name":"","func":"msg.payload = null;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":500,"y":780,"wires":[["64d6212b.ba6cd"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
+[{"id":"b5effce.db9fd","type":"comment","z":"ec52577b3db3c043","name":"Example: Confirm all pending errors in the system diagnostic","info":"","x":440,"y":700,"wires":[]},{"id":"64d6212b.ba6cd","type":"ctrlx-datalayer-request","z":"ec52577b3db3c043","device":"7b877229.678964","method":"WRITE","path":"diagnosis/confirm/error","payloadFormat":"value_type","name":"","x":870,"y":740,"wires":[[]]},{"id":"226bf82.26e5e88","type":"inject","z":"ec52577b3db3c043","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":340,"y":740,"wires":[["efa89bd3d50d6f25"]]},{"id":"8d40fd0bb68b143c","type":"ui_button","z":"ec52577b3db3c043","name":"","group":"cd7a7d59d153b666","order":1,"width":"3","height":"1","passthru":false,"label":"Confirm errors","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":320,"y":780,"wires":[["efa89bd3d50d6f25"]]},{"id":"efa89bd3d50d6f25","type":"function","z":"ec52577b3db3c043","name":"make confirm errors","func":"msg.payload = null;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":580,"y":740,"wires":[["64d6212b.ba6cd"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+### Confirm single pending error in the system diagnostic
+
+This Example shows how to confirm a single pending error in the system diagnostic. Following error is expected to present in the pending diagnostics:
+
+```JSON
+Main Diagnosis Number : "091F2006"
+Detailed Diagnosis Number : "0C560107"
+Entity : "motion/axs/AxisX" 
+```
+
+![examples_diagnosis_confirm_error.png](./images/examples_diagnosis_confirm_error.png)
+![examples_diagnosis_confirm_error_dashboard.png](./images/examples_diagnosis_confirm_error_dashboard.png)
+
+```JSON
+[{"id":"9c0aca12bc2a9640","type":"function","z":"ec52577b3db3c043","name":"make Confirm error","func":"var newMsg = {};\nnewMsg.payload = { \n  \"type\": \"object\", \n  \"value\": { \n    \"mainDiagnosisNumber\": \"091F2006\", \n    \"detailedDiagnosisNumber\": \"0C560107\", \n    \"entity\": \"motion/axs/AxisX\" \n  } \n}\nreturn newMsg;\n\n","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":570,"y":440,"wires":[["a8efc66b4b7461ef"]]},{"id":"bfe0636f9fe41f01","type":"inject","z":"ec52577b3db3c043","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":340,"y":480,"wires":[["9c0aca12bc2a9640"]]},{"id":"a8efc66b4b7461ef","type":"ctrlx-datalayer-request","z":"ec52577b3db3c043","device":"7b877229.678964","method":"WRITE","path":"diagnosis/confirm/error","payloadFormat":"value_type","name":"Confirm error","x":780,"y":440,"wires":[[]]},{"id":"3edc488be0bb09aa","type":"comment","z":"ec52577b3db3c043","name":"Example: Confirm single pending error \"Axis limit exceeded\"","info":"","x":440,"y":400,"wires":[]},{"id":"9add50cbdef40e90","type":"ui_button","z":"ec52577b3db3c043","name":"","group":"cd7a7d59d153b666","order":1,"width":"3","height":"1","passthru":false,"label":"Confirm error","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":320,"y":440,"wires":[["9c0aca12bc2a9640"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ## PLC examples
@@ -186,7 +209,7 @@ The request returns in `msg.payload` the written value:
 }
 ```
 
-## Dashboard examples for ctrlX CORE - PLC App
+## ctrlX CORE - PLC App dashboard examples
 
 Please note that for these examples the installation of the ctrlX CORE - PLC App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-PLC-App/ba-p/13298) and the corresponding [documentation of the ctrlX CORE - PLC App](https://docs.automation.boschrexroth.com/doc/729184690/plc-app-plc-runtime-environment-for-ctrlx-core-application-manual/latest/en/).
 
@@ -299,7 +322,7 @@ sString;
 [{"id":"52f3b28.7154acc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"WRITE","path":"plc/app/Application/sym/GVL/sString","payloadFormat":"value_type","name":"Write \"sString\" value","x":780,"y":580,"wires":[[]]},{"id":"a84a6218.d8fa38","type":"ui_text_input","z":"4ff80d56.dd60fc","name":"","label":"sString","tooltip":"","group":"938bb9af.bc8108","order":1,"width":0,"height":0,"passthru":false,"mode":"text","delay":"0","topic":"topic","topicType":"msg","x":400,"y":580,"wires":[["b77fcdb1.bb59e"]]},{"id":"b77fcdb1.bb59e","type":"function","z":"4ff80d56.dd60fc","name":"make value","func":"var newMsg = {}\nnewMsg.payload = {\"type\":\"string\",\"value\":msg.payload}\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":570,"y":580,"wires":[["52f3b28.7154acc"]]},{"id":"7fd8a2ba.130acc","type":"ctrlx-datalayer-subscribe","z":"4ff80d56.dd60fc","subscription":"632bcc2.eddf134","path":"plc/app/Application/sym/GVL/sString","name":"Read \"sString\" value","x":200,"y":580,"wires":[["a84a6218.d8fa38"]]},{"id":"efa71414.90e038","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Monitor and handle a string PLC variable \"sString\"","info":"","x":310,"y":540,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"938bb9af.bc8108","type":"ui_group","name":"PLC Variable handling","tab":"9cba2148.8c9148","order":1,"disp":true,"width":"4","collapse":false},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for ctrlX CORE - MOTION App
+## ctrlX CORE - MOTION App dashboard examples
 
 Please note that for these examples the installation of the ctrlX CORE - MOTION App is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Motion-App/ba-p/13294) and the corresponding [documentation of the ctrlX CORE - MOTION App](https://docs.automation.boschrexroth.com/doc/1993836051/motion-app-motion-laufzeitumgebung-fuer-ctrlx-core-anwendungsbeschreibung/latest/en/).
 
@@ -380,7 +403,18 @@ The following example shows how to abort an movement of a motion axis `AxisX` in
 [{"id":"79e751dd.c8402","type":"function","z":"4ff80d56.dd60fc","name":"make abort command","func":"var newMsg = {};\nnewMsg.payload = {\n      \"type\":\"object\",\n      \"value\":{\"dec\":\"10\",\"jrkDec\":\"0\"}\n     }\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":440,"y":1840,"wires":[["7cb11da0.1916bc"]]},{"id":"7cb11da0.1916bc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/abort","payloadFormat":"value_type","name":"\"AxisX\" abort","x":660,"y":1840,"wires":[[]]},{"id":"dc3e7b2.6ab9388","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Abort an axis movement of \"AxisX\"","info":"","x":240,"y":1800,"wires":[]},{"id":"a11e7b1a.b3a8d","type":"ui_button","z":"4ff80d56.dd60fc","name":"","group":"eb7620ae.6f5d","order":3,"width":"2","height":"1","passthru":false,"label":"Stop \"AxisX\"","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":210,"y":1880,"wires":[["79e751dd.c8402"]]},{"id":"690b0e68.ffc46","type":"inject","z":"4ff80d56.dd60fc","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":1840,"wires":[["79e751dd.c8402"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for script interpreter and ctrlX CORE - Python Runtime App
+### Reset an error of "AxisX"
+
+The following example shows how to reset an error of a motion axis `AxisX` in the ctrlX MOTION. The state of the ctrlX MOTION has to be `Running`. The corresponding motion object has to be present and its state has to be `ERRORSTOP` ([see axis state machine documentation](https://docs.automation.boschrexroth.com/doc/359516816/axis-objects/latest/en/)).
+
+![example-motion-reset-axis-error.png](./images/example-motion-reset-axis-error.png)
+![example-motion-reset-axis-error-dashboard.png](./images/example-motion-reset-axis-error-dashboard.png)
+
+```JSON
+[{"id":"d134226bd80e1be5","type":"function","z":"ec52577b3db3c043","name":"make Reset error","func":"var newMsg = {};\nnewMsg.payload = null\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":590,"y":280,"wires":[["c654bbe59916dcd8"]]},{"id":"c654bbe59916dcd8","type":"ctrlx-datalayer-request","z":"ec52577b3db3c043","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/reset","payloadFormat":"value_type","name":"Reset error of \"AxisX\"","x":820,"y":280,"wires":[[]]},{"id":"ee10a5d37883f0b2","type":"comment","z":"ec52577b3db3c043","name":"Example: Reset error of \"AxisX\"","info":"","x":350,"y":240,"wires":[]},{"id":"7e4f970aeb1a9af7","type":"ui_button","z":"ec52577b3db3c043","name":"","group":"eb7620ae.6f5d","order":4,"width":"3","height":"1","passthru":false,"label":"Reset error of \"AxisX\"","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":340,"y":320,"wires":[["d134226bd80e1be5"]]},{"id":"a68723ea4473153d","type":"inject","z":"ec52577b3db3c043","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":340,"y":280,"wires":[["d134226bd80e1be5"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+## Script interpreter and ctrlX CORE - Python Runtime App dashboard examples
 
 Please note that for these examples the installation of the `ctrlX CORE - Python Runtime App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-Python-Runtime-App/ba-p/15901) and the corresponding [documentation of the "Script parser/interpreter (Python)"](https://docs.automation.boschrexroth.com/doc/2758030364/script-parser-interpreter-python/latest/en/).
 
@@ -470,7 +504,7 @@ The following example shows how to abort a running script or command in a script
 [{"id":"0f30727715f9f47e","type":"function","z":"244b5a539daa7df9","name":"make abort command","func":"var newMsg = {};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":360,"y":1220,"wires":[["73c8c291c5af4037"]]},{"id":"73c8c291c5af4037","type":"ctrlx-datalayer-request","z":"244b5a539daa7df9","device":"7b877229.678964","method":"CREATE","path":"script/instances/MyInstance/cmd/abort","payloadFormat":"value_type","name":"Abort \"MyInstance\"","x":590,"y":1220,"wires":[[]]},{"id":"0ff7dae9e392de65","type":"ui_button","z":"244b5a539daa7df9","name":"","group":"f675e9d2.c9935","order":1,"width":"3","height":"1","passthru":false,"label":"Abort instance","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":120,"y":1220,"wires":[["0f30727715f9f47e"]]},{"id":"9b7ad38852b20c26","type":"inject","z":"244b5a539daa7df9","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":120,"y":1260,"wires":[["0f30727715f9f47e"]]},{"id":"5048f7d0ef2fe811","type":"comment","z":"244b5a539daa7df9","name":"Example: Abort interpreter instance \"MyInstance\"","info":"","x":200,"y":1180,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"f675e9d2.c9935","type":"ui_group","name":"Interpreter handling","tab":"9cba2148.8c9148","order":4,"disp":true,"width":"4","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
-## Dashboard examples for ctrlX CORE - EtherCat Master App
+## ctrlX CORE - EtherCat Master App dashboard examples
 
 Please note that for these examples the installation of the `ctrlX CORE - EtherCat Master App` is expected. See [our store](https://developer.community.boschrexroth.com/t5/Store-and-How-to/ctrlX-CORE-EtherCAT-Master-App/ba-p/13282) and the corresponding [documentation of the EtherCat Master App](https://docs.automation.boschrexroth.com/doc/3229083526/ethercat-master-app-ethercat-master-for-ctrlx-core-application-manual/latest/en/).
 
