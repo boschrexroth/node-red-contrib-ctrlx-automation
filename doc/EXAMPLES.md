@@ -42,6 +42,10 @@ This page contains various examples for different use cases. Looking through the
 - [Move an axis "AxisX"]( #move-an-axis-axisx)
 - [Abort an axis movement of "AxisX"]( #abort-an-axis-movement-of-axisx)
 - [Reset an error of "AxisX"](#reset-an-error-of-axisx)
+- [Group axes of kinematic "Robot"]( #group-axes-of-kinematic-robot)
+- [Enable and disable kinematic "Robot"]( #enable-and-disable-kinematic-robot)
+- [Move absolute position kinematic "Robot"]( #move-absolute-position-kinematic-robot)
+
 
 [Script interpreter and ctrlX CORE - Python Runtime App dashboard examples](#dashboard-examples-for-script-interpreter-and-ctrlx-core---python-runtime-app)
 
@@ -415,6 +419,14 @@ The following example shows how to reset an error of a motion axis `AxisX` in th
 ```JSON
 [{"id":"d134226bd80e1be5","type":"function","z":"ec52577b3db3c043","name":"make Reset error","func":"var newMsg = {};\nnewMsg.payload = null\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":590,"y":280,"wires":[["c654bbe59916dcd8"]]},{"id":"c654bbe59916dcd8","type":"ctrlx-datalayer-request","z":"ec52577b3db3c043","device":"7b877229.678964","method":"CREATE","path":"motion/axs/AxisX/cmd/reset","payloadFormat":"value_type","name":"Reset error of \"AxisX\"","x":820,"y":280,"wires":[[]]},{"id":"ee10a5d37883f0b2","type":"comment","z":"ec52577b3db3c043","name":"Example: Reset error of \"AxisX\"","info":"","x":350,"y":240,"wires":[]},{"id":"7e4f970aeb1a9af7","type":"ui_button","z":"ec52577b3db3c043","name":"","group":"eb7620ae.6f5d","order":4,"width":"3","height":"1","passthru":false,"label":"Reset error of \"AxisX\"","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":340,"y":320,"wires":[["d134226bd80e1be5"]]},{"id":"a68723ea4473153d","type":"inject","z":"ec52577b3db3c043","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":340,"y":280,"wires":[["d134226bd80e1be5"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"eb7620ae.6f5d","type":"ui_group","name":"Axes handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"5","collapse":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
+### Group axes of kinematic "Robot"
+
+The following example shows how to add the axes ("X","Y","Z") to a kinematic group "Robot". Each axis grouped must be defined in the kinematic axes. Axis states must be `STANDSTILL`. This command will transition the grouped axes into state `COORDINATED_MOTION`.
+
+
+### Enable and disable kinematic "Robot"
+
+### Move absolute position kinematic "Robot"
 
 ## Script interpreter and ctrlX CORE - Python Runtime App dashboard examples
 
