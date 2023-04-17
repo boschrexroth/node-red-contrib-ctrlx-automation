@@ -45,6 +45,8 @@ This page contains various examples for different use cases. Looking through the
 - [Group axes of kinematic "Robot"]( #group-axes-of-kinematic-robot)
 - [Enable and disable kinematic "Robot"]( #enable-and-disable-kinematic-robot)
 - [Move absolute position kinematic "Robot"]( #move-absolute-position-kinematic-robot)
+- [Abort kinematic "Robot"]( #abort-kinematic-robot)
+- [Reset kinematic "Robot"]( #reset-kinematic-robot)
 
 
 [Script interpreter and ctrlX CORE - Python Runtime App dashboard examples](#dashboard-examples-for-script-interpreter-and-ctrlx-core---python-runtime-app)
@@ -450,6 +452,28 @@ The following example shows how to request an absolute position move of a kinema
 
 ```JSON
 [{"id":"a4b5f4ddf588ea6a","type":"function","z":"49a0fa857f86c38c","name":"make pos command","func":"var newMsg = {};\nnewMsg.payload = {\n    \"type\": \"object\",\n    \"value\": {\n        \"kinPos\": [15.5, 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],\n        \"coordSys\": \"WCS\",\n        \"lim\": {\n            \"vel\": 800,\n            \"acc\": 3,\n            \"dec\": 3,\n            \"jrkAcc\": 0,\n            \"jrkDec\": 0\n        }\n    }\n}\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":420,"y":120,"wires":[["5071eee48d45d006"]]},{"id":"5071eee48d45d006","type":"ctrlx-datalayer-request","z":"49a0fa857f86c38c","device":"7b877229.678964","method":"CREATE","path":"motion/kin/Robot/cmd/move-abs","payloadFormat":"value_type","name":"\"Robot\" pos abs","x":660,"y":120,"wires":[[]]},{"id":"ed595e644b52bb5c","type":"ui_button","z":"49a0fa857f86c38c","name":"","group":"85755e14b124f041","order":3,"width":"3","height":"1","passthru":false,"label":"Move \"Robot\"","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":200,"y":160,"wires":[["a4b5f4ddf588ea6a"]]},{"id":"04d0b8522adbe49e","type":"inject","z":"49a0fa857f86c38c","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":180,"y":120,"wires":[["a4b5f4ddf588ea6a"]]},{"id":"6ab024b45f88f622","type":"comment","z":"49a0fa857f86c38c","name":"Example: Move absolute kinematic \"Robot\"","info":"","x":220,"y":80,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"85755e14b124f041","type":"ui_group","name":"Kinematic Handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Abort kinematic "Robot"
+
+The following example shows how to abort the kinematic "Robot". This command can be issued in state `MOVING` or `STANDBY`. It will transition the kinematic into state `ABORTING`. Once the stopping motion is complete, the kinematic transitions to state `STANDBY` and all buffered commands are removed.
+
+![example-motion-abort-kinematic.png](./images/example-motion-abort-kinematic.png)
+![example-motion-abort-kinematic-dashboard.png](./images/example-motion-abort-kinematic-dashboard.png)
+
+```JSON
+[{"id":"563e15c2db30bf28","type":"ctrlx-datalayer-request","z":"201ba7c7148a7cc2","device":"7b877229.678964","method":"CREATE","path":"motion/kin/Robot/cmd/abort","payloadFormat":"value_type","name":"\"Robot\" abort","x":670,"y":120,"wires":[[]]},{"id":"ac7a8b1446a1e812","type":"ui_button","z":"201ba7c7148a7cc2","name":"","group":"85755e14b124f041","order":3,"width":"3","height":"1","passthru":false,"label":"Abort \"Robot\"","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":220,"y":160,"wires":[["558c61d4c8d9c1ac"]]},{"id":"4175c5684253f0db","type":"inject","z":"201ba7c7148a7cc2","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":200,"y":120,"wires":[["558c61d4c8d9c1ac"]]},{"id":"64da5a64be4f7a30","type":"comment","z":"201ba7c7148a7cc2","name":"Example: Abort command kinematic \"Robot\"","info":"","x":250,"y":80,"wires":[]},{"id":"558c61d4c8d9c1ac","type":"function","z":"201ba7c7148a7cc2","name":"make abort command","func":"var newMsg = {};\nnewMsg.payload = {\n    \"type\": \"object\",\n    \"value\": {}\n};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":440,"y":120,"wires":[["563e15c2db30bf28"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"85755e14b124f041","type":"ui_group","name":"Kinematic Handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Reset kinematic "Robot"
+
+The following example shows how to reset errors for the kinematic "Robot". If the errors are minor, subordinate axes are also reset and the kinematic transitions to state `STANDBY`. In the case of severe errors, subordinate axes are not reset and the kinematic transitions to state `DISABLED`.
+
+![example-motion-reset-kinematic.png](./images/example-motion-reset-kinematic.png)
+![example-motion-reset-kinematic-dashboard.png](./images/example-motion-reset-kinematic-dashboard.png)
+
+```JSON
+[{"id":"295d31e596bb3952","type":"ctrlx-datalayer-request","z":"0c66745436523bb7","device":"7b877229.678964","method":"CREATE","path":"motion/kin/Robot/cmd/reset","payloadFormat":"value_type","name":"\"Robot\" reset","x":710,"y":100,"wires":[[]]},{"id":"aed8d5115b8cc229","type":"ui_button","z":"0c66745436523bb7","name":"","group":"85755e14b124f041","order":3,"width":"3","height":"1","passthru":false,"label":"Reset \"Robot\"","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":260,"y":140,"wires":[["b3a6dc57db58af3a"]]},{"id":"7638c60369720b4f","type":"inject","z":"0c66745436523bb7","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":240,"y":100,"wires":[["b3a6dc57db58af3a"]]},{"id":"0610da93a6d6a7f1","type":"comment","z":"0c66745436523bb7","name":"Example: Reset kinematic \"Robot\"","info":"","x":260,"y":60,"wires":[]},{"id":"b3a6dc57db58af3a","type":"function","z":"0c66745436523bb7","name":"make reset command","func":"var newMsg = {};\nnewMsg.payload = {\n    \"type\": \"object\",\n    \"value\": {}\n};\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":480,"y":100,"wires":[["295d31e596bb3952"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"85755e14b124f041","type":"ui_group","name":"Kinematic Handling","tab":"9cba2148.8c9148","order":3,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ## Script interpreter and ctrlX CORE - Python Runtime App dashboard examples
