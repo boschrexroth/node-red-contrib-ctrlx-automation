@@ -31,18 +31,36 @@
 
 -->
 <script type="text/javascript">
+
+  function validateIntPropertyWithDefault(prop, opts) {
+    if (prop === '' || (Number.isInteger(parseInt(prop)) && parseInt(prop) >= 0)) {
+      return true;
+    }
+    return "Must be a positive number or empty field";
+  }
+  function validateFloatPropertyWithDefault(prop, opts) {
+    if (prop === '' || (!isNaN(prop) && parseFloat(prop) >= 0)) {
+      return true;
+    }
+    return "Must be a positive number or empty field";
+  }
+
   RED.nodes.registerType('ctrlx-config-subscription', {
     category: 'config',
     defaults: {
       device: {type: 'ctrlx-config', required: true},
       name: {value: '', required: true},
-      publishIntervalMs: {value: '', required: false}
-      /*
-      publishIntervalMs: {value: '', required: false, validate: function(v) {
-          let val = $("#node-config-input-publishIntervalMs").val();
-          return val === '' || Number.isInteger(parseInt(val));
-        }
-      }*/
+      publishIntervalMs: {value: '', required: false, validate: validateIntPropertyWithDefault},
+      publishIntervalUnits: {value: 'seconds', required: true},
+      samplingInterval: {value: '', required: false, validate: validateIntPropertyWithDefault},
+      samplingIntervalUnits: {value: 'seconds', required: true},
+      errorInterval: {value: '', required: false, validate: validateIntPropertyWithDefault},
+      errorIntervalUnits: {value: 'seconds', required: true},
+      keepaliveInterval: {value: '', required: false, validate: validateIntPropertyWithDefault},
+      keepaliveIntervalUnits: {value: 'minutes', required: true},
+      queueSize: {value: '', required: false, validate: validateIntPropertyWithDefault},
+      queueBehaviour: {value: 'DiscardOldest', required: true},
+      deadbandValue: {value: 0, required: false, validate: validateFloatPropertyWithDefault}
     },
     label: function() {
       return this.name ? this.name : 'unnamed';
@@ -60,22 +78,137 @@
   </div>
 
   <div class="form-row">
+    <label for="node-config-input-publishIntervalMs" style="width: 150px"><i class="fa fa-history"></i> Publish Interval</label>
+    <input type="text" id="node-config-input-publishIntervalMs" placeholder="use default" style="text-align:end; width:100px"/>
+    <select id="node-config-input-publishIntervalUnits" style="width:165px !important">
+      <option value="milliseconds">Milliseconds</option>
+      <option value="seconds">Seconds</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-samplingInterval" style="width: 150px"><i class="fa fa-history"></i> Sampling Interval</label>
+    <input type="text" id="node-config-input-samplingInterval" placeholder="use default" style="text-align:end; width:100px"/>
+    <select id="node-config-input-samplingIntervalUnits" style="width:165px !important">
+      <option value="microseconds">Microseconds</option>
+      <option value="milliseconds">Milliseconds</option>
+      <option value="seconds">Seconds</option>
+      <option value="minutes">Minutes</option>
+      <option value="hours">Hours</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-errorInterval" style="width: 150px"><i class="fa fa-history"></i> Error Interval</label>
+    <input type="text" id="node-config-input-errorInterval" placeholder="use default" style="text-align:end; width:100px"/>
+    <select id="node-config-input-errorIntervalUnits" style="width:165px !important">
+      <option value="milliseconds">Milliseconds</option>
+      <option value="seconds">Seconds</option>
+      <option value="minutes">Minutes</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-keepaliveInterval" style="width: 150px"><i class="fa fa-heartbeat"></i> Keep-alive Interval</label>
+    <input type="text" id="node-config-input-keepaliveInterval" placeholder="use default" style="text-align:end; width:100px"/>
+    <select id="node-config-input-keepaliveIntervalUnits" style="width:165px !important">
+      <option value="milliseconds">Milliseconds</option>
+      <option value="seconds">Seconds</option>
+      <option value="minutes">Minutes</option>
+      <option value="hours">Hours</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-queueSize" style="width: 150px"><i class="fa fa-list"></i> Queue Size</label>
+    <input type="text" id="node-config-input-queueSize" placeholder="use default" style="text-align:end; width:100px"/>
+    <select type="text" id="node-config-input-queueBehaviour" style="width: 140px;">
+      <option value="DiscardOldest">Discard Oldest</option>
+      <option value="DiscardNewest">Discard Newest</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-config-input-deadbandValue" style="width: 150px"><i class="fa fa-filter"></i> Deadband Value</label>
+    <input type="text" id="node-config-input-deadbandValue" placeholder="0.0" style="text-align:end; width: 100px"/>
+  </div>
+
+  <div class="form-row">
     <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-config-input-name" />
   </div>
 
-  <div class="form-row">
-    <label for="node-config-input-publishIntervalMs"><i class="fa fa-history"></i> Publish Interval</label>
-    <input type="text" id="node-config-input-publishIntervalMs" placeholder="use default" />
-  </div>
-
   <div class="form-tips">
-    <p>The Publish Interval is the minimum time in milliseconds that the server should use to send new updates.
-      It is used to prevent the server from flooding the client.
-    </p>
-    <p>Hint: If no Publish Interval is set, then the server side default is used.</p>
+    <p>Hint: If no value is set, then the server side default is used.</p>
   </div>
 
 </script>
 
 
+<script type="text/html" data-help-name="ctrlx-config-subscription">
+
+  <p>Configurationj of the subcription properties.</p>
+
+  <h3>Properties</h3>
+  <dl class="message-properties">
+
+    <dt class="optional">Publish Interval<span class="property-type">number</span></dt>
+    <dd>
+      The minimum time in milliseconds that the server should use to send new update telegrams. (default: 1s) <br>
+      Multiple sampled values can be grouped into a single telegram. It is used to prevent the server from flooding the client.
+    </dd>
+
+    <dt class="optional">Sampling Interval<span class="property-type">number</span></dt>
+    <dd>
+      The fastest rate at which the node values should be sampled and values captured. (default: 1s) <br>
+      The resulting sampling frequency should be adjusted to the dynamics of the signal to be sampled.
+      Higher sampling frequency increases load on ctrlX Data Layer. <br>
+      The sampling frequency can be higher, than the publish interval. Captured samples are put in a queue and sent in the publish interval.
+      Note: The minimum sampling interval can be overruled by a global setting in the ctrlX Data Layer configuration
+    </dd>
+
+    <dt class="optional">Error Interval<span class="property-type">number</span></dt>
+    <dd>
+      The interval in which an "error" message is sent if an error was received from a node. (default: 10s) <br>
+      Higher values reduce load on output target and network in case of errors by limiting frequency of error messages.
+    </dd>
+
+    <dt class="optional">Keep-Alive Interval<span class="property-type">number</span></dt>
+    <dd>
+      The interval of a "heartbeat" message that is sent if no change of data occurs. (default: 60s) <br>
+      It is used internally to detect broken network connections.
+    </dd>
+
+    <dt class="optional">Queue Size<span class="property-type">number</span></dt>
+    <dd>
+      The size of the node value queue which stores multiples sampled values within a publishing interval. (default: 10)
+      Relevant if more values are captured than can be sent.
+    </dd>
+
+    <dt class="optional">Queue Behaviour<span class="property-type">string</span></dt>
+    <dd>
+      The behaviour of the queue if it is full. (default: "DiscardOldest") <br>
+      "Discard Oldest": The oldest value gets deleted from the queue when it is full. <br>
+      "Discard Newest": The newest value gets deleted from the queue when it is full. <br>
+    </dd>
+
+    <dt class="optional">Deadband Value<span class="property-type">number</span></dt>
+    <dd>
+      The filter when a new value will be sampled. (default: 0.0) <br>
+      Calculation rule: <code>if (abs(lastCapturedValue - newValue) > deadBandValue) capture(newValue) </code>
+    </dd>
+
+  </dl>
+
+  <h3>Details</h3>
+  <p>The properties of the subscription apply to all the nodes of this subscription.</p>
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://github.com/boschrexroth/node-red-contrib-ctrlx-automation">GitHub</a> - the nodes github repository</li>
+    <li><a href="https://developer.community.boschrexroth.com">ctrlX Community</a> - forum and support</li>
+    <li><a href="https://docs.automation.boschrexroth.com">ctrlX AUTOMATION Product Help</a> - the online documentation of ctrlX AUTOMATION</li>
+    <li><a href="https://www.boschrexroth.com">Bosch Rexroth AG</a> - WE MOVE. YOU WIN.</li>
+  </ul>
+
+</script>

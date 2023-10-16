@@ -203,7 +203,7 @@ describe('CtrlxCoreDataLayerEvents', function() {
         await ctrlx.logIn();
 
         // Create the subscription
-        let subscription = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent'], 100);
+        let subscription = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent'], {'publishIntervalMs': 100});
         expect(subscription).to.exist;
         expect(subscription.publishIntervalMs).to.be.a('number').eql(100);
 

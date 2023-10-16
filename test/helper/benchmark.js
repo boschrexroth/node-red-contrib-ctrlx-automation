@@ -196,7 +196,7 @@ async function benchmarkSubscriptionSimple() {
     await ctrlx.logIn();
 
     performance.mark('A');
-    let sub = await ctrlx.datalayerSubscribe('framework/metrics/system/cpu-utilisation-percent');
+    let sub = await ctrlx.datalayerSubscribe(['framework/metrics/system/cpu-utilisation-percent']);
     performance.mark('B');
 
     sub.on('update', (data) => {

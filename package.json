@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-ctrlx-automation",
-  "version": "1.8.20",
+  "version": "1.9.3",
   "description": "Node-RED nodes for ctrlX AUTOMATION",
   "repository": {
     "type": "git",
@@ -52,7 +52,8 @@
     "atob": "^2.1.2",
     "debug": "^4.3.4",
     "launchdarkly-eventsource": "^1.4.4",
-    "mustache": "^4.2.0"
+    "mustache": "^4.2.0",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "test": "mocha",

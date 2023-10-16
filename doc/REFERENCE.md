@@ -117,12 +117,19 @@ This property allows to configure how the payload is returned in case of a `BROW
 Possible values are:
 
 * `value only`: In this case, only the value of the Data Layer node is returned as a javascript variable in the `msg.payload` variable.
-* `value + type (json)`: The `msg.payload` will hold a json object which contains an attribute `value` that contains the value of the Data Layer node and an attribute `type` which contains the Data Layer type encoded as a string.
+* `value + type (json)`: The `msg.payload` will hold a json object which contains an attribute `value` that contains the value of the Data Layer node and an attribute `type` which contains the Data Layer type encoded as a string. (Default)
 
 **Note:** The type-system of the ctrlX Data Layer is more fine granular than the type-system of javascript and Node-RED. For example, in javascript there is only `Number` for all kind of floating-point, signed or unsigned numbers. In the Data Layer exist different kind of distinct data types like in other programming languages. E.g. `int8` , `uint8`, .. ,`int64`, `uint64`, `float`, `double`. When returning the payload as `value only` you will lose the information about the original data value. So depending on your use-case you might chose the right payload format. E.g. if you want to forward the value for display in an user interface the original data type might not be of interest and it is more handy to already have the value in the `msg.payload` variables. In other use-cases, where you might want to do calculations or analytics on top of the values it might be necessary to know the original data type.
 For a detailed overview of the different data types and the mapping to javascript have a look at the [data type reference](DATATYPES.md).
 
 **Hint:** Some nodes in the Data Layer expect, that type of the value has to be explicitly specified in case of a `WRITE` request. In this case it is not possible to write the value with the payload setting of `value only` and the node will return a `DL_TYPE_MISMATCH` error. The only chance is to set the payload setting to `value + type (json)` and to provide a json object with `value` and `type` attribute in `msg.payload`. In order to find out which type is expected by the node you can query the documentation of the specific Data Layer node or you may perform a `READ` request on the same node to find out what the returned data type is. Usually, the same data type is expected on a `WRITE` request.
+
+#### Limits for number of active requests
+
+The limits can be used to prevent, that the flow gets overloaded when the rate at which requests are sent from the flow
+is constantly higher than the rate at which these can be processed on server side. To do so, all further requests get dropped as long as the number of
+active requests (i.e. pending responses) is higher than the `Error` limit. This case can also be catched by the `catch` node.
+When the number of active requests reaches the `Warning` limit only a warning message will be logged.
 
 #### Name
 
@@ -223,6 +230,8 @@ The node status gives some diagnostic information. The following messages may oc
 * Request failed
 * Request successful
 
+In addition, the node status shows the number of active requests if there is more than 1 response pending.
+
 <img src="./images/node-status.png" alt="Node status example" width="500px"/>
 <br><br>
 
@@ -240,19 +249,21 @@ The following **error** messages may occur:
 * *property path for node is not set*: Occurs, if no path given by `msg.path` and the *Path* property within the node configuration is empty.
 * *property method for node is not set*: Occurs, if no method given by `msg.method` and the *Method* property within the node configuration is empty.
 * *internal error: received invalid pending request!*: This is a node internal error and can't be resolved by the user.
+* *Number of requests too high. There are already responses pending. Dropping request.*: Occurs, if the rate of requests sent is higher than the rate at which the server can process the requests. The request has been dropped. To prevent, reduce the rate at which requests are sent or increase the error limit.
 
 The following **warnings** may occur:
 
 * *msg.requestTimeout is given as NaN* and *msg.requestTimeout is given as negative value*: Wrong timeout value is set via `msg.requestTimeout`.
 * *`msg.path` differs from configuration property Path of node* resp. *`msg.method` differs from configuration property Method of node*: Occurs, if input `msg` attributes and corresponding node configuration properties do not match (`msg.path` vs. *Path* or `msg.method` vs. *Method*).
 * *CtrlxProblemError: DL_INVALID_ADDRESS*: Occurs, if the path given by `msg.path` or within the node configuration is not present (e.g. misspelled).
+* *Number of requests very high. There are already responses pending.*: Occurs, if the rate of requests sent is higher than the rate at which the server can process the requests. To prevent, reduce the rate at which requests are sent or increase the warning limit.
 
 Further error messages which come directly from the Data Layer are also possible.  
 As an example, if the `msg.path` does not point to an existent Data Layer node, an error "*CtrlxProblemError: DL_INVALID_ADDRESS*" is emitted.
 
 ## Configuration Node *ctrlx-config-subscription*
 
-A subscription groups multiple subscribed values to a group which share the same sample time and are processed within the same thread on server side. The *ctrlx-config-subscribe* configuration node represents a subscription of multiple nodes. It is automatically created when the first *Data Layer Subscribe* node is added to the flow and allows the following configuration.
+A subscription groups multiple subscribed values to a group which share the same settings (e.g. the sample time) and are processed within the same thread on server side. The *ctrlx-config-subscribe* configuration node represents a subscription of multiple nodes. It is automatically created when the first *Data Layer Subscribe* node is added to the flow and allows the following configuration.
 
 ### Configuration dialog
 
@@ -271,6 +282,43 @@ This is an arbitrary name which is displayed in the Node-RED editor.
 #### Publish Interval
 
 The Publish Interval is the minimum time in milliseconds that the server should use to send new updates. It is used to prevent the server from flooding the client, when the value changes to rapidly.
+
+#### Sampling Interval
+
+The fastest rate at which the node values should be sampled and values captured (default: 1s).
+The resulting sampling frequency should be adjusted to the dynamics of the signal to be sampled.
+Higher sampling frequency increases load on ctrlX Data Layer.
+The sampling frequency can be higher, than the publish interval. Captured samples are put in a queue and sent in the publish interval.
+
+Note: The minimum sampling interval can be overruled by a global setting in the ctrlX Data Layer configuration.
+
+#### Error Interval
+
+The interval in which an "error" message is sent if an error was received from a node (default: 10s).
+Higher values reduce load on output target and network in case of errors by limiting frequency of error messages.
+
+#### Keep-Alive Interval
+
+The interval of a "heartbeat" message that is sent if no change of data occurs (default: 60s).
+It is used internally to detect broken network connections.
+
+#### Queue Size
+
+The size of the node value queue which stores multiples sampled values within a publishing interval (default: 10).
+Relevant if more values are captured than can be sent.
+
+#### Queue Behaviour
+
+The behaviour of the queue if it is full (default: "DiscardOldest").
+
+* `Discard Oldest`: The oldest value gets deleted from the queue when it is full.
+* `Discard Newest`: The newest value gets deleted from the queue when it is full.
+
+#### Deadband Value
+
+The filter when a new value will be sampled (default: 0.0).
+
+Calculation rule: `if (abs(lastCapturedValue - newValue) > deadBandValue) capture(newValue)`
 
 ## Data Layer Subscribe
 
@@ -336,3 +384,37 @@ The `msg.timestampFiletime` contains the timestamp of the sampled value in 100-n
   }  
   ```
 
+### Inputs of the *Data Layer Subscribe* node
+
+When the property `type` is changed to `dynamic`, then the path to subscribe to is no longer static and fixed
+after the deploy, but can be injected during runtime. The node gets an input connector which accepts the following `msg` to subscribe to a data layer path:
+
+```JSON
+msg = {
+    "action": "subscribe",
+    "path": "<path to subscribe>"
+}
+```
+
+Or to unsubscribe from the current data layer path:
+
+```JSON
+msg = {
+    "action": "unsubscribe"
+}
+```
+
+If you want to change a subscription, then a given path can be directly overwritten with a new `subscribe`action. No need to unsubscribe beforehand. the `msg` object is not forwarded to the output of the node.
+
+The inputs of the node are given via the attributes `msg.action` and `msg.path`.
+
+#### Input `msg.action`
+
+Can be one of the following settings:
+
+* `subscribe`
+* `unsubscribe`
+
+#### Input `msg.path`
+
+A single string or an array of strings with the ctrlX Data Layer node paths to subscribe to.

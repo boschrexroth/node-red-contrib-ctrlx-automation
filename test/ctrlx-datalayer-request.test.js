@@ -39,7 +39,8 @@ const ctrlxDatalayerRequestNode = require("../ctrlx-datalayer-request.js");
 
 // The the server mockup to test against
 const CtrlxMockup = require('./helper/CtrlxMockupV2')
-const CtrlxCore = require('../lib/CtrlxCore')
+const CtrlxCore = require('../lib/CtrlxCore');
+const CtrlxProblemError = require("../lib/CtrlxProblemError.js");
 
 const expect = require('chai').expect;
 
@@ -118,6 +119,8 @@ describe('ctrlx-datalayer-request', function () {
         n1.should.have.property('name', 'request');
         n1.should.have.property('method', 'READ');
         n1.should.have.property('path', 'framework/metrics/system/cpu-utilisation-percent');
+        n1.should.have.property('pendingWarnLevel', 0);
+        n1.should.have.property('pendingErrorLevel', 0);
 
         done();
       });
@@ -517,6 +520,93 @@ describe('ctrlx-datalayer-request', function () {
 
         // @ts-ignore
         n1.receive({ payload: { type: 'string', value: 'nostromo' } });
+      });
+    });
+
+    it('should read many values and trigger a warning and error for too much pending responses', function (done) {
+
+      let flow = [
+        { "id": "f1", "type": "tab", "label": "Test flow"},
+        { "id": "h1", "z":"f1", "type": "helper" },
+        { "id": "n1", "z":"f1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": "withdelay", "pendingWarnLevel": 5, "pendingErrorLevel": 10, "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "z":"f1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true },
+        { "id": "n2", "z":"f1", "type": "catch", "name": "catch", "wires": [["h2"]] },
+        { "id": "h2", "z":"f1", "type": "helper"}
+      ];
+      let credentials = {
+        c1: {
+          username: getUsername(),
+          password: getPassword()
+        }
+      };
+      let state = {
+        numResponses: 0,
+        numRequests: 0,
+        numWarnings: 0,
+        numErrors: 0,
+        connected: false
+      }
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        n1.should.have.property('pendingWarnLevel', 5);     // make a warning once we reached more than 5 pending responses
+        n1.should.have.property('pendingErrorLevel', 10);   // make an error and drop request once we reached more than 10 pending responses
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('number').within(0, 100);
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('double');
+
+            // Wait for the first response. Now we are connected and send additional requests.
+            // The 1. request will not be queued
+            // The next 10 requests will be queued
+            // The 12th requests will be rejected, because the queue is full
+            if (state.numRequests == 0) {
+              for (let i = 0; i < 12; i++) {
+                state.numRequests++;
+                n1.receive({ payload: "" });
+              }
+            } else {
+              state.numResponses++;
+              // In the end, we expect 10 responses, 1 dropped message with an error, and 1 warning at the warning level
+              if (state.numResponses == 10) {
+                expect(state.numErrors).eql(1);
+                expect(state.numWarnings).eql(1);
+                done();
+              }
+            }
+          }
+          catch (err) {
+            done(err);
+          }
+        });
+
+        let n2 = helper.getNode("n2");
+        let h2 = helper.getNode("h2");
+        n2.should.have.property('name', 'catch');
+        h2.on("input", function(msg) {
+          state.numErrors++;
+          try {
+            expect(msg).to.have.property('error').with.property('message').that.is.a('string').eql("Error: Number of requests too high. There are already 11 responses pending. Dropping request.");
+            expect(state.numWarnings).eql(1);
+          } catch (err) {
+            done(err);
+          }
+        });
+        n1.on('call:warn', call => {
+          state.numWarnings++;
+          try {
+            expect(call.firstArg).eql('Number of requests very high. There are already 5 responses pending.');
+          } catch (err) {
+            done(err);
+          }
+        });
+
+        // Send a msg to make sure the node is connected
+        n1.receive({ payload: "" });
       });
     });
 

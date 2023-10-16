@@ -264,6 +264,16 @@ class CtrlxMockupV2 {
       return;
     });
 
+    this.app.get('/automation/api/v2/nodes/withdelay', authenticateJWT, (req, res) => {
+      setTimeout(() => {
+        res.statusCode = 200;
+        res.json({
+          value: 17.5,
+          type: 'double'
+        });
+      }, 10);
+    });
+
 
     //
     // Builtin Data Mockups - Create/Delete
@@ -331,6 +341,8 @@ class CtrlxMockupV2 {
     //
     // Builtin Data Mockups - Events/Subscription
     //
+
+    /* Mockup for GET is no longer needed, cause subscription is now created via POST
     this.app.get('/automation/api/v2/events', authenticateJWT, (req, res) => {
 
       // Handle optional parameter publishIntervalMs
@@ -360,7 +372,7 @@ class CtrlxMockupV2 {
       // Create a mockup stream which returns the requested nodes
       const SseStream = require('ssestream').default;
       const sseStream = new SseStream(req);
-      sseStream.pipe(res)
+      sseStream.pipe(res);
 
       let id = 0;
       let pushers = new Array();
@@ -389,9 +401,9 @@ class CtrlxMockupV2 {
               data.type = 'int16';
               break;
             case 'motion/axs/Axis_X/state/values/actual/acc/cm-per-s^2':
-                data.value = 42;
-                data.type = 'double';
-                break;
+              data.value = 42;
+              data.type = 'double';
+              break;
             case 'test/broken/connection/i':
               data.value = id;
               data.type = 'int16';
@@ -427,7 +439,118 @@ class CtrlxMockupV2 {
         sseStream.unpipe(res)
       });
 
+    })*/
 
+    this.subscriptionCount = 0; // variable is used in tests to verify how many reconnects have happened
+    this.app.post('/automation/api/v2/events', authenticateJWT, (req, res) => {
+      this.subscriptionCount++;
+
+      // subscription options are given in the payload
+      const options = req.body;
+
+      // Handle optional parameter publishIntervalMs
+      let publishIntervalMs = 1000;
+      if (typeof options.properties !== 'undefined' && typeof options.properties.publishInterval !== 'undefined') {
+        // @ts-ignore
+        publishIntervalMs = options.properties.publishInterval;
+      }
+
+      // Nodes are given as comma separate array
+      if (typeof req.body.nodes === 'undefined') {
+        res.statusCode = 400;
+        res.send();
+        return;
+      }
+      // @ts-ignore
+      let nodes = req.body.nodes;
+
+      // the id is used to identify the subscription
+      if (typeof req.body.properties.id === 'undefined') {
+        res.statusCode = 400;
+        res.send();
+        return;
+      }
+
+
+      this.app.get('/automation/api/v2/events/' + req.body.properties.id, authenticateJWT, (req, res) => {
+
+        // Create a mockup stream which returns the requested nodes
+        const SseStream = require('ssestream').default;
+        const sseStream = new SseStream(req);
+        sseStream.pipe(res);
+
+        let id = 0;
+        let pushers = new Array();
+
+        nodes.forEach(element => {
+
+          let pusher = setInterval(() => {
+
+            let data = {
+              node: element,
+              schema: undefined,
+              timestamp: Date.now() * 1e4 + 116444736e9  // expected format is FILETIME (100-nanosecond intervals since January 1, 1601 UTC)
+            }
+
+            switch(element) {
+              case 'framework/metrics/system/cpu-utilisation-percent':
+                data.value = Math.random() * 100;
+                data.type = 'double';
+                break;
+              case 'framework/bundles/com_boschrexroth_comm_datalayer/active':
+                data.value = (Math.random() > 0.5) ? true : false;
+                data.type = 'bool';
+                break;
+              case 'plc/app/Application/sym/PLC_PRG/i':
+                data.value = Math.round(Math.random() * 4096);
+                data.type = 'int16';
+                break;
+              case 'motion/axs/Axis_X/state/values/actual/acc/cm-per-s^2':
+                data.value = 42;
+                data.type = 'double';
+                break;
+              case 'test/broken/connection/i':
+                data.value = id;
+                data.type = 'int16';
+                // This is a special node. If included it will kill the connection after a second to
+                // mock a connection interruption.
+                setTimeout(() => {
+                  sseStream.unpipe(res)
+                  res.connection.destroy();
+                }, 1000);
+                break;
+              case 'test/options':
+                data.value = options;
+                data.type = 'object';
+                break;
+
+              default:
+                data.value = 'error: unknown value';
+                data.type = 'string';
+            }
+
+            sseStream.write({
+              id: id++,
+              event: 'update',
+              data: data
+            });
+
+          }, publishIntervalMs);
+
+          pushers.push(pusher);
+        });
+
+
+        res.on('close', () => {
+          pushers.forEach(pusher => {
+            clearInterval(pusher)
+          });
+          sseStream.unpipe(res)
+        });
+      });
+
+      res.statusCode = 201;
+      res.send();
     })
 
 

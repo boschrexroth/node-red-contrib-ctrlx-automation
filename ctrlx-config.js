@@ -230,7 +230,7 @@ module.exports = function(RED) {
                       break;
                     }
                     case 'SUBSCRIBE': {
-                      node.datalayerSubscribe(id, node.pendingRequests[id].paths, node.pendingRequests[id].publishIntervalMs, node.pendingRequests[id].callback);
+                      node.datalayerSubscribe(id, node.pendingRequests[id].paths, node.pendingRequests[id].options, node.pendingRequests[id].callback);
                       break;
                     }
                     default: {
@@ -398,16 +398,16 @@ module.exports = function(RED) {
       }
     }
 
-    this.datalayerSubscribe = function(nodeRef, paths, publishIntervalMs, callback) {
+    this.datalayerSubscribe = function(nodeRef, paths, options, callback) {
       if (node.connected) {
-        node.ctrlX.datalayerSubscribe(paths, publishIntervalMs)
+        node.ctrlX.datalayerSubscribe(paths, options)
           .then((data) => callback(null, data))
           .catch((err) => callback(err, null));
       } else if (node.connecting) {
         node.pendingRequests[nodeRef.id] = {
           method: 'SUBSCRIBE',
           paths: paths,
-          publishIntervalMs: publishIntervalMs,
+          options: options,
           callback: callback
         };
       } else {

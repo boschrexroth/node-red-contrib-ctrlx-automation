@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020-2021 Bosch Rexroth AG
+ * Copyright (c) 2020-2023 Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,75 @@ module.exports = function(RED) {
     this.configNodeDevice = RED.nodes.getNode(this.device);
     this.name = config.name;
     this.publishIntervalMs = config.publishIntervalMs;
+    if (this.publishIntervalMs === '') {
+      this.publishIntervalMs = undefined;
+    } else if (this.publishIntervalMs !== undefined) {
+      this.publishIntervalMs = parseInt(this.publishIntervalMs);
+      if (config.publishIntervalUnits === "seconds") {
+        this.publishIntervalMs *= 1000;
+      } else if (config.publishIntervalUnits === "minutes") {
+        this.publishIntervalMs *= (60 * 1000);
+      } else if (config.publishIntervalUnits === "hours") {
+        this.publishIntervalMs *= (60 * 60 * 1000);
+      }
+    }
+    this.samplingIntervalUs = config.samplingInterval;
+    if (this.samplingIntervalUs === '') {
+      this.samplingIntervalUs = undefined;
+    } else if (this.samplingIntervalUs !== undefined) {
+      this.samplingIntervalUs = parseInt(this.samplingIntervalUs);
+      if (config.samplingIntervalUnits === "milliseconds") {
+        this.samplingIntervalUs *= 1000;
+      } else if (config.samplingIntervalUnits === "seconds") {
+        this.samplingIntervalUs *= (1000 * 1000);
+      } else if (config.samplingIntervalUnits === "minutes") {
+        this.samplingIntervalUs *= (60 * 1000 * 1000);
+      } else if (config.samplingIntervalUnits === "hours") {
+        this.samplingIntervalUs *= (60 * 60 * 1000 * 1000);
+      }
+    }
+    this.errorIntervalMs = config.errorInterval;
+    if (this.errorIntervalMs === '') {
+      this.errorIntervalMs = undefined;
+    } else if (this.errorIntervalMs !== undefined) {
+      this.errorIntervalMs = parseInt(this.errorIntervalMs);
+      if (config.errorIntervalUnits === "seconds") {
+        this.errorIntervalMs *= 1000;
+      } else if (config.errorIntervalUnits === "minutes") {
+        this.errorIntervalMs *= (60 * 1000);
+      } else if (config.errorIntervalUnits === "hours") {
+        this.errorIntervalMs *= (60 * 60 * 1000);
+      }
+    }
+    this.keepaliveIntervalMs = config.keepaliveInterval;
+    if (this.keepaliveIntervalMs === '') {
+      this.keepaliveIntervalMs = undefined;
+    } else if (this.keepaliveIntervalMs !== undefined) {
+      this.keepaliveIntervalMs = parseInt(this.keepaliveIntervalMs);
+      if (config.keepaliveIntervalUnits === "seconds") {
+        this.keepaliveIntervalMs *= 1000;
+      } else if (config.keepaliveIntervalUnits === "minutes") {
+        this.keepaliveIntervalMs *= (60 * 1000);
+      } else if (config.keepaliveIntervalUnits === "hours") {
+        this.keepaliveIntervalMs *= (60 * 60 * 1000);
+      }
+    }
+    this.queueSize = config.queueSize;
+    if (this.queueSize === '') {
+      this.queueSize = undefined;
+    } else if (this.queueSize !== undefined) {
+      this.queueSize = parseInt(this.queueSize);
+    }
+    this.queueBehaviour = config.queueBehaviour;
+    if (this.queueBehaviour === '') {
+      this.queueBehaviour = undefined;
+    }
+    this.deadbandValue = config.deadbandValue;
+    if (this.deadbandValue === '') {
+      this.deadbandValue = undefined;
+    } else if (this.deadbandValue !== undefined) {
+      this.deadbandValue = parseInt(this.deadbandValue);
+    }
 
 
     // Node state
@@ -79,7 +148,7 @@ module.exports = function(RED) {
       let paths = new Array();
       Object.values(node.users).forEach((element) => {
         if (element.path !== '') {
-          paths.push(element.path);
+          paths = paths.concat(element.path);
         }
       });
 
@@ -92,7 +161,18 @@ module.exports = function(RED) {
       if (node.configNodeDevice.debug) {
         node.debug('Requesting Subscription for: ' + paths);
       }
-      node.configNodeDevice.datalayerSubscribe(node, paths, node.publishIntervalMs, (err, subscription) => {
+
+      const options = {
+        'publishIntervalMs': node.publishIntervalMs,
+        'samplingIntervalUs': node.samplingIntervalUs,
+        'errorIntervalMs': node.errorIntervalMs,
+        'keepaliveIntervalMs': node.keepaliveIntervalMs,
+        'queueSize': node.queueSize,
+        'queueBehaviour': node.queueBehaviour,
+        'deadbandValue' : node.deadbandValue
+      }
+
+      node.configNodeDevice.datalayerSubscribe(node, paths, options, (err, subscription) => {
 
         if (err) {
           node.error(`Failed to create subscription ${node.name} for nodes ${paths} with error ${err.message}, but will retry`);
@@ -111,39 +191,50 @@ module.exports = function(RED) {
           node.subscription = subscription;
 
 
+          // In rare cases (e.g. during boot-up of control, or when the webserver resets) it might happen, that the subscription
+          // was successfully created but the strean was already ended by the server before we could the register the corresponding handlers below.
+          // So let's handle this race condition explicitly here.
+          if (node.subscription.isEndByServer) {
+
+            // To recover from the error state, let's reset the subscription.
+            node.dirty = true;
+            setTimeout(() => {
+              node.updateSubscription();
+            }, 2000);
+          }
+
 
           // This is the handler function which dispatches incoming update messages to the nodes.
           node.subscription.on('update', (data, lastEventId) => {
             Object.values(node.users).forEach((element) => {
-              if (element.path === data.node) {
+              if (element.path === data.node || (Array.isArray(element.path) && element.path.includes(data.node))) {
                 element.callback(null, data, lastEventId);
               }
             });
           });
 
 
-
           // This is the handler which is called on error. E.g. on authorization errors of the whole subscription
-          // or when a single node address has a problem.
+          // or when a single path address has a problem.
           node.subscription.on('error', (err) => {
 
-            let isSingleNodeError = false;
+            let isSinglPathError = false;
 
-            // Check if we have an error, that is only attached to a single node and
+            // Check if we have an error, that is only attached to a single path and
             // not to the whole subscription
             if (err instanceof CtrlxProblemError && err._instance) {
 
               // Distribute the error to actual node.
               Object.values(node.users).forEach((element) => {
-                if (element.path === err._instance) {
+                if (element.path === err._instance || (Array.isArray(element.path) && element.path.includes(err._instance))) {
                   element.callback(err);
-                  isSingleNodeError = true;
+                  isSinglPathError = true;
                 }
               });
 
             }
 
-            if (!isSingleNodeError) {
+            if (!isSinglPathError) {
               // Distribute the error to all registered nodes.
               Object.values(node.users).forEach((element) => {
                 element.callback(err);

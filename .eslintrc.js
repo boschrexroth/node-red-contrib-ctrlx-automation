@@ -4,7 +4,8 @@ module.exports = {
     "es6": true,
     "node": true,
     "mocha": true,
-    "browser": false
+    "browser": false,
+    "es2020": true      // e.g. for BigInt
   },
   "extends": [
     "eslint:recommended",
@@ -15,7 +16,7 @@ module.exports = {
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 2020
   },
   "rules": {
     'spaced-comment': 'error'

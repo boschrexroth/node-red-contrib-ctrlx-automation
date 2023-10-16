@@ -48,20 +48,26 @@ To handle subsciptions an additional config node `CtrlXConfigSubscription`is nec
 - [x] Feature: Support custom port after hostname. E.g. 'localhost:8443'.
 - [x] Feature: Different output types (value only, value + type)
 
-### vX.X.0
+### v1.9.0
+
+- [x] Implement: Create sse subscriptions via POST endpoint
+- [x] Feature: Dynamic subscriptions
+- [x] Feature: Support new subscription properties
+- [x] Feature: Show and limit number of pending requests
+- [x] Feature: Add keep-alive mechanism to subscription to better detect network communication problems
+
+### vX.0.0
 
 - [ ] Feature: Support for read with arguments and methods
 - [ ] Feature: Allow custom certificate handling
 - [ ] Feature: Support http proxy configuration
-- [ ] Feature: Add keep-alive mechanism to subscription to better detect network communication problems
-- [ ] Feature: Implement dynamic subscriptions
 
-### vX.X.0
+### vY.0.0
 
 - [ ] Refactor: Extract CtrlxCore class into own npm library
 - [ ] Feature: Support typescript bindings
 
-### vX.X.0
+### Not on roadmap
 
 - [ ] Feature: i18n
 - [ ] Feature: Find the device via UPnP
@@ -100,3 +106,4 @@ This can also be enabled in VSCode. Note, that you need to also add the `outputC
             },
             "outputCapture": "std"
         }
+    ]

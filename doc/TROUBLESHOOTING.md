@@ -18,7 +18,7 @@ Example for writing a DWORD variable of the PLC app:
 
 Make sure, that `Payload` is set to `value + type (json)` and provide the payload in the following format:
 
-```
+```JSON
 msg.payload = {
   "type": "bool8", 
   "value": true
