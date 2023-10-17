@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020-2021 Bosch Rexroth AG
+ * Copyright (c) 2020-2023 Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,6 +44,7 @@ module.exports = function(RED) {
     this.name = config.name;
     this.path = config.path;
     this.eventCounter = 0;
+    this.isDynamic = config.hasOwnProperty("inputs") && config.inputs == 1
 
 
     //
@@ -53,6 +54,12 @@ module.exports = function(RED) {
     this.setStatus = function(status) {
       node.status(status);
     };
+
+    const Actions = {
+      SUBSCRIBE: 'subscribe',
+      UNSUBSCRIBE: 'unsubscribe',
+    };
+    const allowableActions = Object.values(Actions);
 
 
     if (this.configSubscription) {
@@ -66,8 +73,7 @@ module.exports = function(RED) {
       //
       // Emit handler
       //
-      node.configSubscription.register(node, node.path, (err, data, lastEventId) => {
-
+      let notifyHandler = function (err, data, lastEventId) {
         if (err) {
           if (err.message) {
             node.status({ fill: 'red', shape: 'ring', text: `subscription failed: ${err.message}` });
@@ -87,6 +93,37 @@ module.exports = function(RED) {
             timestampFiletime: data.timestamp
           });
         }
+      };
+
+      if (!node.isDynamic) {
+        node.configSubscription.register(node, node.path, notifyHandler);
+      } else {
+        node.status({ fill: 'yellow', shape: 'ring', text: 'not subscribed' });
+      }
+
+
+      //
+      // Input handler (dynamic)
+      //
+      node.on('input', function (msg, send, done) {
+        const action = msg.action;
+
+        if (!allowableActions.includes(action)) {
+          done(new Error(`Invalid action: ${action}`));
+          return;
+        }
+
+        if (action === Actions.SUBSCRIBE) {
+          node.configSubscription.register(node, msg.path, notifyHandler);
+          node.eventCounter = 0;
+        } else if (action === Actions.UNSUBSCRIBE) {
+          node.configSubscription.deregister(node, (err) => {
+            node.status({ fill: 'yellow', shape: 'ring', text: 'not subscribed' });
+            node.eventCounter = 0;
+            done(err);
+          });
+        }
+
       });
 
 

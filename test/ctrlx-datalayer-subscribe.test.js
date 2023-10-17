@@ -2,7 +2,7 @@
  *
  * MIT License
  *
- * Copyright (c) 2020-2021 Bosch Rexroth AG
+ * Copyright (c) 2020-2023 Bosch Rexroth AG
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -120,7 +120,13 @@ describe('ctrlx-datalayer-subscribe', function () {
 
         let s1 = helper.getNode("s1");
         expect(s1).to.have.property('name', 'sub1');
-        expect(s1).to.have.property('publishIntervalMs', '100');
+        expect(s1).to.have.property('publishIntervalMs', 100);
+        expect(s1).to.have.property('samplingIntervalUs', undefined);
+        expect(s1).to.have.property('errorIntervalMs', undefined);
+        expect(s1).to.have.property('keepaliveIntervalMs', undefined);
+        expect(s1).to.have.property('queueSize', undefined);
+        expect(s1).to.have.property('queueBehaviour', undefined);
+        expect(s1).to.have.property('deadbandValue', undefined);
 
         let n1 = helper.getNode("n1");
         expect(n1).to.have.property('name', 'subscribe');
@@ -174,7 +180,7 @@ describe('ctrlx-datalayer-subscribe', function () {
       helper.load([ctrlxConfigNode, ctrlxConfigSubscriptionNode, ctrlxDatalayerSubscribeNode], flow, credentials, () => {
 
         let s1 = helper.getNode("s1");
-        expect(s1).to.have.property('publishIntervalMs', '100');
+        expect(s1).to.have.property('publishIntervalMs', 100);
         let h1 = helper.getNode("h1");
 
         let numReceived = 0;
@@ -207,6 +213,7 @@ describe('ctrlx-datalayer-subscribe', function () {
     it('should be reconnecting and receive updates after connection got broken', function (done) {
 
       this.timeout(8000);
+      testServer.subscriptionCount = 0;
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -224,7 +231,7 @@ describe('ctrlx-datalayer-subscribe', function () {
       helper.load([ctrlxConfigNode, ctrlxConfigSubscriptionNode, ctrlxDatalayerSubscribeNode], flow, credentials, () => {
 
         let s1 = helper.getNode("s1");
-        expect(s1).to.have.property('publishIntervalMs', '100');
+        expect(s1).to.have.property('publishIntervalMs', 100);
         let h1 = helper.getNode("h1");
 
         let numReceived = 0;
@@ -251,6 +258,7 @@ describe('ctrlx-datalayer-subscribe', function () {
         // Reconnect shall happen after max 2 seconds retry and 2 seconds for reconnect
         setTimeout(() => {
           expect(numReceived).to.be.greaterThan(15);
+          expect(testServer.subscriptionCount).to.be.eql(2);
           s1.subscription.close();
           done();
         }, 5000);
@@ -258,6 +266,201 @@ describe('ctrlx-datalayer-subscribe', function () {
     });
 
 
+
+    it('should use additional subscription options', function (done) {
+
+      let flow = [
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "test/options", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1",
+          "name": "sub1",
+          "publishIntervalMs": "100",
+          "publishIntervalUnits": "milliseconds",
+          "samplingInterval": "1",
+          "samplingIntervalUnits": "seconds",
+          "errorInterval": "2",
+          "errorIntervalUnits": "seconds",
+          "keepaliveInterval": "3",
+          "keepaliveIntervalUnits": "minutes",
+          "queueSize": "50",
+          "queueBehaviour": "DiscardOldest",
+          "deadbandValue": "23"
+        },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
+      ];
+      let credentials = {
+        c1: {
+          username: getUsername(),
+          password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxConfigSubscriptionNode, ctrlxDatalayerSubscribeNode], flow, credentials, () => {
+
+        let s1 = helper.getNode("s1");
+        expect(s1).to.have.property('publishIntervalMs', 100);
+        expect(s1).to.have.property('samplingIntervalUs', 1000000);
+        expect(s1).to.have.property('errorIntervalMs', 2000);
+        expect(s1).to.have.property('keepaliveIntervalMs', 180000);
+        expect(s1).to.have.property('queueSize', 50);
+        expect(s1).to.have.property('queueBehaviour', 'DiscardOldest');
+        expect(s1).to.have.property('deadbandValue', 23);
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            // The mockup will echo back the given options, so that we can check that payload is conformant to the datalayer API
+            expect(msg).to.have.property('topic').to.be.a('string').eql('test/options');
+            expect(msg).to.have.property('timestamp').to.be.a('number');
+            expect(msg).to.have.property('type').to.be.a('string').eql('object');
+            msg.payload.properties.id = "";
+            expect(msg).to.have.property('payload').to.be.a('object').eql({
+              properties: {
+                id: "",
+                keepaliveInterval: 180000,
+                publishInterval: 100,
+                errorInterval: 2000,
+                rules: [
+                  {
+                    rule_type: "Sampling",
+                    rule: {
+                      samplingInterval: 1000000,
+                    },
+                  },
+                  {
+                    rule_type: "Queueing",
+                    rule: {
+                      behaviour: "DiscardOldest",
+                      queueSize: 50,
+                    },
+                  },
+                  {
+                    rule_type: "DataChangeFilter",
+                    rule: {
+                      deadBandValue: 23,
+                    },
+                  },
+                ],
+              },
+              nodes: [
+                "test/options",
+              ],
+            });
+            done();
+            s1.subscription.close();
+          }
+          catch (err) {
+            s1.subscription.close();
+            done(err);
+          }
+        });
+
+
+      });
+    });
+
+
+    it('should subscribe dynamically', function (done) {
+
+      let flow = [
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-subscribe", "inputs": 1, "subscription": "s1", "path": "", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "100" },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
+      ];
+      let credentials = {
+        c1: {
+          username: getUsername(),
+          password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxConfigSubscriptionNode, ctrlxDatalayerSubscribeNode], flow, credentials, () => {
+
+        let s1 = helper.getNode('s1');
+        expect(s1).to.have.property('publishIntervalMs', 100);
+        let h1 = helper.getNode('h1');
+        let n1 = helper.getNode('n1');
+
+        // @ts-ignore
+        h1.on('input', (msg) => {
+          try {
+            expect(msg).to.have.property('topic').to.be.a('string').eql('framework/metrics/system/cpu-utilisation-percent');
+            expect(msg).to.have.property('timestamp').to.be.a('number');
+            expect(msg).to.have.property('type').to.be.a('string').eql('double');
+            expect(msg).to.have.property('payload').to.be.a('number').within(0, 100);
+            s1.subscription.close();
+            done();
+          }
+          catch (err) {
+            s1.subscription.close();
+            done(err);
+          }
+        });
+
+        // Send msg to connect to subscription
+        n1.receive({ action: 'subscribe', path: 'framework/metrics/system/cpu-utilisation-percent' });
+      });
+    });
+
+
+    it('should subscribe dynamically to multiple paths', function (done) {
+
+      let flow = [
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-subscribe", "inputs": 1, "subscription": "s1", "path": "", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "100" },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
+      ];
+      let credentials = {
+        c1: {
+          username: getUsername(),
+          password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxConfigSubscriptionNode, ctrlxDatalayerSubscribeNode], flow, credentials, () => {
+
+        let s1 = helper.getNode('s1');
+        expect(s1).to.have.property('publishIntervalMs', 100);
+        let h1 = helper.getNode('h1');
+        let n1 = helper.getNode('n1');
+        let received1 = false;
+        let received2 = false;
+
+        // @ts-ignore
+        h1.on('input', (msg) => {
+          try {
+            if (msg.topic === 'framework/metrics/system/cpu-utilisation-percent') {
+              expect(msg).to.have.property('timestamp').to.be.a('number');
+              expect(msg).to.have.property('type').to.be.a('string').eql('double');
+              expect(msg).to.have.property('payload').to.be.a('number').within(0, 100);
+              received1 = true;
+            } else if (msg.topic === 'plc/app/Application/sym/PLC_PRG/i') {
+              expect(msg).to.have.property('timestamp').to.be.a('number');
+              expect(msg).to.have.property('type').to.be.a('string').eql('int16');
+              expect(msg).to.have.property('payload').to.be.a('number').within(0, 4096);
+              received2 = true;
+            } else {
+              done(new Error('unexpected topic received'));
+            }
+          }
+          catch (err) {
+            s1.subscription.close();
+            done(err);
+          }
+
+          if (received1 && received2) {
+            s1.subscription.close();
+            done();
+          }
+        });
+
+        // Send msg to connect to subscription
+        n1.receive({ action: 'subscribe', path: ['framework/metrics/system/cpu-utilisation-percent', 'plc/app/Application/sym/PLC_PRG/i'] });
+      });
+    });
 
   });
 

@@ -7,7 +7,7 @@ The nodes can run in a Node-RED app environment on a ctrlX CORE device as well a
 
 ![nodes.png](./doc/images/nodes.png)
 
-**Important:** Please upgrade the AutomationCore System App to at least version 1.8.0 (XCR-V-0108, part of ReleaseMilestone 21.03) or newer, because the nodes are now using the new API which introduces subscription support!
+**Important:** It is recommended to upgrade the AutomationCore System App to version 1.20.0 (XCR-V-0120, part of ReleaseMilestone 23.03) or newer for full subscription settings support! Older versions are still supported but with less features.
 
 ## Installation
 
@@ -31,13 +31,13 @@ In addition to that, a configuration node will be added to the project as soon a
 
 This node can be triggered to execute read, write, browse, create or delete operations within the ctrlX Data Layer.
 
-![usage_overview_request.png](./doc/images/examples_read_CPU_utilisation.png)
+![usage_overview_request.png](./doc/images/usage_overview_request.png)
 
 ### Data Layer Subscribe
 
 This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. The node is useful for continuous tracking of value in the ctrlX Data Layer and in this case more efficient than the `Data Layer Request` node, because it does not need to be triggerd to poll for a value. Instead, this node automatically watches for value changes on server side and publishes new values via server sent events and low overhead for data transmission.
 
-![usage_overview_subscribe.png](./doc/images/examples_subscribe_CPU_utilisation.png)
+![usage_overview_subscribe.png](./doc/images/usage_overview_subscribe.png)
 
 ## Usage - Reference Manual
 
@@ -48,6 +48,10 @@ For working with different nodes in the Data Layer it might also be useful to ha
 
 It might be helpful to have a look at the [Examples](./doc/EXAMPLES.md) document to find various flows for different use-cases. They demonstrate the different ways how the nodes can be used. Most of the examples are also directly available from within the Node-RED editor.
 They appear under the Examples section of the library import menu in Node-RED.
+
+## Release Notes
+
+New features since version `1.9` are introduced in more detail in the [release notes](./doc/RELEASE_NOTES.md)
 
 ## Support
 
@@ -72,24 +76,24 @@ Any use of the source code and related documents of this repository in applicati
 ## Changelog
 
 ```text
-* 2020-09-29: 1.2.0 - Initial release with request node for ctrlX Data Layer.
-* 2020-11-28: 1.2.2 - fix: msg.topic is not set to path if msg.topic is undefined.
-* 2020-12-02: 1.2.3 - Only documentation and diagnosis improvements.
-* 2020-12-14: 1.2.4 - fix: Error when request was triggered immediately after deploy.
-* 2020-12-20: 1.8.0 - Initial release which adds node to subscribe to ctrlX Data Layer.
-                      Support custom port after hostname. E.g. 'localhost:8443'.
-* 2020-10-01: 1.8.1 - fix: automatic reconnect when device was not available on start of flow.
-* 2021-02-22: 1.8.2 - Switched to ctrlX Data Layer API version v2 which is only available with AutomationCore 1.8.0 or newer.
-                      Introduced new setting to request node, which allows to set payload format to return only 'value' or 'value' and 'type'.
-* 2021-03-10: 1.8.3 - Internal improvements for more compliant URI encoding of http requests.
-* 2021-05-07: 1.8.4 - fix: allow to make a write without arguments (msg.payload = null). E.g. for 'diagnosis/confirm/error'.
-* 2021-05-25: 1.8.5 - fix: make 'BROWSE' requests to support the payload property 'value only'.
-* 2021-05-28: 1.8.6 - feat: make path tree view selection in property window to automatically expand to current path.
-                      fix: make subscribe node to emit an initial 'msg' after deploy, even if value does not change.
-* 2021-06-29: 1.8.7 - fix: writing strings with non-ASCII symbols (e.g. 'ü') resulted in DL_TYPE_MISMATCH.
-* 2021-07-04: 1.8.8 - fix: give each of the subscribe nodes his own counter to show in the status text.
-                      fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
-* 2021-09-20: 1.8.9 - fix: read with argument failed with error 'DL_TYPE_MISMATCH'.
+* 2020-09-29: 1.2.0  - Initial release with request node for ctrlX Data Layer.
+* 2020-11-28: 1.2.2  - fix: msg.topic is not set to path if msg.topic is undefined.
+* 2020-12-02: 1.2.3  - Only documentation and diagnosis improvements.
+* 2020-12-14: 1.2.4  - fix: Error when request was triggered immediately after deploy.
+* 2020-12-20: 1.8.0  - Initial release which adds node to subscribe to ctrlX Data Layer.
+                     - Support custom port after hostname. E.g. 'localhost:8443'.
+* 2020-10-01: 1.8.1  - fix: automatic reconnect when device was not available on start of flow.
+* 2021-02-22: 1.8.2  - Switched to ctrlX Data Layer API version v2 which is only available with AutomationCore 1.8.0 or newer.
+                     - Introduced new setting to request node, which allows to set payload format to return only 'value' or 'value' and 'type'.
+* 2021-03-10: 1.8.3  - Internal improvements for more compliant URI encoding of http requests.
+* 2021-05-07: 1.8.4  - fix: allow to make a write without arguments (msg.payload = null). E.g. for 'diagnosis/confirm/error'.
+* 2021-05-25: 1.8.5  - fix: make 'BROWSE' requests to support the payload property 'value only'.
+* 2021-05-28: 1.8.6  - feat: make path tree view selection in property window to automatically expand to current path.
+                     - fix: make subscribe node to emit an initial 'msg' after deploy, even if value does not change.
+* 2021-06-29: 1.8.7  - fix: writing strings with non-ASCII symbols (e.g. 'ü') resulted in DL_TYPE_MISMATCH.
+* 2021-07-04: 1.8.8  - fix: give each of the subscribe nodes his own counter to show in the status text.
+                     - fix: allow to make a create without arguments (msg.payload = null). E.g. for '/motion/axs/<axs_name>/cmd/reset'.
+* 2021-09-20: 1.8.9  - fix: read with argument failed with error 'DL_TYPE_MISMATCH'.
 * 2021-10-19: 1.8.10 - fix: support 64bit integer as BigInt to prevent rounding errors on big integer values.
 * 2021-10-22: 1.8.11 - fix: prevent "Failed login attempts" after flow gets redeployed with correct credentials (Bug392030).
 * 2021-10-22: 1.8.12 - fix: make subscription to properly report error and reconnect when authorization token expires (Bug405282).
@@ -104,11 +108,18 @@ Any use of the source code and related documents of this repository in applicati
                      - fix: support addresses with special characters (e.g. '^' in 'mm/s^2').
                      - docs: updated and extended the example flows.
 * 2022-10-20: 1.8.20 - fix: throw correct error on password change and dropped session (Bug534347). 
+* 2023-07-01: 1.9.0  - feat: dynamic subscriptions to change subscription at runtime
+                     - feat: support new subscription properties
+                     - feat: show and limit number of pending requests
+                     - fix: default payload format changed to `value + type`
+* 2023-07-17: 1.9.1  - fix: change sampling interval to microseconds                     
+* 2023-08-07: 1.9.2  - fix: automatic reconnect of subscription on reboot of control 
+* 2023-09-04: 1.9.3  - fix: subscription with ipv6 address that contains a zone index
 ```
   
 ## About
 
-Copyright © 2020-2022 Bosch Rexroth AG. All rights reserved.
+Copyright © 2020-2023 Bosch Rexroth AG. All rights reserved.
 
 <https://www.boschrexroth.com>
 
@@ -121,7 +132,7 @@ GERMANY
 
 MIT License
 
-Copyright (c) 2020-2022 Bosch Rexroth AG
+Copyright (c) 2020-2023 Bosch Rexroth AG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

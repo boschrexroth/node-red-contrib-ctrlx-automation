@@ -14,6 +14,7 @@ This page contains various examples for different use cases. Looking through the
 - [Subscribe to the current CPU utilisation](#subscribe-to-the-current-cpu-utilisation)
 - [Monitor CPU utilisation in line chart](#monitor-cpu-utilisation-in-line-chart)
 - [Use a catch node to handle errors](#use-a-catch-node-to-handle-errors)
+- [Subscribe and unsubscribe to a node dynamically](#subscribe-and-unsubscribe-to-a-node-dynamically)
 
 [Diagnosis and Logbook examples](#diagnosis-and-logbook-examples)
 
@@ -128,6 +129,16 @@ Errors in the nodes e.g. node is missing or node path is invalid can be catched 
 
 ```JSON
 [{"id":"3984d15c.b6a4be","type":"comment","z":"b7f42922c8391768","name":"Example: Use a catch node to handle errors.","info":"","x":430,"y":540,"wires":[]},{"id":"adcdeb72.352b88","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":890,"y":600,"wires":[]},{"id":"bf808c7e.2b56a","type":"ctrlx-datalayer-request","z":"b7f42922c8391768","device":"7b877229.678964","method":"READ","path":"invalid/path/value/to/force/error","name":"","x":610,"y":600,"wires":[["adcdeb72.352b88"]]},{"id":"eda269ff.f06d88","type":"inject","z":"b7f42922c8391768","name":"","repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":360,"y":600,"wires":[["bf808c7e.2b56a"]]},{"id":"b55ac3d1.719b1","type":"catch","z":"b7f42922c8391768","name":"","scope":["bf808c7e.2b56a"],"uncaught":false,"x":420,"y":680,"wires":[["e91439fb.0fa298"]]},{"id":"e91439fb.0fa298","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":650,"y":680,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
+```
+
+### Subscribe and unsubscribe to a node dynamically
+
+The path of a subscribe node can be set dynamically at runtime.
+
+![example-basic-dynamic-subscription.png](./images/example-basic-dynamic-subscription.png)
+
+```JSON
+[{"id":"8c92f714677c9a4a","type":"ctrlx-datalayer-subscribe","z":"e54f652072ad4b5b","subscription":"21664f4efd3d1a9d","path":"","name":"","inputs":1,"x":560,"y":100,"wires":[["ef08e241e0ed21b0"]]},{"id":"792d1c9b693276d8","type":"inject","z":"e54f652072ad4b5b","name":"subscribe","props":[{"p":"action","v":"subscribe","vt":"str"},{"p":"path","v":"framework/metrics/system/cpu-utilisation-percent","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","x":140,"y":80,"wires":[["8c92f714677c9a4a"]]},{"id":"7a9058067ce9881e","type":"inject","z":"e54f652072ad4b5b","name":"unsubscribe","props":[{"p":"action","v":"unsubscribe","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","x":150,"y":120,"wires":[["8c92f714677c9a4a"]]},{"id":"ef08e241e0ed21b0","type":"debug","z":"e54f652072ad4b5b","name":"output","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":750,"y":100,"wires":[]},{"id":"e53d299d117f8483","type":"comment","z":"e54f652072ad4b5b","name":"Example: Set subscription at runtime","info":"","x":160,"y":40,"wires":[]},{"id":"21664f4efd3d1a9d","type":"ctrlx-config-subscription","device":"bfebf08a.52a46","name":"sub","publishIntervalMs":"100","publishIntervalUnits":"milliseconds","samplingInterval":"","samplingIntervalUnits":"seconds","errorInterval":"","errorIntervalUnits":"seconds","keepaliveInterval":"","keepaliveIntervalUnits":"minutes","queueSize":"","queueBehaviour":"DiscardOldest","deadbandValue":""},{"id":"bfebf08a.52a46","type":"ctrlx-config","name":"localhost","hostname":"192.168.17.190","debug":true}]
 ```
 
 ## Diagnosis and Logbook examples

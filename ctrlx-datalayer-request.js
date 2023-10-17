@@ -43,20 +43,35 @@ module.exports = function(RED) {
     this.path = config.path;
     this.method = config.method;
     this.payloadFormat = config.payloadFormat;
+    this.pendingWarnLevel = config.pendingWarnLevel;
+    this.pendingErrorLevel = config.pendingErrorLevel;
 
     // If the config is missing certain options (it was probably deployed prior to an update to the node code),
     // select compatibility options for the new fields
     if (typeof this.payloadFormat === 'undefined') {
       this.payloadFormat = 'v1';
     }
+    if (typeof this.pendingWarnLevel === 'undefined') {
+      this.pendingWarnLevel = 0; // disabled
+    } else {
+      this.pendingWarnLevel = parseInt(this.pendingWarnLevel);
+    }
+    if (typeof this.pendingErrorLevel === 'undefined') {
+      this.pendingErrorLevel = 0; // disabled
+    } else {
+      this.pendingErrorLevel = parseInt(this.pendingErrorLevel);
+    }
 
     this.isTemplatedPath = (this.path || "").indexOf("{{") !== -1;
     if (RED.settings.httpRequestTimeout) {
       this.reqTimeout = parseInt(RED.settings.httpRequestTimeout) || 120000;
-    }
-    else {
+    } else {
       this.reqTimeout = 120000;
     }
+
+    // This variable holds the number of requests where a response is pending.
+    // So 0 means, that the node is idle.
+    this.numPendingResponses = 0;
 
 
     //
@@ -64,23 +79,39 @@ module.exports = function(RED) {
     //
     let node = this;
     this.setStatus = function(status) {
+      if (node.numPendingResponses != 0) {
+        status.text += `, ${node.numPendingResponses} active`
+      }
+      if (node.pendingWarnLevel && node.numPendingResponses >= node.pendingWarnLevel) {
+        status.fill = "yellow";
+      }
       node.status(status);
     };
 
 
     if (this.configNode) {
-      node.status({ fill: "red", shape: "ring", text: "not logged in" });
+      node.setStatus({ fill: "red", shape: "ring", text: "not logged in" });
 
       //
       // Input handler
       //
       node.on("input", function(msg, send, done) {
-        node.status({ fill: "blue", shape: "dot", text: "requesting" });
+        node.setStatus({ fill: "blue", shape: "dot", text: "requesting" });
+
+        // Check for message overflow
+        if (node.pendingErrorLevel && node.numPendingResponses > node.pendingErrorLevel) {
+          // emit error and abort request
+          done(new Error(`Number of requests too high. There are already ${node.numPendingResponses} responses pending. Dropping request.`));
+          return;
+        } else if (node.pendingWarnLevel && node.numPendingResponses == node.pendingWarnLevel) {
+          // emit warning but continue request
+          node.warn(`Number of requests very high. There are already ${node.numPendingResponses} responses pending.`);
+        }
 
         // Prepare the path
         let path = node.path || msg.path;
         if (msg.path && node.path && (node.path !== msg.path)) {
-          node.warn(RED._("`msg.path` differs from configuration property *Path* of node"));
+          node.warn("`msg.path` differs from configuration property *Path* of node");
         }
         if (node.isTemplatedPath) {
           path = mustache.render(node.path, msg);
@@ -94,7 +125,7 @@ module.exports = function(RED) {
         // Prepare the method
         let method = node.method || "READ";
         if (msg.method && node.method && (node.method !== "msg")) {
-          node.warn(RED._("`msg.method` differs from configuration property *Method* of node"));
+          node.warn("`msg.method` differs from configuration property *Method* of node");
         }
         if (msg.method && node.method && (node.method === "msg")) {
           method = msg.method.toUpperCase();
@@ -111,7 +142,7 @@ module.exports = function(RED) {
           if (isNaN(msg.requestTimeout)) {
             node.warn("msg.requestTimeout is given as NaN");
           } else if (msg.requestTimeout < 1) {
-            node.warn(RED._("msg.requestTimeout is given as negative value"));
+            node.warn("msg.requestTimeout is given as negative value");
           } else {
             timeout = msg.requestTimeout;
           }
@@ -129,6 +160,7 @@ module.exports = function(RED) {
           // READ
           //
           let func = function(err, data) {
+            node.numPendingResponses--;
 
             if (err) {
               if (done) {
@@ -136,7 +168,7 @@ module.exports = function(RED) {
               } else {
                 node.error(err, msg); // Node-RED 0.x compatible
               }
-              node.status({ fill: "red", shape: "ring", text: "request failed" });
+              node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
               node.configNode.logAdditionalDebugErrorInfo(node, err);
               return;
             }
@@ -172,9 +204,10 @@ module.exports = function(RED) {
               done();
             }
 
-            node.status({ fill: "green", shape: "dot", text: "request successful" });
+            node.setStatus({ fill: "green", shape: "dot", text: "request successful" });
           }
 
+          node.numPendingResponses++;
           if (method === 'READ_WITH_ARG') {
             node.configNode.datalayerReadWithArg(node, path, msg.payload, func);
           } else {
@@ -207,8 +240,10 @@ module.exports = function(RED) {
               break;
           }
 
+          node.numPendingResponses++;
           node.configNode.datalayerWrite(node, path, payload,
             function(err) {
+              node.numPendingResponses--;
 
               if (err) {
                 if (done) {
@@ -216,7 +251,7 @@ module.exports = function(RED) {
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({ fill: "red", shape: "ring", text: "request failed" });
+                node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -228,7 +263,7 @@ module.exports = function(RED) {
               if (done) {
                 done();
               }
-              node.status({ fill: "green", shape: "dot", text: "request successful" });
+              node.setStatus({ fill: "green", shape: "dot", text: "request successful" });
             });
 
         } else if (method === 'CREATE') {
@@ -236,8 +271,10 @@ module.exports = function(RED) {
           //
           // CREATE
           //
+          node.numPendingResponses++;
           node.configNode.datalayerCreate(node, path, msg.payload,
             function(err, data) {
+              node.numPendingResponses--;
 
               if (err) {
                 if (done) {
@@ -245,7 +282,7 @@ module.exports = function(RED) {
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({ fill: "red", shape: "ring", text: "request failed" });
+                node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -274,7 +311,7 @@ module.exports = function(RED) {
               if (done) {
                 done();
               }
-              node.status({ fill: "green", shape: "dot", text: "request successful" });
+              node.setStatus({ fill: "green", shape: "dot", text: "request successful" });
             });
 
         } else if (method === 'DELETE') {
@@ -282,8 +319,10 @@ module.exports = function(RED) {
           //
           // DELETE
           //
+          node.numPendingResponses++;
           node.configNode.datalayerDelete(node, path,
             function(err) {
+              node.numPendingResponses--;
 
               if (err) {
                 if (done) {
@@ -291,7 +330,7 @@ module.exports = function(RED) {
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({ fill: "red", shape: "ring", text: "request failed" });
+                node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -304,15 +343,17 @@ module.exports = function(RED) {
                 done();
               }
 
-              node.status({ fill: "green", shape: "dot", text: "request successful" });
+              node.setStatus({ fill: "green", shape: "dot", text: "request successful" });
             });
 
         } else if (method === 'METADATA') {
           //
           // METADATA
           //
+          node.numPendingResponses++;
           node.configNode.datalayerReadMetadata(node, path,
             function(err, data) {
+              node.numPendingResponses--;
 
               if (err) {
                 if (done) {
@@ -320,7 +361,7 @@ module.exports = function(RED) {
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({ fill: "red", shape: "ring", text: "request failed" });
+                node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -334,15 +375,17 @@ module.exports = function(RED) {
                 done();
               }
 
-              node.status({ fill: "green", shape: "dot", text: "request successful" });
+              node.setStatus({ fill: "green", shape: "dot", text: "request successful" });
             });
 
         } else if (method === 'BROWSE') {
           //
           // BROWSE
           //
+          node.numPendingResponses++;
           node.configNode.datalayerBrowse(node, path,
             function(err, data) {
+              node.numPendingResponses--;
 
               if (err) {
                 if (done) {
@@ -350,7 +393,7 @@ module.exports = function(RED) {
                 } else {
                   node.error(err, msg); // Node-RED 0.x compatible
                 }
-                node.status({ fill: "red", shape: "ring", text: "request failed" });
+                node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
                 node.configNode.logAdditionalDebugErrorInfo(node, err);
                 return;
               }
@@ -376,7 +419,7 @@ module.exports = function(RED) {
                 done();
               }
 
-              node.status({ fill: "green", shape: "dot", text: "request successful" });
+              node.setStatus({ fill: "green", shape: "dot", text: "request successful" });
             });
 
         } else {
@@ -385,7 +428,7 @@ module.exports = function(RED) {
           } else {
             node.error('Method property of node unknown or not implemented:' + node.method, msg);
           }
-          node.status({ fill: "red", shape: "ring", text: "request failed" });
+          node.setStatus({ fill: "red", shape: "ring", text: "request failed" });
         }
 
       });
@@ -402,7 +445,7 @@ module.exports = function(RED) {
       // Register this node at the config node to receive updates on state change. The config node also
       // provides all functionality, that is used in the handlers above.
       if (this.configNode.connected) {
-        node.status({ fill: "green", shape: "dot", text: "authenticated" });
+        node.setStatus({ fill: "green", shape: "dot", text: "authenticated" });
       }
       node.configNode.register(node);
 

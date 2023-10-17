@@ -2,7 +2,7 @@
 
   MIT License
 
-  Copyright (c) 2020-2021 Bosch Rexroth AG
+  Copyright (c) 2020-2023 Bosch Rexroth AG
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +34,9 @@
 
   var treeList_Subscribe;
 
-  function onEditPrepare_Subscribe(node) {
+  function onEditPrepare_TreeView(node) {
 
-    // Create a new TreeList widget.
+    // Create a new TreeList widget, that the user can use to browse the data layer and select a node.
     // See: https://nodered.org/docs/api/ui/treeList/
     //      https://discourse.nodered.org/t/select-form-with-tree-structure-in-custom-node/8348
     treeList_Subscribe = $("<div>")
@@ -127,7 +127,7 @@
       }
       var editorRow = $("#dialog-form>div.node-input-browse-row");
       height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom")));
-      $(".node-input-browse-row").css("height",height+"px");
+      $(".node-input-browse-row").css("height", height + "px");
   }
 
   function generateName_Subscribe(node) {
@@ -153,8 +153,9 @@
       icon: 'icons/core.png',
       defaults: {
         subscription: {type: 'ctrlx-config-subscription', required: true},
-        path: {value: '', required: true},
-        name: {value: '', required: false}
+        path: {value: '', required: false},
+        name: {value: '', required: false},
+        inputs: {value: 0}
       },
       inputs: 0,
       outputs: 1,
@@ -163,9 +164,40 @@
         return generateName_Subscribe(this);
       },
       oneditprepare: function() {
-        onEditPrepare_Subscribe(this);
+        onEditPrepare_TreeView(this);
+
+        const isDynamic = function() {
+          return $('#node-input-topicType').val() === "dynamic";
+        }
+        const updateVisibility = function() {
+          var dynamic = isDynamic();
+          if (dynamic) {
+            $('div.form-row.form-row-mqtt-static').hide();
+            $('div.form-row.node-input-browse-row').hide();
+            $('div.section-browse').hide();
+          } else {
+            $('div.form-row.form-row-mqtt-static').show();
+          }
+        }
+
+        $('#node-input-topicType').on("change", function () {
+          $("#node-input-inputs").val(isDynamic() ? 1 : 0);
+          updateVisibility();
+        });
+
+        if (this.inputs === 1) {
+          $('#node-input-topicType').val('dynamic')
+        } else {
+          $('#node-input-topicType').val('static')
+        }
+        $('#node-input-topicType').trigger("change");
       },
-      oneditresize: resizeNodeList_Subscribe
+      oneditresize: resizeNodeList_Subscribe,
+      oneditsave: function() {
+        if ($('#node-input-topicType').val() === "dynamic") {
+          $('#node-input-path').val("");
+        }
+      }
   });
 </script>
 
@@ -181,6 +213,15 @@
   </div>
 
   <div class="form-row">
+    <label for="node-input-topicType"> Type</label>
+    <select id="node-input-topicType" style="width: 70%">
+        <option value="static">static</option>
+        <option value="dynamic">dynamic</option>
+    </select>
+    <input type="hidden" id="node-input-inputs">
+  </div>
+
+  <div class="form-row form-row-mqtt-static">
     <label for="node-input-path"><i class="fa fa-globe"></i> Path</label>
     <input id="node-input-path" type="text" placeholder="path/to/data/layer/node">
     <button type="button" id="node-input-browse-button" class="btn"><i class="fa fa-search"></i></button>
@@ -206,25 +247,40 @@
   <dl class="message-properties">
     <dt>payload <span class="property-type">any</span></dt>
     <dd>The node returns the monitored data.</dd>
+
     <dt>topic <span class="property-type">string</span></dt>
     <dd>The <code>topic</code> property is set to <code>path</code> of the data.</dd>
+
     <dt>type <span class="property-type">string</span></dt>
     <dd>Data type of the returned payload.</dd>
+
     <dt>timestamp <span class="property-type">number</span></dt>
     <dd>Timestamp of the latched data in javascript format as number. Can be directly converted to Date object (Contains number of milliseconds from Jan 1, 1970).</dd>
+
     <dt>timestampFiletime <span class="property-type">number</span></dt>
     <dd>Timestamp of the latched data as 100-nanoseconds since Jan 1 1601 (a.k.a FILETIME). This is the internal format as recorded by Data Layer.</dd>
   </dl>
 
   <h3>Details</h3>
   <p>In case of an error, the node will not emit a <code>msg</code> but throw an error, that can be catched by the <code>catch</code> node.</p>
-  <!-- TODO: implement later
-  <p><b>Note</b>: If running behind a proxy, the standard <code>http_proxy=...</code> environment variable should be set and Node-RED restarted, or use Proxy Configuration. If Proxy Configuration was set, the configuration take precedence over environment variable.</p>
-  -->
+
+  <p>When the property <code>type</code> is changed to <code>dynamic</code>, then the path to subscribe to is no longer static and fixed
+    after the deploy, but can be injected during runtime. The node gets an input connector which accepts a <code>msg</code> to define the data layer path to subscribe to.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="optional">action <span class="property-type">string</span></dt>
+    <dd>Name of the action the node should perform.
+        Must be one of <code>"subscribe"</code> or <code>"unsubscribe"</code>.</dd>
+
+    <dt class="optional">path <span class="property-type">string</span></dt>
+    <dd>For the <code>"subscribe"</code> action this is the a single string or an array of strings with the ctrlX Data Layer node paths to subscribe to.</dd>
+  </dl>
 
   <h3>References</h3>
   <ul>
     <li><a href="https://github.com/boschrexroth/node-red-contrib-ctrlx-automation">GitHub</a> - the nodes github repository</li>
+    <li><a href="https://developer.community.boschrexroth.com">ctrlX Community</a> - forum and support</li>
     <li><a href="https://docs.automation.boschrexroth.com">ctrlX AUTOMATION Product Help</a> - the online documentation of ctrlX AUTOMATION</li>
     <li><a href="https://www.boschrexroth.com">Bosch Rexroth AG</a> - WE MOVE. YOU WIN.</li>
   </ul>
