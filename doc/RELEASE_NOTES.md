@@ -9,7 +9,7 @@ The subscription dialog features a lot of new options to set the behaviour of th
 <img src="./images/node-settings-config-subscription.png" alt="Configuration node settings" width="400px"/>
 
 For example, the `Sampling Interval` allows to sample the value on the server side with a higher frequency.
-A detailed explenation of all settings is available in the [Reference](REFERENCE.md).
+A detailed explanation of all settings is available in the [Reference](REFERENCE.md).
 
 ## Limits for number of active requests
 
@@ -28,7 +28,7 @@ The subscription node now has a "dynamic" mode which allows the path to be dynam
 fixed at the time of deployment of the flow.
 After setting the node to `dynamic`, the node gets an input connector which accepts the following `msg` to subscribe to a data layer path:
 
-```JSON
+```javascript
 msg = {
     "action": "subscribe",
     "path": "<path to subscribe>"
@@ -37,7 +37,7 @@ msg = {
 
 Or to unsubscribe from the current data layer path:
 
-```JSON
+```javascript
 msg = {
     "action": "unsubscribe"
 }
@@ -48,10 +48,10 @@ msg = {
 Using the dynamic subscription features it is now also possible to subscribe to more than a single ctrlX Data Layer path with a single Node-RED subscription node.
 This can be done by passing an array of addresses for the `path`.
 
-```JSON
+```javascript
 msg = {
     "action": "subscribe",
-    "path": ["<path to subscribe>", "<path to subscribe>", "<path to subscribe>", ...]
+    "path": ["<path to subscribe>", "<path to subscribe>", "<path to subscribe>", "..."]
 }
 ```
 
