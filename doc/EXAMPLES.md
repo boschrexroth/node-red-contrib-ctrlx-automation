@@ -18,8 +18,11 @@ This page contains various examples for different use cases. Looking through the
 
 [Diagnosis and Logbook examples](#diagnosis-and-logbook-examples)
 
+- [Read all pending diagnostics](#read-all-pending-diagnostics)
 - [Confirm all pending errors in the system diagnostic](#confirm-all-pending-errors-in-the-system-diagnostic)
 - [Confirm single pending error in the system diagnostic](#confirm-single-pending-error-in-the-system-diagnostic)
+- [Get main diagnostic text](#get-main-diagnostic-text)
+- [Get detailed diagnostic text](#get-detailed-diagnostic-text)
 
 [PLC examples](#plc-examples)
 
@@ -68,7 +71,7 @@ This page contains various examples for different use cases. Looking through the
 
 The example flows can either be imported via the clipboard or by importing directly in the Node-RED editor via the **Import Nodes** Dialog.
 
-![examples_import_nodes.png](./images/examples_import_nodes.png)
+![examples-import-nodes.png](./images/examples-import-nodes.png)
 
 Keep in mind, that you need to insert valid credentials (username and password) for your device and adjust your hostname inside of the communication nodes.
 When importing several examples after each other a message `Some of the nodes you are importing already exist in your workspace.` appears. Please choose `View nodes...` and click on `Import selected`. Otherwise you could overwrite existing settings nodes.
@@ -78,7 +81,7 @@ When importing several examples after each other a message `Some of the nodes yo
 
 ### Set request properties via msg
 
-![examples_set_request_properties_via_msg.png](./images/examples_set_request_properties_via_msg.png)
+![examples-set-request-properties-via-msg.png](./images/examples-set-request-properties-via-msg.png)
 
 ```JSON
 [{"id":"7d8c9ee.2e8246","type":"comment","z":"b7f42922c8391768","name":"Example: Use the msg object to set the properties programmatically via function node","info":"","x":570,"y":100,"wires":[]},{"id":"c558ee94.94a69","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":1000,"y":160,"wires":[]},{"id":"b21cb94.37f9648","type":"ctrlx-datalayer-request","z":"b7f42922c8391768","device":"7b877229.678964","method":"msg","path":"","name":"","x":760,"y":160,"wires":[["c558ee94.94a69"]]},{"id":"6a8a874a.7d0058","type":"inject","z":"b7f42922c8391768","name":"","repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":370,"y":160,"wires":[["19b7a2d1.6a030d"]]},{"id":"19b7a2d1.6a030d","type":"function","z":"b7f42922c8391768","name":"set properties","func":"msg.method = 'READ';\nmsg.path = 'framework/metrics/system/cpu-utilisation-percent';\n\nreturn msg;","outputs":1,"noerr":0,"x":550,"y":160,"wires":[["b21cb94.37f9648"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
@@ -88,7 +91,7 @@ When importing several examples after each other a message `Some of the nodes yo
 
 The following example shows how to get a web token from ctrlX COREs authentication server. The username and password has to be adapted in the `make headers` function.
 
-![examples_get_token.png](./images/examples_get_token.png)
+![examples-get-token.png](./images/examples-get-token.png)
 
 ```JSON
 [{"id":"af22af4db424ebc6","type":"function","z":"b7f42922c8391768","name":"make headers","func":"var newMsg = {};\nnewMsg.headers = {};\nnewMsg.headers[\"Content-Type\"] = \"application/json\"\nnewMsg.payload =\n    { name: \"boschrexroth\", password: \"boschrexroth\" }\nnewMsg.url = \"https://localhost/identity-manager/api/v2/auth/token\";\nreturn newMsg;\n","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":330,"y":140,"wires":[["0a76057a199ca617"]]},{"id":"0a76057a199ca617","type":"http request","z":"b7f42922c8391768","name":"Get token","method":"POST","ret":"obj","paytoqs":"ignore","url":"","tls":"","persist":false,"proxy":"","insecureHTTPParser":false,"authType":"","senderr":false,"headers":[],"x":500,"y":140,"wires":[["ee4def3e07376b8d"]]},{"id":"ee4def3e07376b8d","type":"debug","z":"b7f42922c8391768","name":"debug 1","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":660,"y":140,"wires":[]},{"id":"c485adb93723e929","type":"inject","z":"b7f42922c8391768","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":160,"y":140,"wires":[["af22af4db424ebc6"]]},{"id":"056e75fc0e45614d","type":"comment","z":"b7f42922c8391768","name":"Get web token from authentication server","info":"","x":240,"y":80,"wires":[]}]
@@ -96,7 +99,7 @@ The following example shows how to get a web token from ctrlX COREs authenticati
 
 ### Read the current CPU utilisation on request
 
-![examples_read_CPU_utilisation.png](./images/examples_read_CPU_utilisation.png)
+![examples-read-CPU-utilisation.png](./images/examples-read-CPU-utilisation.png)
 
 ```JSON
 [{"id":"765680d3.1c7788","type":"ctrlx-datalayer-request","z":"b7f42922c8391768","device":"7b877229.678964","method":"READ","path":"framework/metrics/system/cpu-utilisation-percent","payloadFormat":"value","name":"","x":690,"y":280,"wires":[["9195cd7c.d74f3"]]},{"id":"a1661333.e8b348","type":"inject","z":"b7f42922c8391768","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":380,"y":280,"wires":[["765680d3.1c7788"]]},{"id":"9195cd7c.d74f3","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":1010,"y":280,"wires":[]},{"id":"84d1b245.874028","type":"comment","z":"b7f42922c8391768","name":"Example: Read the current CPU utilisation from the ctrX Data Layer and print to debug log","info":"","x":590,"y":220,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
@@ -104,7 +107,7 @@ The following example shows how to get a web token from ctrlX COREs authenticati
 
 ### Subscribe to the current CPU utilisation
 
-![examples_subscribe_CPU_utilisation.png](./images/examples_subscribe_CPU_utilisation.png)
+![examples-subscribe-CPU-utilisation.png](./images/examples-subscribe-CPU-utilisation.png)
 
 ```JSON
 [{"id":"872cd634.800108","type":"comment","z":"b7f42922c8391768","name":"Example: Subscribe to current CPU utilisation from the ctrX Data Layer and print to debug log","info":"","x":580,"y":340,"wires":[]},{"id":"d921bdd6.1d0b9","type":"ctrlx-datalayer-subscribe","z":"b7f42922c8391768","subscription":"632bcc2.eddf134","path":"framework/metrics/system/cpu-utilisation-percent","name":"","x":460,"y":400,"wires":[["ffa838b8.e6db98"]]},{"id":"ffa838b8.e6db98","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":770,"y":400,"wires":[]},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
@@ -125,7 +128,7 @@ The following example shows how to subscribe to the current CPU utilisation and 
 
 Errors in the nodes e.g. node is missing or node path is invalid can be catched with the Node-RED internal `catch` node.
 
-![examples_catch_error.png](./images/examples_catch_error.png)
+![examples-catch-error.png](./images/examples-catch-error.png)
 
 ```JSON
 [{"id":"3984d15c.b6a4be","type":"comment","z":"b7f42922c8391768","name":"Example: Use a catch node to handle errors.","info":"","x":430,"y":540,"wires":[]},{"id":"adcdeb72.352b88","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":890,"y":600,"wires":[]},{"id":"bf808c7e.2b56a","type":"ctrlx-datalayer-request","z":"b7f42922c8391768","device":"7b877229.678964","method":"READ","path":"invalid/path/value/to/force/error","name":"","x":610,"y":600,"wires":[["adcdeb72.352b88"]]},{"id":"eda269ff.f06d88","type":"inject","z":"b7f42922c8391768","name":"","repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":360,"y":600,"wires":[["bf808c7e.2b56a"]]},{"id":"b55ac3d1.719b1","type":"catch","z":"b7f42922c8391768","name":"","scope":["bf808c7e.2b56a"],"uncaught":false,"x":420,"y":680,"wires":[["e91439fb.0fa298"]]},{"id":"e91439fb.0fa298","type":"debug","z":"b7f42922c8391768","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","targetType":"full","x":650,"y":680,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false}]
@@ -143,16 +146,29 @@ The path of a subscribe node can be set dynamically at runtime.
 
 ## Diagnosis and Logbook examples
 
+### Read all pending diagnostics
+
+This Example shows how to read all pending diagnostics via a subscription and show them on the dashboard.
+
+![examples-diagnosis-read-pending-diagnostics.png](./images/examples-diagnosis-read-pending-diagnostics.png)
+![examples-diagnosis-read-pending-diagnostics-dashboard.png](./images/examples-diagnosis-read-pending-diagnostics-dashboard.png)
+
+
+```JSON
+[{"id":"af0c0102e0191bc8","type":"ctrlx-datalayer-subscribe","z":"bf7a3579c5656113","subscription":"632bcc2.eddf134","path":"diagnosis/get/actual/list","name":"Read pending diagnostics","x":310,"y":480,"wires":[["367e1ba061c76fec"]]},{"id":"367e1ba061c76fec","type":"function","z":"bf7a3579c5656113","name":"make value","func":"var newMsg = {}\nvar myArray = msg.payload.listDiagnosisIdentificationWithTimestamp\nnewMsg.payload = \"Pending diagnostics:<br>\"\nfor (let index = 0; index < (myArray.length -1); ++index) {\n    newMsg.payload += index + \": \" \n    + myArray[index].diagnosisIdentification.mainDiagnosisNumber \n    + \", \" + myArray[index].diagnosisIdentification.detailedDiagnosisNumber \n    + \", \" + myArray[index].diagnosisIdentification.entity + \";<br>\"\n}\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":510,"y":480,"wires":[["8eac940b52bde5ae"]]},{"id":"8eac940b52bde5ae","type":"ui_template","z":"bf7a3579c5656113","group":"cd7a7d59d153b666","name":"Show pending diagnostics","order":4,"width":"6","height":"2","format":"<div ng-bind-html=\"msg.payload\"></div>","storeOutMessages":true,"fwdInMessages":true,"resendOnRefresh":true,"templateScope":"local","className":"","x":720,"y":480,"wires":[[]]},{"id":"308321925688e5da","type":"comment","z":"bf7a3579c5656113","name":"Example: Get main diagnosis text","info":"","x":330,"y":440,"wires":[]},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
 ### Confirm all pending errors in the system diagnostic
 
-To confirm all pending errors in the system diagnostic you need to send an empty `WRITE` request to `diagnosis/confirm/error`. This can be done by setting the `payload` to null.
+This Example shows how to confirm all pending errors in the system diagnostic. An empty `WRITE` request needs to send  to `diagnosis/confirm/error`. This can be done by setting the `payload` to `null`.
 
-![examples_diagnosis_confirm_errors.png](./images/examples_diagnosis_confirm_errors.png)
-![examples_diagnosis_confirm_errors_dashboard.png](./images/examples_diagnosis_confirm_errors_dashboard.png)
+![examples-diagnosis-confirm-errors.png](./images/examples-diagnosis-confirm-errors.png)
+![examples-diagnosis-confirm-errors-dashboard.png](./images/examples-diagnosis-confirm-errors-dashboard.png)
 
 ```JSON
 [{"id":"b5effce.db9fd","type":"comment","z":"ec52577b3db3c043","name":"Example: Confirm all pending errors in the system diagnostic","info":"","x":440,"y":700,"wires":[]},{"id":"64d6212b.ba6cd","type":"ctrlx-datalayer-request","z":"ec52577b3db3c043","device":"7b877229.678964","method":"WRITE","path":"diagnosis/confirm/error","payloadFormat":"value_type","name":"","x":870,"y":740,"wires":[[]]},{"id":"226bf82.26e5e88","type":"inject","z":"ec52577b3db3c043","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":340,"y":740,"wires":[["efa89bd3d50d6f25"]]},{"id":"8d40fd0bb68b143c","type":"ui_button","z":"ec52577b3db3c043","name":"","group":"cd7a7d59d153b666","order":1,"width":"3","height":"1","passthru":false,"label":"Confirm errors","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":320,"y":780,"wires":[["efa89bd3d50d6f25"]]},{"id":"efa89bd3d50d6f25","type":"function","z":"ec52577b3db3c043","name":"make confirm errors","func":"msg.payload = null;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":580,"y":740,"wires":[["64d6212b.ba6cd"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
+
 ### Confirm single pending error in the system diagnostic
 
 This Example shows how to confirm a single pending error in the system diagnostic. Following error is expected to present in the pending diagnostics:
@@ -165,11 +181,33 @@ Detailed diagnosis text : "TargetPos max limit exceeded"
 Entity : "motion/axs/AxisX" 
 ```
 
-![examples_diagnosis_confirm_error.png](./images/examples_diagnosis_confirm_error.png)
-![examples_diagnosis_confirm_error_dashboard.png](./images/examples_diagnosis_confirm_error_dashboard.png)
+![examples-diagnosis-confirm-error.png](./images/examples-diagnosis-confirm-error.png)
+![examples-diagnosis-confirm-error-dashboard.png](./images/examples-diagnosis-confirm-error-dashboard.png)
 
 ```JSON
 [{"id":"9c0aca12bc2a9640","type":"function","z":"ec52577b3db3c043","name":"make Confirm error","func":"var newMsg = {};\nnewMsg.payload = { \n  \"type\": \"object\", \n  \"value\": { \n    \"mainDiagnosisNumber\": \"091F2006\", \n    \"detailedDiagnosisNumber\": \"0C560107\", \n    \"entity\": \"motion/axs/AxisX\" \n  } \n}\nreturn newMsg;\n\n","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":570,"y":440,"wires":[["a8efc66b4b7461ef"]]},{"id":"bfe0636f9fe41f01","type":"inject","z":"ec52577b3db3c043","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":340,"y":480,"wires":[["9c0aca12bc2a9640"]]},{"id":"a8efc66b4b7461ef","type":"ctrlx-datalayer-request","z":"ec52577b3db3c043","device":"7b877229.678964","method":"WRITE","path":"diagnosis/confirm/error","payloadFormat":"value_type","name":"Confirm error","x":780,"y":440,"wires":[[]]},{"id":"3edc488be0bb09aa","type":"comment","z":"ec52577b3db3c043","name":"Example: Confirm single pending error \"Axis limit exceeded\"","info":"","x":440,"y":400,"wires":[]},{"id":"9add50cbdef40e90","type":"ui_button","z":"ec52577b3db3c043","name":"","group":"cd7a7d59d153b666","order":1,"width":"3","height":"1","passthru":false,"label":"Confirm error","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":320,"y":440,"wires":[["9c0aca12bc2a9640"]]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Get main diagnostic text
+
+This Example shows how to get the diagnostic text from the main diagnostic number `091F2006`.
+
+![examples-diagnosis-get-main-diag-text.png](./images/examples-diagnosis-get-main-diag-text.png)
+![examples-diagnosis-get-main-diag-text-dashboard](./images/examples-diagnosis-get-main-diag-text-dashboard.png)
+
+```JSON
+[{"id":"24e389ee88bbd972","type":"ctrlx-datalayer-request","z":"bf7a3579c5656113","device":"7b877229.678964","method":"READ","path":"","payloadFormat":"value_type","name":"Read main diag text","x":560,"y":640,"wires":[["9cfc3279057259fe"]]},{"id":"96de7236184e1636","type":"function","z":"bf7a3579c5656113","name":"make value","func":"var newMsg = {}\nvar myMainDiagNumber = \"091F2006\"\nnewMsg.path = \"diagnosis/get/text/main?data={ \\\"type\\\": \\\"object\\\", \\\"value\\\": { \\\"mainDiagnosisNumber\\\": \\\"\" + myMainDiagNumber + \"\\\" } }\"\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":370,"y":640,"wires":[["24e389ee88bbd972"]]},{"id":"e45d515b6c331225","type":"comment","z":"bf7a3579c5656113","name":"Example: Get main diagnosis text","info":"","x":170,"y":600,"wires":[]},{"id":"3331e124823b565a","type":"inject","z":"bf7a3579c5656113","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":160,"y":680,"wires":[["96de7236184e1636"]]},{"id":"efcdc0eecbd37d40","type":"ui_button","z":"bf7a3579c5656113","name":"","group":"cd7a7d59d153b666","order":1,"width":"3","height":"1","passthru":false,"label":"Read main diag text","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":160,"y":640,"wires":[["96de7236184e1636"]]},{"id":"9cfc3279057259fe","type":"ui_text","z":"bf7a3579c5656113","group":"cd7a7d59d153b666","order":2,"width":"6","height":"2","name":"","label":"Main diag text","format":"{{msg.payload.value}}","layout":"col-center","className":"","x":760,"y":640,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Get detailed diagnostic text
+
+This Example shows how to get the detailed diagnostic text from the detailed diagnostic number `0C560107` in combination with the related main diagnostic number `091F2006`.
+
+![examples-diagnosis-get-detail-diag-text.png](./images/examples-diagnosis-get-detail-diag-text.png)
+![examples-diagnosis-get-detail-diag-text-dashboard](./images/examples-diagnosis-get-detail-diag-text-dashboard.png)
+
+```JSON
+[{"id":"24e389ee88bbd972","type":"ctrlx-datalayer-request","z":"bf7a3579c5656113","device":"7b877229.678964","method":"READ","path":"","payloadFormat":"value_type","name":"Read detail diag text","x":560,"y":640,"wires":[["9cfc3279057259fe"]]},{"id":"96de7236184e1636","type":"function","z":"bf7a3579c5656113","name":"make value","func":"var newMsg = {}\nvar myMainDiagNumber = \"091F2006\"\nvar myDetailDiagNumber = \"0C560107\"\nnewMsg.path = \"diagnosis/get/text/detailed?data={ \\\"type\\\": \\\"object\\\", \\\"value\\\": { \\\"detailedDiagnosisNumber\\\": \\\"\" + myDetailDiagNumber + \"\\\", \\\"relatedMainDiagnosisNumber\\\": \\\"\" + myMainDiagNumber + \"\\\" } }\"\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":370,"y":640,"wires":[["24e389ee88bbd972"]]},{"id":"e45d515b6c331225","type":"comment","z":"bf7a3579c5656113","name":"Example: Get detail diagnosis text","info":"","x":180,"y":600,"wires":[]},{"id":"3331e124823b565a","type":"inject","z":"bf7a3579c5656113","name":"Manual Trigger","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":160,"y":680,"wires":[["96de7236184e1636"]]},{"id":"efcdc0eecbd37d40","type":"ui_button","z":"bf7a3579c5656113","name":"","group":"cd7a7d59d153b666","order":1,"width":"3","height":"1","passthru":false,"label":"Read detail diag text","tooltip":"","color":"","bgcolor":"","className":"","icon":"","payload":"","payloadType":"str","topic":"topic","topicType":"msg","x":160,"y":640,"wires":[["96de7236184e1636"]]},{"id":"9cfc3279057259fe","type":"ui_text","z":"bf7a3579c5656113","group":"cd7a7d59d153b666","order":2,"width":"6","height":"2","name":"","label":"Detail diag text","format":"{{msg.payload.value}}","layout":"col-center","className":"","x":760,"y":640,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"cd7a7d59d153b666","type":"ui_group","name":"Diagnosis","tab":"9cba2148.8c9148","order":9,"disp":true,"width":"6","collapse":false,"className":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ## PLC examples
