@@ -115,11 +115,12 @@ Any use of the source code and related documents of this repository in applicati
 * 2023-07-17: 1.9.1  - fix: change sampling interval to microseconds                     
 * 2023-08-07: 1.9.2  - fix: automatic reconnect of subscription on reboot of control 
 * 2023-09-04: 1.9.3  - fix: subscription with ipv6 address that contains a zone index
+* 2024-03-13: 1.9.4  - fix: timeout of connection with Node.js v19. "Read timeout, received no data in undefinedms, assuming connection is dead".
 ```
   
 ## About
 
-Copyright © 2020-2023 Bosch Rexroth AG. All rights reserved.
+Copyright © 2020-2024 Bosch Rexroth AG. All rights reserved.
 
 <https://www.boschrexroth.com>
 
@@ -132,7 +133,7 @@ GERMANY
 
 MIT License
 
-Copyright (c) 2020-2023 Bosch Rexroth AG
+Copyright (c) 2020-2024 Bosch Rexroth AG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
