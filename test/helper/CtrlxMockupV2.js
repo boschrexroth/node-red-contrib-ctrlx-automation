@@ -523,6 +523,17 @@ class CtrlxMockupV2 {
                 data.value = options;
                 data.type = 'object';
                 break;
+              case 'test/invalid/json':
+                // This is a special node which sends an invalid and malformed json to for example
+                // simulate a broken connection.
+                sseStream.write({
+                  id: id++,
+                  event: 'update',
+                  data: `{"type": "object", "value": { "invalid formed json`
+                });
+                data.value = { "valid": "data" };
+                data.type = 'object';
+                break;
 
               default:
                 data.value = 'error: unknown value';
