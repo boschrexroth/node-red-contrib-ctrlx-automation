@@ -462,6 +462,56 @@ describe('ctrlx-datalayer-subscribe', function () {
       });
     });
 
+
+    it('should subscribe a node with strange address', function (done) {
+
+      let path = 'with/strange/symbols/abc=1;nichts-ist.wahr:("alles[ist]erlaubt")42/x.y.z';
+
+      let flow = [
+        { "id": "f1", "type": "tab", "label": "Test flow"},
+        { "id": "h1", "z":"f1", "type": "helper" },
+        { "id": "n1", "z":"f1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": path, "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "z":"f1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "1000" },
+        { "id": "c1", "z":"f1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true },
+      ];
+      let credentials = {
+        c1: {
+          username: getUsername(),
+          password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxConfigSubscriptionNode, ctrlxDatalayerSubscribeNode], flow, credentials, () => {
+
+        let s1 = helper.getNode("s1");
+        let h1 = helper.getNode("h1");
+        let n1 = helper.getNode("n1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            expect(msg).to.have.property('topic').to.be.a('string').eql(path);
+            expect(msg).to.have.property('timestamp').to.be.a('number');
+            expect(msg).to.have.property('type').to.be.a('string').eql('double');
+            expect(msg).to.have.property('payload').to.be.a('number').eql(23);
+
+            s1.subscription.close();
+            done();
+          }
+          catch (err) {
+            s1.subscription.close();
+            done(err);
+          }
+        });
+
+        // We expect to reveive an error message, because the mockup will send an invalid JSON message.
+        n1.on('call:error', call => {
+          //numErrors++;
+        });
+
+      });
+    });
+
   });
 
   describe('ctrlx-datalayer-subscribe: Error Handling', function () {
