@@ -494,7 +494,6 @@ describe('ctrlx-datalayer-subscribe', function () {
             expect(msg).to.have.property('timestamp').to.be.a('number');
             expect(msg).to.have.property('type').to.be.a('string').eql('double');
             expect(msg).to.have.property('payload').to.be.a('number').eql(23);
-
             s1.subscription.close();
             done();
           }
@@ -504,9 +503,9 @@ describe('ctrlx-datalayer-subscribe', function () {
           }
         });
 
-        // We expect to reveive an error message, because the mockup will send an invalid JSON message.
+        // The node should not return any errors, but just accept the path
         n1.on('call:error', call => {
-          //numErrors++;
+          done(call.firstArg);
         });
 
       });
@@ -563,7 +562,7 @@ describe('ctrlx-datalayer-subscribe', function () {
         n1.on('call:error', call => {
           numErrors++;
           try {
-            expect(call.firstArg).eql('Error parsing update event: Unexpected end of JSON input');
+            expect(call.firstArg).oneOf(['Error parsing update event: Unexpected end of JSON input', 'Error parsing update event: Unterminated string in JSON at position 50']);
           } catch (err) {
             done(err);
           }
