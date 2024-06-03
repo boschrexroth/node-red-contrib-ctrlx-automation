@@ -27,7 +27,6 @@
 
 const CtrlxCore = require('../../lib/CtrlxCore')
 const { performance, PerformanceObserver } = require('perf_hooks')
-const async = require('async');
 const { assert } = require('console');
 
 

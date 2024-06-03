@@ -165,6 +165,49 @@ describe('ctrlx-datalayer-request', function () {
     });
 
 
+    it('should read a node with strange address', function (done) {
+
+      let path = 'with/strange/symbols/abc=1;nichts-ist.wahr:("alles[ist]erlaubt")42/x.y.z';
+
+      let flow = [
+        { "id": "h1", "type": "helper" },
+        { "id": "n1", "type": "ctrlx-datalayer-request", "device": "c1", "method": "READ", "path": path, "name": "request", "wires": [["h1"]] },
+        { "id": "c1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true }
+      ];
+      let credentials = {
+        c1: {
+          username: getUsername(),
+          password: getPassword()
+        }
+      };
+
+      helper.load([ctrlxConfigNode, ctrlxDatalayerRequestNode], flow, credentials, () => {
+
+        let n1 = helper.getNode("n1");
+        let h1 = helper.getNode("h1");
+
+        // @ts-ignore
+        h1.on("input", (msg) => {
+          try {
+            expect(msg).to.have.property('payload').with.property('value').that.is.a('string').eql('/automation/api/v2/nodes/' + encodeURI(path));
+            expect(msg).to.have.property('payload').with.property('type').that.is.a('string').eql('string');
+
+            done();
+          }
+          catch (err) {
+            done(err);
+          }
+        });
+        n1.on('call:error', (call) => {
+          done(call.firstArg);
+        });
+
+        // @ts-ignore
+        n1.receive({ payload: "" });
+      });
+    });
+
+
     it('should read a value and set the empty msg.topic', function (done) {
 
       let flow = [

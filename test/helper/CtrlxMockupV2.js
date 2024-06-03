@@ -274,6 +274,14 @@ class CtrlxMockupV2 {
       }, 10);
     });
 
+    this.app.get('/automation/api/v2/nodes/with/strange/symbols/*', authenticateJWT, (req, res) => {
+      res.statusCode = 200;
+      res.json({
+        value: req.path,
+        type: 'string'
+      });
+    });
+
 
     //
     // Builtin Data Mockups - Create/Delete
@@ -522,6 +530,21 @@ class CtrlxMockupV2 {
               case 'test/options':
                 data.value = options;
                 data.type = 'object';
+                break;
+              case 'test/invalid/json':
+                // This is a special node which sends an invalid and malformed json to for example
+                // simulate a broken connection.
+                sseStream.write({
+                  id: id++,
+                  event: 'update',
+                  data: `{"type": "object", "value": { "invalid formed json`
+                });
+                data.value = { "valid": "data" };
+                data.type = 'object';
+                break;
+              case 'with/strange/symbols/abc=1;nichts-ist.wahr:("alles[ist]erlaubt")42/x.y.z':
+                data.value = 23;
+                data.type = 'double';
                 break;
 
               default:
