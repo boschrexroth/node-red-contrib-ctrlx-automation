@@ -50,10 +50,10 @@
   },
   "dependencies": {
     "atob": "^2.1.2",
-    "debug": "^4.3.4",
+    "debug": "^4.3.7",
     "launchdarkly-eventsource": "^1.4.4",
     "mustache": "^4.2.0",
-    "uuid": "^8.3.2"
+    "uuid": "^11.0.3"
   },
   "scripts": {
     "test": "mocha",
