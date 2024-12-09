@@ -119,6 +119,8 @@ Any use of the source code and related documents of this repository in applicati
 * 2024-03-19: 1.9.5  - fix: update dependencies in package-lock
 * 2024-05-24: 1.9.6  - fix: catch exception when server sends invalid/incomplete json in subscription (Bug849302).
                      - fix: add more tests to handle node address with invalid symbols
+* 2024-12-06: 1.9.7  - fix: update dependencies in package-lock                     
+                     - fix: further improve resilience on invalid data from server
 ```
   
 ## About
