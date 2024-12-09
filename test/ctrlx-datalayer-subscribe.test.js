@@ -562,7 +562,11 @@ describe('ctrlx-datalayer-subscribe', function () {
         n1.on('call:error', call => {
           numErrors++;
           try {
-            expect(call.firstArg).oneOf(['Error parsing update event: Unexpected end of JSON input', 'Error parsing update event: Unterminated string in JSON at position 50']);
+            expect(call.firstArg).oneOf([
+              'Error parsing update event: Unexpected end of JSON input',
+              'Error parsing update event: Unterminated string in JSON at position 50',
+              'Error parsing update event: Unterminated string in JSON at position 50 (line 1 column 51)'
+            ]);
           } catch (err) {
             done(err);
           }
