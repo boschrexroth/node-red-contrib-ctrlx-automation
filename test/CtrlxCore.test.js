@@ -110,6 +110,13 @@ describe('CtrlxCore', function() {
       done();
     });
 
+    it('should parse raw data (types/datalayer/raw', function(done) {
+
+      let raw = 'PKWrNViZ�g�sampleSchema.fbs]�;�0D�=Ş@{��ֶ�ʊBbB��Q����S����X�5�f��@ƥ��e3�z~LvB]ZV3{�H7��0e-�h����o����C�PK?WrNViZ�g�$ sampleSchema.fbs ,��v@�PKb�';
+      expect(CtrlxDatalayer._parseData(raw).value).to.equal(raw)
+      done();
+    });
+
     it('should parse BigInt', function(done) {
 
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value": 9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
