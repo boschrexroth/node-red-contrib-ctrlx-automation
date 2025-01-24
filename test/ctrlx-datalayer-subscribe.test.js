@@ -272,7 +272,8 @@ describe('ctrlx-datalayer-subscribe', function () {
       let flow = [
         { "id": "h1", "type": "helper" },
         { "id": "n1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "test/options", "name": "subscribe", "wires": [["h1"]] },
-        { "id": "s1", "type": "ctrlx-config-subscription", "device": "c1",
+        {
+          "id": "s1", "type": "ctrlx-config-subscription", "device": "c1",
           "name": "sub1",
           "publishIntervalMs": "100",
           "publishIntervalUnits": "milliseconds",
@@ -468,11 +469,11 @@ describe('ctrlx-datalayer-subscribe', function () {
       let path = 'with/strange/symbols/abc=1;nichts-ist.wahr:("alles[ist]erlaubt")42/x.y.z';
 
       let flow = [
-        { "id": "f1", "type": "tab", "label": "Test flow"},
-        { "id": "h1", "z":"f1", "type": "helper" },
-        { "id": "n1", "z":"f1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": path, "name": "subscribe", "wires": [["h1"]] },
-        { "id": "s1", "z":"f1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "1000" },
-        { "id": "c1", "z":"f1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true },
+        { "id": "f1", "type": "tab", "label": "Test flow" },
+        { "id": "h1", "z": "f1", "type": "helper" },
+        { "id": "n1", "z": "f1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": path, "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "z": "f1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "1000" },
+        { "id": "c1", "z": "f1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true },
       ];
       let credentials = {
         c1: {
@@ -514,14 +515,14 @@ describe('ctrlx-datalayer-subscribe', function () {
   });
 
   describe('ctrlx-datalayer-subscribe: Error Handling', function () {
-    xit('should handle invalid send json messages', function (done) {
+    it('should handle invalid send json messages', function (done) {
 
       let flow = [
-        { "id": "f1", "type": "tab", "label": "Test flow"},
-        { "id": "h1", "z":"f1", "type": "helper" },
-        { "id": "n1", "z":"f1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "test/invalid/json", "name": "subscribe", "wires": [["h1"]] },
-        { "id": "s1", "z":"f1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "1000" },
-        { "id": "c1", "z":"f1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true },
+        { "id": "f1", "type": "tab", "label": "Test flow" },
+        { "id": "h1", "z": "f1", "type": "helper" },
+        { "id": "n1", "z": "f1", "type": "ctrlx-datalayer-subscribe", "subscription": "s1", "path": "test/invalid/json", "name": "subscribe", "wires": [["h1"]] },
+        { "id": "s1", "z": "f1", "type": "ctrlx-config-subscription", "device": "c1", "name": "sub1", "publishIntervalMs": "1000" },
+        { "id": "c1", "z": "f1", "type": "ctrlx-config", "name": "ctrlx", "hostname": getHostname(), "debug": true },
       ];
       let credentials = {
         c1: {
