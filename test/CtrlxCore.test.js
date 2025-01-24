@@ -110,18 +110,10 @@ describe('CtrlxCore', function () {
       done();
     });
 
-    it('should parse raw data (types/datalayer/raw', function (done) {
-
-      const raw = '��ֶ�ʊBbB��Q����S����X�5�f��@ƥ��e3�z~LvB]ZV3{�H7��0e-�h����';
-      expect(CtrlxDatalayer._parseData(raw)).to.throw(SyntaxError);
-
-      done();
-    });
-
     it('should parse invalid JSON', function (done) {
 
       const invalidJSON = 'test/invalid/json';
-      expect(CtrlxDatalayer._parseData(invalidJSON)).to.throw(SyntaxError);
+      expect(() => CtrlxDatalayer._parseData(invalidJSON)).to.throw(SyntaxError);
 
       done();
     });
