@@ -112,8 +112,23 @@ describe('CtrlxCore', function() {
 
     it('should parse raw data (types/datalayer/raw', function(done) {
 
-      let raw = 'PKWrNViZ�g�sampleSchema.fbs]�;�0D�=Ş@{��ֶ�ʊBbB��Q����S����X�5�f��@ƥ��e3�z~LvB]ZV3{�H7��0e-�h����o����C�PK?WrNViZ�g�$ sampleSchema.fbs ,��v@�PKb�';
-      expect(CtrlxDatalayer._parseData(raw).value).to.equal(raw)
+      const raw = '��ֶ�ʊBbB��Q����S����X�5�f��@ƥ��e3�z~LvB]ZV3{�H7��0e-�h����';
+
+      const data = CtrlxDatalayer._parseData(raw);
+      expect(data.value).to.equal(raw)
+      expect(data.type).to.be.a('string').eql('raw');
+
+      done();
+    });
+
+    it('should parse invalid JSON', function(done) {
+
+      const invalidJSON = 'test/invalid/json';
+
+      const data = CtrlxDatalayer._parseData(invalidJSON);
+      expect(data.value).to.equal(invalidJSON)
+      expect(data.type).to.be.a('string').eql('raw');
+
       done();
     });
 
