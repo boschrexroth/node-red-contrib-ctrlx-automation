@@ -35,7 +35,7 @@ const CtrlxDatalayer = require('../lib/CtrlxDatalayerV2')
 /*
  * This test group contains basic test cases
  */
-describe('CtrlxCore', function() {
+describe('CtrlxCore', function () {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || 'localhost';
@@ -49,9 +49,9 @@ describe('CtrlxCore', function() {
 
 
 
-  describe('CtrlxCore: Basics', function() {
+  describe('CtrlxCore: Basics', function () {
 
-    it('should have working properties', function(done) {
+    it('should have working properties', function (done) {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       expect(ctrlx.autoReconnect).to.eql(false);
@@ -65,7 +65,7 @@ describe('CtrlxCore', function() {
       done();
     });
 
-    it('should have a working hostname:port parser', function(done) {
+    it('should have a working hostname:port parser', function (done) {
 
       // IPv4
       expect(CtrlxCore._parseHost('127.0.0.1')).to.deep.equal({ 'hostname': '127.0.0.1', 'port': 443 })
@@ -110,29 +110,23 @@ describe('CtrlxCore', function() {
       done();
     });
 
-    it('should parse raw data (types/datalayer/raw', function(done) {
+    it('should parse raw data (types/datalayer/raw', function (done) {
 
       const raw = '��ֶ�ʊBbB��Q����S����X�5�f��@ƥ��e3�z~LvB]ZV3{�H7��0e-�h����';
-
-      const data = CtrlxDatalayer._parseData(raw);
-      expect(data.value).to.equal(raw)
-      expect(data.type).to.be.a('string').eql('raw');
+      expect(CtrlxDatalayer._parseData(raw)).to.throw(SyntaxError);
 
       done();
     });
 
-    it('should parse invalid JSON', function(done) {
+    it('should parse invalid JSON', function (done) {
 
       const invalidJSON = 'test/invalid/json';
-
-      const data = CtrlxDatalayer._parseData(invalidJSON);
-      expect(data.value).to.equal(invalidJSON)
-      expect(data.type).to.be.a('string').eql('raw');
+      expect(CtrlxDatalayer._parseData(invalidJSON)).to.throw(SyntaxError);
 
       done();
     });
 
-    it('should parse BigInt', function(done) {
+    it('should parse BigInt', function (done) {
 
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value": 9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value":-9223372036854775807}`).value).to.equal(BigInt(-9223372036854775807n))
