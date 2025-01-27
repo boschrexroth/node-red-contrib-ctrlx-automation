@@ -51,7 +51,7 @@ const CtrlxCore = require('../lib/CtrlxCore');
 /*
  * This test group contains test cases for Node-RED nodes.
  */
-describe('ctrlx-datalayer-subscribe', function() {
+describe('ctrlx-datalayer-subscribe', function () {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || 'localhost';
@@ -91,9 +91,9 @@ describe('ctrlx-datalayer-subscribe', function() {
 
 
 
-  describe('ctrlx-datalayer-subscribe: Basic Functionality', function() {
+  describe('ctrlx-datalayer-subscribe: Basic Functionality', function () {
 
-    it('should be loaded as imported by the flow and receive an update', function(done) {
+    it('should be loaded as imported by the flow and receive an update', function (done) {
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -162,7 +162,7 @@ describe('ctrlx-datalayer-subscribe', function() {
 
 
 
-    it('should be receive updates within 100ms publishTime', function(done) {
+    it('should be receive updates within 100ms publishTime', function (done) {
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -210,7 +210,7 @@ describe('ctrlx-datalayer-subscribe', function() {
     });
 
 
-    it('should be reconnecting and receive updates after connection got broken', function(done) {
+    it('should be reconnecting and receive updates after connection got broken', function (done) {
 
       this.timeout(8000);
       testServer.subscriptionCount = 0;
@@ -267,7 +267,7 @@ describe('ctrlx-datalayer-subscribe', function() {
 
 
 
-    it('should use additional subscription options', function(done) {
+    it('should use additional subscription options', function (done) {
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -362,7 +362,7 @@ describe('ctrlx-datalayer-subscribe', function() {
     });
 
 
-    it('should subscribe dynamically', function(done) {
+    it('should subscribe dynamically', function (done) {
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -406,7 +406,7 @@ describe('ctrlx-datalayer-subscribe', function() {
     });
 
 
-    it('should subscribe dynamically to multiple paths', function(done) {
+    it('should subscribe dynamically to multiple paths', function (done) {
 
       let flow = [
         { "id": "h1", "type": "helper" },
@@ -464,7 +464,7 @@ describe('ctrlx-datalayer-subscribe', function() {
     });
 
 
-    it('should subscribe a node with strange address', function(done) {
+    it('should subscribe a node with strange address', function (done) {
 
       let path = 'with/strange/symbols/abc=1;nichts-ist.wahr:("alles[ist]erlaubt")42/x.y.z';
 
@@ -514,8 +514,8 @@ describe('ctrlx-datalayer-subscribe', function() {
 
   });
 
-  describe('ctrlx-datalayer-subscribe: Error Handling', function() {
-    it('should handle invalid send json messages', function(done) {
+  describe('ctrlx-datalayer-subscribe: Error Handling', function () {
+    it('should handle invalid send json messages', function (done) {
 
       let flow = [
         { "id": "f1", "type": "tab", "label": "Test flow" },
