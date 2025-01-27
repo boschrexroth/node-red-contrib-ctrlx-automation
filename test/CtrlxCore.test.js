@@ -35,7 +35,7 @@ const CtrlxDatalayer = require('../lib/CtrlxDatalayerV2')
 /*
  * This test group contains basic test cases
  */
-describe('CtrlxCore', function () {
+describe('CtrlxCore', function() {
 
   function getHostname() {
     return process.env.TEST_HOSTNAME || 'localhost';
@@ -49,9 +49,9 @@ describe('CtrlxCore', function () {
 
 
 
-  describe('CtrlxCore: Basics', function () {
+  describe('CtrlxCore: Basics', function() {
 
-    it('should have working properties', function (done) {
+    it('should have working properties', function(done) {
       let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
 
       expect(ctrlx.autoReconnect).to.eql(false);
@@ -65,7 +65,7 @@ describe('CtrlxCore', function () {
       done();
     });
 
-    it('should have a working hostname:port parser', function (done) {
+    it('should have a working hostname:port parser', function(done) {
 
       // IPv4
       expect(CtrlxCore._parseHost('127.0.0.1')).to.deep.equal({ 'hostname': '127.0.0.1', 'port': 443 })
@@ -110,7 +110,7 @@ describe('CtrlxCore', function () {
       done();
     });
 
-    it('should parse invalid JSON', function (done) {
+    it('should parse invalid JSON', function(done) {
 
       const invalidJSON = 'test/invalid/json';
       expect(() => CtrlxDatalayer._parseData(invalidJSON)).to.throw(SyntaxError);
@@ -118,7 +118,7 @@ describe('CtrlxCore', function () {
       done();
     });
 
-    it('should parse BigInt', function (done) {
+    it('should parse BigInt', function(done) {
 
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value": 9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value":-9223372036854775807}`).value).to.equal(BigInt(-9223372036854775807n))
