@@ -121,8 +121,8 @@ Any use of the source code and related documents of this repository in applicati
                      - fix: add more tests to handle node address with invalid symbols
 * 2024-12-06: 1.9.7  - fix: update dependencies in package-lock                     
                      - fix: further improve resilience on invalid data from server
+* 2025-01-27: 1.9.8  - fix: no support for raw binary data (types/datalayer/raw). E.g. for some Ethercat nodes, returned now as a buffer for further processing.
 ```
-  
 ## About
 
 Copyright © 2020-2024 Bosch Rexroth AG. All rights reserved.
