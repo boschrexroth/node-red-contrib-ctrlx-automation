@@ -210,10 +210,12 @@ class CtrlxMockupV2 {
       }
       this.var_i64 = req.body.value;
       res.statusCode = 200;
+      res.setHeader('content-type', 'application/json');
       res.send(`{"type": "int64", "value":${this.var_i64.toString()}}`);
     });
     this.app.get('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/i64', authenticateJWT, (req, res) => {
       res.statusCode = 200;
+      res.setHeader('content-type', 'application/json');
       res.send(`{"type": "int64", "value":${this.var_i64.toString()}}`);
     });
 
