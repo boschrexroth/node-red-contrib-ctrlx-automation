@@ -110,7 +110,7 @@ describe('CtrlxCore', function() {
       done();
     });
 
-    it('should parse invalid JSON', function(done) {
+    it('should throw exception on invalid JSON', function(done) {
 
       const invalidJSON = 'test/invalid/json';
       expect(() => CtrlxDatalayer._parseData(invalidJSON)).to.throw(SyntaxError);

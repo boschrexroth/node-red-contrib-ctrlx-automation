@@ -121,6 +121,7 @@ class CtrlxMockupV2 {
         type: 'bool'
       });
     });
+
     this.app.get('/automation/api/v2/nodes/framework/metrics/system/cpu-utilisation-percent', authenticateJWT, (req, res) => {
       switch (req.query.type) {
         case undefined:
@@ -166,6 +167,7 @@ class CtrlxMockupV2 {
           break;
       }
     });
+
     this.app.get('/automation/api/v2/nodes/framework/metrics/system', authenticateJWT, (req, res) => {
       if (req.query.type === 'browse') {
         res.statusCode = 200;
@@ -193,6 +195,7 @@ class CtrlxMockupV2 {
         type: 'int16'
       });
     });
+
     this.app.get('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/i', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
@@ -213,6 +216,7 @@ class CtrlxMockupV2 {
       res.setHeader('content-type', 'application/json');
       res.send(`{"type": "int64", "value":${this.var_i64.toString()}}`);
     });
+
     this.app.get('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/i64', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.setHeader('content-type', 'application/json');
@@ -233,6 +237,7 @@ class CtrlxMockupV2 {
         type: 'string'
       });
     });
+
     this.app.get('/automation/api/v2/nodes/plc/app/Application/sym/PLC_PRG/str', authenticateJWT, (req, res) => {
       res.statusCode = 200;
       res.json({
@@ -282,6 +287,12 @@ class CtrlxMockupV2 {
         value: req.path,
         type: 'string'
       });
+    });
+
+    this.app.get('/automation/api/v2/nodes/encoding/raw/buffer', authenticateJWT, (req, res) => {
+      res.statusCode = 200;
+      res.setHeader('content-type', 'application/octet-stream');
+      res.send(Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05]));
     });
 
 
