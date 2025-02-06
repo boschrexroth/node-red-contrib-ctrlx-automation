@@ -110,6 +110,14 @@ describe('CtrlxCore', function() {
       done();
     });
 
+    it('should throw exception on invalid JSON', function(done) {
+
+      const invalidJSON = 'test/invalid/json';
+      expect(() => CtrlxDatalayer._parseData(invalidJSON)).to.throw(SyntaxError);
+
+      done();
+    });
+
     it('should parse BigInt', function(done) {
 
       expect(CtrlxDatalayer._parseData(`{"type": "int64", "value": 9223372036854775807}`).value).to.equal(BigInt(9223372036854775807n))

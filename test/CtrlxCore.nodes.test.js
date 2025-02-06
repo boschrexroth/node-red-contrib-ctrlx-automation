@@ -312,6 +312,21 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
     });
 
+    it('should return a raw buffer', function(done) {
+
+      let ctrlx = new CtrlxCore(getHostname(), getUsername(), getPassword());
+
+      ctrlx.logIn()
+        .then(() => { return ctrlx.datalayerRead('encoding/raw/buffer'); })
+        .then((data) => {
+          assert.deepEqual(data.value, new Uint8Array([0x01, 0x02, 0x03, 0x04, 0x05]));
+          done();
+        })
+        .catch((err) => done(err))
+        .finally(() => ctrlx.logOut());
+
+    });
+
   });
 
 
