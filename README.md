@@ -31,13 +31,13 @@ In addition to that, a configuration node will be added to the project as soon a
 
 This node can be triggered to execute read, write, browse, create or delete operations within the ctrlX Data Layer.
 
-![usage_overview_request.png](./doc/images/usage_overview_request.png)
+![examples-general-read-CPU-utilisation.png](./doc/images/examples-general-read-CPU-utilisation.png)
 
 ### Data Layer Subscribe
 
 This node allows to subscribe to value changes of an item in the ctrlX Data Layer. It is an input node, which does not need to be triggered, but automatically emits a new `msg`, when the value changes. The node is useful for continuous tracking of value in the ctrlX Data Layer and in this case more efficient than the `Data Layer Request` node, because it does not need to be triggerd to poll for a value. Instead, this node automatically watches for value changes on server side and publishes new values via server sent events and low overhead for data transmission.
 
-![usage_overview_subscribe.png](./doc/images/usage_overview_subscribe.png)
+![examples-general-subscribe-CPU-utilisation.png](./doc/images/examples-general-subscribe-CPU-utilisation.png)
 
 ## Usage - Reference Manual
 
