@@ -35,6 +35,7 @@ This page contains various examples for different use cases. Looking through the
 - [Monitor and handle an integer PLC variable "iInteger"]( #monitor-and-handle-an-integer-plc-variable-iinteger)
 - [Monitor and handle a real PLC variable "rReal"]( #monitor-and-handle-a-real-plc-variable-rreal)
 - [Monitor and handle a string PLC variable "sString"]( #monitor-and-handle-a-string-plc-variable-sstring)
+- [Monitor and handle a struct PLC variable "strStruct"]( #monitor-and-handle-a-struct-plc-variable-strstruct)
 
 [ctrlX CORE - MOTION App dashboard examples](#dashboard-examples-for-ctrlx-core---motion-app)
 
@@ -377,6 +378,44 @@ sString;
 
 ```JSON
 [{"id":"52f3b28.7154acc","type":"ctrlx-datalayer-request","z":"4ff80d56.dd60fc","device":"7b877229.678964","method":"WRITE","path":"plc/app/Application/sym/GVL/sString","payloadFormat":"value_type","name":"Write \"sString\" value","x":780,"y":580,"wires":[[]]},{"id":"a84a6218.d8fa38","type":"ui_text_input","z":"4ff80d56.dd60fc","name":"","label":"sString","tooltip":"","group":"938bb9af.bc8108","order":1,"width":0,"height":0,"passthru":false,"mode":"text","delay":"0","topic":"topic","topicType":"msg","x":400,"y":580,"wires":[["b77fcdb1.bb59e"]]},{"id":"b77fcdb1.bb59e","type":"function","z":"4ff80d56.dd60fc","name":"make value","func":"var newMsg = {}\nnewMsg.payload = {\"type\":\"string\",\"value\":msg.payload}\nreturn newMsg;","outputs":1,"noerr":0,"initialize":"","finalize":"","x":570,"y":580,"wires":[["52f3b28.7154acc"]]},{"id":"7fd8a2ba.130acc","type":"ctrlx-datalayer-subscribe","z":"4ff80d56.dd60fc","subscription":"632bcc2.eddf134","path":"plc/app/Application/sym/GVL/sString","name":"Read \"sString\" value","x":200,"y":580,"wires":[["a84a6218.d8fa38"]]},{"id":"efa71414.90e038","type":"comment","z":"4ff80d56.dd60fc","name":"Example: Monitor and handle a string PLC variable \"sString\"","info":"","x":310,"y":540,"wires":[]},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"938bb9af.bc8108","type":"ui_group","name":"PLC Variable handling","tab":"9cba2148.8c9148","order":1,"disp":true,"width":"4","collapse":false},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":""},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
+```
+
+### Monitor and handle a struct PLC variable "strStruct"
+
+The following example shows how to read, write and monitor a PLC variable `strStruct` of type `DUT`(struct) via the dashboard. The struct type definition needs to added to the PLC project, a symbol configuration has to be present and the variable has to be configured for write access via a pragma or directly in the symbolic variable configuration. Also the variable has to be used in a program or via pragma.
+
+`DUT`
+
+```IEC61131-3
+TYPE DUT :
+	STRUCT
+		bBool : BOOL := TRUE;
+		iInt : INT := 123;
+	END_STRUCT
+END_TYPE
+```
+
+`GVL`
+
+```IEC61131-3
+{attribute 'linkalways'}
+{attribute 'symbol' := 'readwrite'}
+VAR_GLOBAL
+  strStruct : DUT;
+END_VAR
+```
+
+`PLC_PRG`
+
+```IEC61131-3
+strStruct;
+```
+
+![examples-plc-monitor-handle-struct.png](./images/examples-plc-monitor-handle-struct.png)
+![examples-plc-monitor-handle-struct-dashboard.png](./images/examples-plc-monitor-handle-struct-dashboard.png)
+
+```JSON
+[{"id":"6f5d6bbd194918ae","type":"ui_form","z":"38bcc9961503333d","name":"","label":"Input form","group":"938bb9af.bc8108","order":1,"width":0,"height":0,"options":[{"label":"bBool","value":"bBool","type":"checkbox","required":true,"rows":null},{"label":"iInt","value":"iInt","type":"number","required":true,"rows":null}],"formValue":{"bBool":false,"iInt":""},"payload":"","submit":"submit","cancel":"cancel","topic":"topic","topicType":"msg","splitLayout":"","className":"","x":420,"y":580,"wires":[["1313c8d3ddaacf48"]]},{"id":"efa71414.90e038","type":"comment","z":"38bcc9961503333d","name":"Example: Monitor and handle a struct PLC variable \"strStruct\"","info":"","x":380,"y":540,"wires":[]},{"id":"1313c8d3ddaacf48","type":"function","z":"38bcc9961503333d","name":"make value","func":"var newMsg = {}\nnewMsg.payload = { \"type\": \"object\", \"value\": {\n    \"bBool\": msg.payload.bBool,\n    \"iInt\": msg.payload.iInt} }\nreturn newMsg;","outputs":1,"timeout":0,"noerr":0,"initialize":"","finalize":"","libs":[],"x":590,"y":580,"wires":[["52f3b28.7154acc"]]},{"id":"88e501beb3dd7132","type":"ctrlx-datalayer-subscribe","z":"38bcc9961503333d","subscription":"632bcc2.eddf134","path":"plc/app/Application/sym/GVL/strStruct","name":"Read \"strStruct\"","inputs":0,"x":240,"y":580,"wires":[["6f5d6bbd194918ae"]]},{"id":"52f3b28.7154acc","type":"ctrlx-datalayer-request","z":"38bcc9961503333d","device":"7b877229.678964","method":"WRITE","path":"plc/app/Application/sym/GVL/strStruct","payloadFormat":"value_type","name":"Write \"strStruct\"","pendingWarnLevel":"","pendingErrorLevel":"","x":780,"y":580,"wires":[[]]},{"id":"938bb9af.bc8108","type":"ui_group","name":"PLC Variable handling","tab":"9cba2148.8c9148","order":1,"disp":true,"width":"4","collapse":false},{"id":"632bcc2.eddf134","type":"ctrlx-config-subscription","device":"7b877229.678964","name":"Sub_Default","publishIntervalMs":"1","publishIntervalUnits":"seconds","samplingInterval":"100","samplingIntervalUnits":"milliseconds","errorInterval":"60","errorIntervalUnits":"seconds","keepaliveInterval":"60","keepaliveIntervalUnits":"seconds","queueSize":"1","queueBehaviour":"DiscardOldest","deadbandValue":""},{"id":"7b877229.678964","type":"ctrlx-config","name":"localhost","hostname":"localhost","debug":false},{"id":"9cba2148.8c9148","type":"ui_tab","name":"Examples","icon":"dashboard","order":7,"disabled":false,"hidden":false}]
 ```
 
 ## ctrlX CORE - MOTION App dashboard examples
