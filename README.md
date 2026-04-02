@@ -122,7 +122,9 @@ Any use of the source code and related documents of this repository in applicati
 * 2024-12-06: 1.9.7  - fix: update dependencies in package-lock                     
                      - fix: further improve resilience on invalid data from server
 * 2025-01-27: 1.9.8  - fix: no support for raw binary data (types/datalayer/raw). E.g. for some Ethercat nodes, returned now as a buffer for further processing.
+* 2026-04-02: 1.9.9  - chore: upgrade internal development dependencies to newest version to mitigate for vulnerabilities. No runtime changes.
 ```
+
 ## About
 
 Copyright © 2020-2024 Bosch Rexroth AG. All rights reserved.
