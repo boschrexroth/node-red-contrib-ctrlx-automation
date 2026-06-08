@@ -163,8 +163,10 @@
       The fastest rate at which the node values should be sampled and values captured. (default: 1s) <br>
       The resulting sampling frequency should be adjusted to the dynamics of the signal to be sampled.
       Higher sampling frequency increases load on ctrlX Data Layer. <br>
-      The sampling frequency can be higher, than the publish interval. Captured samples are put in a queue and sent in the publish interval.
-      Note: The minimum sampling interval can be overruled by a global setting in the ctrlX Data Layer configuration
+      The sampling frequency can be higher, than the publish interval. Captured samples are put in a queue and sent in the publish interval. <br>
+      Notes: <br>
+      - The minimum sampling interval can be overruled by a global setting in the ctrlX Data Layer configuration. <br>
+      - The sampling interval 0 indicates lossless sampling, only applicable for real-time (RT) providers and subscribed nodes, marked with a lossless flag in the metadata (qos.lossless=true). Once activated, it will sample every value update, independently of any sample interval. Make sure, that queue size is big enough to store all values at the given publish interval.<br>
     </dd>
 
     <dt class="optional">Error Interval<span class="property-type">number</span></dt>
