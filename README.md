@@ -124,6 +124,31 @@ Any use of the source code and related documents of this repository in applicati
 * 2025-01-27: 1.9.8  - fix: no support for raw binary data (types/datalayer/raw). E.g. for some Ethercat nodes, returned now as a buffer for further processing.
 * 2026-04-02: 1.9.9  - chore: upgrade internal development dependencies to newest version to mitigate for vulnerabilities. No runtime changes.
                      - fix: allow sampling interval = 0 in subscription properties, which indicates a real-time (RT) lossless subscriptions.
+* 2026-07-08: 2.0.0  - chg: changed msg.error object to show all available error informations.
+                        This is an incompatible change and may affect your catch node(s) and failure reactions e.g. processing 'msg.error.message', so please adapt your flows accordingly.
+                        Example for an 'msg.error' <= Version 1.9.9:
+
+                        {
+                            name: "CtrlxProblemError",
+                            message: "DL_TYPE_MISMATCH",
+                            stack: ...
+                        }
+
+                        Example for an 'msg.error' >= Version 2.0.0:
+
+                        {
+                            name: "DL_TYPE_MISMATCH",
+                            message: 
+                                "{
+                                    "type": "about:blank",
+                                    "title": "DL_TYPE_MISMATCH",
+                                    "status": 400,
+                                    "detail": "1: 8: error: unknown field: a",
+                                    "instance": "sdk/net/provider/all-data/static/inertial-value",
+                                    "severity": "Error"
+                                }",
+                            stack: ...
+                        }       
 ```
 
 ## About
