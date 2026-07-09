@@ -431,7 +431,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .then(() => ctrlx.datalayerReadMetadata('invalidnode'))
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          expect(err.name).equal(404);
+          expect(err.name).equal('[404] Not Found');
           expect(err.message).equal('Not Found');
 
           expect(err.status).equal(404);
