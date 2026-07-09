@@ -388,19 +388,19 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
       ctrlx.datalayerRead('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
-        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .catch((err) => { expect(err.name).equal('Error'); })
         .finally(() => ctrlx.logOut());
       ctrlx.datalayerReadMetadata('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
-        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .catch((err) => { expect(err.name).equal('Error'); })
         .finally(() => ctrlx.logOut());
       ctrlx.datalayerWrite('framework/metrics/system/cpu-utilisation-percent', { value: '5', type: 'double' })
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
-        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .catch((err) => { expect(err.name).equal('Error'); })
         .finally(() => ctrlx.logOut());
       ctrlx.datalayerBrowse('framework/metrics/system/cpu-utilisation-percent')
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
-        .catch((err) => { assert.equal(err.name, 'Error'); })
+        .catch((err) => { expect(err.name).equal('Error'); })
         .finally(() => ctrlx.logOut());
       done();
     });
@@ -413,8 +413,10 @@ describe('CtrlxCoreDataLayerNodes', function() {
       ctrlx.logIn()
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          assert.equal(err.name, 'CtrlxProblemError');
-          assert.equal(err.status, 401);
+          console.log(err.name, err.message, err.status, err);
+          expect(err.name).equal('[401] Unauthorized unknown error');
+          expect(err.message).equal('Unauthorized unknown error');
+          expect(err.status).equal(401);
           done();
         })
         .finally(() => ctrlx.logOut());
@@ -429,7 +431,11 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .then(() => ctrlx.datalayerReadMetadata('invalidnode'))
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          assert.equal(err.name, 'CtrlxProblemError');
+          console.debug(err);
+          expect(err.name).equal('[404] Not Found');
+          expect(err.message).equal('Not Found');
+          expect(err.status).equal(404);
+
           done();
         })
         .finally(() => ctrlx.logOut());
@@ -444,12 +450,15 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .then(() => ctrlx.datalayerRead('nonexistent/path'))
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          expect(err.name).equal('CtrlxProblemError');
+          console.debug(err);
+          expect(err.name).equal('Error on Read');
+          expect(err.message).equal('Your current balance is 30, but that costs 50.');
+
           expect(err.title).to.be.a('string');
-          expect(err.type).to.be.a('string').equal('about:blank');
-          expect(err.severity).to.be.a('string').equal('ERROR');
+          expect(err.type).equal('about:blank');
+          expect(err.severity).equal('ERROR');
           expect(err.type).to.be.a('string');
-          expect(err.status).to.be.a('number').equal(404);
+          expect(err.status).equal(404);
           expect(err.detail).to.be.a('string');
           expect(err.instance).to.be.a('string');
           expect(err.mainDiagnosisCode).to.be.a('string').with.length(8);
@@ -473,15 +482,25 @@ describe('CtrlxCoreDataLayerNodes', function() {
     it('should create a CtrlxProblemError from http status code', function() {
 
       let err = CtrlxProblemError.fromHttpStatuscode(404);
-      expect(err.status).to.be.a('number').equal(404);
-      expect(err.title).to.be.a('string').equal('[404] Not Found');
+
+      expect(err.name).equal('[404] Not Found');
+      expect(err.message).equal('Not Found');
+
+      expect(err.type).to.equal('about:blank');
+      expect(err.status).equal(404);
+      expect(err.title).equal('[404] Not Found');
       expect(err.toStringExtended()).to.include('[404] Not Found');
     });
 
     it('should return CtrlxProblemError type only if set', function() {
 
       let err = CtrlxProblemError.fromHttpStatuscode(404);
+
+      expect(err.name).equal('[404] Not Found');
+      expect(err.message).equal('Not Found');
+
       expect(err.type).to.equal('about:blank');
+      expect(err.status).equal(404);
       expect(err.toStringExtended()).to.not.include('about:blank');
       err._type = 'https://example.com/probs/out-of-credit';
       expect(err.toStringExtended()).to.include('https://example.com/probs/out-of-credit');
