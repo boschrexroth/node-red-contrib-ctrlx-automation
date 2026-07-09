@@ -125,7 +125,11 @@ Any use of the source code and related documents of this repository in applicati
 * 2026-04-02: 1.9.9  - chore: upgrade internal development dependencies to newest version to mitigate for vulnerabilities. No runtime changes.
                      - fix: allow sampling interval = 0 in subscription properties, which indicates a real-time (RT) lossless subscriptions.
 * 2026-07-08: 2.0.0  - chg: changed msg.error object to show all available error informations.
-                        ATTENTION: This is an incompatible change and may affect your catch node(s) and failure reactions e.g. processing 'msg.error.message', so please adapt your flows accordingly.
+ 
+                        'msg.error.name':       The name of a Datalayer error, else the name of the HTTP error.
+                        'msg.error.message':    All available detailed informations of a Datalayer error as stringified JSON object, else the HTTP error text.
+
+                        ATTENTION: This is an incompatible change and may affect your catch node(s) and failure reactions on processing 'msg.error.name' or 'msg.error.message', so please check and adapt your flows accordingly!
                         Example for 'msg.error' <= Version 1.9.9:
 
                         {
