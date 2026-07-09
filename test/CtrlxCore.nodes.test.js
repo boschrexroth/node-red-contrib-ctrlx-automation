@@ -413,9 +413,8 @@ describe('CtrlxCoreDataLayerNodes', function() {
       ctrlx.logIn()
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          console.log(err.name, err.message, err.status, err);
-          expect(err.name).equal('[401] Unauthorized unknown error');
-          expect(err.message).equal('Unauthorized unknown error');
+          expect(err.name).equal('[401] Unauthorized');
+          expect(err.message).equal('Unauthorized');
           expect(err.status).equal(401);
           done();
         })
