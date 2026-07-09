@@ -430,8 +430,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .then(() => ctrlx.datalayerReadMetadata('invalidnode'))
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          console.debug(err);
-          expect(err.name).equal('[404] Not Found');
+          expect(err.name).equal(404);
           expect(err.message).equal('Not Found');
           expect(err.status).equal(404);
 
@@ -449,20 +448,19 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .then(() => ctrlx.datalayerRead('nonexistent/path'))
         .then((data) => done(new Error("should not reach this code. Expected error instead of: " + JSON.stringify(data))))
         .catch((err) => {
-          console.debug(err);
           expect(err.name).equal('Error on Read');
-          expect(err.message).equal('Your current balance is 30, but that costs 50.');
+          expect(err.message).equal('{\n  "title": "Error on Read",\n  "type": "about:blank",\n  "status": 404,\n  "detail": "Your current balance is 30, but that costs 50.",\n  "instance": "/account/12345/msgs/abc",\n  "mainDiagnosisCode": "F0360001",\n  "detailedDiagnosisCode": "00666001",\n  "dynamicDescription": "This could be a dynamic description",\n  "severity": "ERROR"\n}');
 
-          expect(err.title).to.be.a('string');
+          expect(err.title).equal('Error on Read');
           expect(err.type).equal('about:blank');
           expect(err.severity).equal('ERROR');
           expect(err.type).to.be.a('string');
           expect(err.status).equal(404);
-          expect(err.detail).to.be.a('string');
-          expect(err.instance).to.be.a('string');
-          expect(err.mainDiagnosisCode).to.be.a('string').with.length(8);
-          expect(err.detailedDiagnosisCode).to.be.a('string').with.length(8);
-          expect(err.dynamicDescription).to.be.a('string');
+          expect(err.detail).equal('Your current balance is 30, but that costs 50.');
+          expect(err.instance).equal('/account/12345/msgs/abc');
+          expect(err.mainDiagnosisCode).equal('F0360001');
+          expect(err.detailedDiagnosisCode).equal('00666001');
+          expect(err.dynamicDescription).equal('This could be a dynamic description');
 
           const message = err.toStringExtended();
           expect(message).to.not.include('about:blank');
