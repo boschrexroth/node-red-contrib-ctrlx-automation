@@ -415,6 +415,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .catch((err) => {
           expect(err.name).equal('[401] Unauthorized');
           expect(err.message).equal('Unauthorized');
+
           expect(err.status).equal(401);
           done();
         })
@@ -432,6 +433,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
         .catch((err) => {
           expect(err.name).equal(404);
           expect(err.message).equal('Not Found');
+
           expect(err.status).equal(404);
 
           done();
@@ -451,10 +453,9 @@ describe('CtrlxCoreDataLayerNodes', function() {
           expect(err.name).equal('Error on Read');
           expect(err.message).equal('{\n  "title": "Error on Read",\n  "type": "about:blank",\n  "status": 404,\n  "detail": "Your current balance is 30, but that costs 50.",\n  "instance": "/account/12345/msgs/abc",\n  "mainDiagnosisCode": "F0360001",\n  "detailedDiagnosisCode": "00666001",\n  "dynamicDescription": "This could be a dynamic description",\n  "severity": "ERROR"\n}');
 
-          expect(err.title).equal('Error on Read');
+          expect(err.title).equal(err.name);
           expect(err.type).equal('about:blank');
           expect(err.severity).equal('ERROR');
-          expect(err.type).to.be.a('string');
           expect(err.status).equal(404);
           expect(err.detail).equal('Your current balance is 30, but that costs 50.');
           expect(err.instance).equal('/account/12345/msgs/abc');
@@ -462,13 +463,13 @@ describe('CtrlxCoreDataLayerNodes', function() {
           expect(err.detailedDiagnosisCode).equal('00666001');
           expect(err.dynamicDescription).equal('This could be a dynamic description');
 
-          const message = err.toStringExtended();
-          expect(message).to.not.include('about:blank');
-          expect(message).to.include(err.title);
-          expect(message).to.include(err.severity);
-          expect(message).to.include(err.detail);
-          expect(message).to.include(err.mainDiagnosisCode);
-          expect(message).to.include(err.detailedDiagnosisCode);
+          const ext = err.toStringExtended();
+          expect(ext).to.not.include('about:blank');
+          expect(ext).to.include(err.title);
+          expect(ext).to.include(err.severity);
+          expect(ext).to.include(err.detail);
+          expect(ext).to.include(err.mainDiagnosisCode);
+          expect(ext).to.include(err.detailedDiagnosisCode);
 
           done();
         })
@@ -483,9 +484,10 @@ describe('CtrlxCoreDataLayerNodes', function() {
       expect(err.name).equal('[404] Not Found');
       expect(err.message).equal('Not Found');
 
-      expect(err.type).to.equal('about:blank');
       expect(err.status).equal(404);
-      expect(err.title).equal('[404] Not Found');
+      expect(err.type).to.equal('about:blank');
+      expect(err.title).equal(err.name);
+
       expect(err.toStringExtended()).to.include('[404] Not Found');
     });
 
@@ -498,6 +500,7 @@ describe('CtrlxCoreDataLayerNodes', function() {
 
       expect(err.type).to.equal('about:blank');
       expect(err.status).equal(404);
+
       expect(err.toStringExtended()).to.not.include('about:blank');
       err._type = 'https://example.com/probs/out-of-credit';
       expect(err.toStringExtended()).to.include('https://example.com/probs/out-of-credit');
