@@ -125,8 +125,8 @@ Any use of the source code and related documents of this repository in applicati
 * 2026-04-02: 1.9.9  - chore: upgrade internal development dependencies to newest version to mitigate for vulnerabilities. No runtime changes.
                      - fix: allow sampling interval = 0 in subscription properties, which indicates a real-time (RT) lossless subscriptions.
 * 2026-07-08: 2.0.0  - chg: changed msg.error object to show all available error informations.
-                        This is an incompatible change and may affect your catch node(s) and failure reactions e.g. processing 'msg.error.message', so please adapt your flows accordingly.
-                        Example for an 'msg.error' <= Version 1.9.9:
+                        ATTENTION: This is an incompatible change and may affect your catch node(s) and failure reactions e.g. processing 'msg.error.message', so please adapt your flows accordingly.
+                        Example for 'msg.error' <= Version 1.9.9:
 
                         {
                             name: "CtrlxProblemError",
@@ -134,7 +134,7 @@ Any use of the source code and related documents of this repository in applicati
                             stack: ...
                         }
 
-                        Example for an 'msg.error' >= Version 2.0.0:
+                        Example for 'msg.error' >= Version 2.0.0:
 
                         {
                             name: "DL_TYPE_MISMATCH",
