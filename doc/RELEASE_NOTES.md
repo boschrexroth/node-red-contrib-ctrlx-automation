@@ -1,3 +1,25 @@
+
+# Version 1.9.10
+
+In case of an error, the human readable `error.message` attribute now contains additional information about the error instead of showing only the error title.
+The message is formated as JSON for improved readability.
+
+When using a catch node, you can find the message in `msg.error.message`. See also the official Node-Red documentation at https://nodered.org/docs/user-guide/handling-errors.
+
+<img src="./images/release-notes-error-handling.png" alt="Error Handling" width="600px"/>
+
+
+# Version 1.9.9
+
+The `Sampling Interval` of a subscription can now be set to `0`, which means, that the ctrlX Data Layer will sample the value at the fastest possible interval. When using
+this setting on realtime variables of the ctrlX Data Layer it is possible to sample the signal lossless without missing a value change. ctrlX Data Layer variables which support
+lossless sampling are also tagged with `qos.lossless: true` in the metadata and shown in the ctrlX Data Layer editor of the ctrlX OS user interface.
+
+Using lossless sampling on the EtherCAT process data, it is for example possible to get the process value from exactly every fieldbus cycle. There will be no sample anomalies
+from missing a cycle or sampling the same value from a cycle twice.
+
+Note: Keep in mind to also chose a `Queue Length` that is large enough to hold all samples for the given `Publish Interval`.
+
 # Version 1.9.0
 
 Version 1.9.0 includes a lot of new features and some changes which are listed below.

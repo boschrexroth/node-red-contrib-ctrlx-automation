@@ -124,11 +124,12 @@ Any use of the source code and related documents of this repository in applicati
 * 2025-01-27: 1.9.8  - fix: no support for raw binary data (types/datalayer/raw). E.g. for some Ethercat nodes, returned now as a buffer for further processing.
 * 2026-04-02: 1.9.9  - chore: upgrade internal development dependencies to newest version to mitigate for vulnerabilities. No runtime changes.
                      - fix: allow sampling interval = 0 in subscription properties, which indicates a real-time (RT) lossless subscriptions.
+* 2026-07-15: 1.9.10 - chg: msg.error.message now contains additional information about the error. See also [release notes](./doc/RELEASE_NOTES.md).
 ```
 
 ## About
 
-Copyright © 2020-2024 Bosch Rexroth AG. All rights reserved.
+Copyright © 2020-2026 Bosch Rexroth AG. All rights reserved.
 
 <https://www.boschrexroth.com>
 
@@ -141,7 +142,7 @@ GERMANY
 
 MIT License
 
-Copyright (c) 2020-2024 Bosch Rexroth AG
+Copyright (c) 2020-2026 Bosch Rexroth AG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
