@@ -2,9 +2,9 @@
 # Version 1.9.10
 
 In case of an error, the human readable `error.message` attribute now contains additional information about the error instead of showing only the error title.
-The message is formated as JSON for improved readability.
+The message is formatted as JSON for improved readability.
 
-When using a catch node, you can find the message in `msg.error.message`. See also the official Node-Red documentation at https://nodered.org/docs/user-guide/handling-errors.
+When using a catch node, you can find the message in `msg.error.message`. See also the official Node-RED documentation at https://nodered.org/docs/user-guide/handling-errors.
 
 <img src="./images/release-notes-error-handling.png" alt="Error Handling" width="600px"/>
 
