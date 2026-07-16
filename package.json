@@ -45,7 +45,7 @@
     "mocha": "^11.7.5",
     "node-red": "^5.0.1",
     "node-red-node-test-helper": "^0.3.0",
-    "nyc": "^15.1.0",
+    "nyc": "^18.0.0",
     "ssestream": "^1.1.0",
     "supports-color": "^9.2.2"
   },
@@ -54,7 +54,7 @@
     "debug": "^4.3.7",
     "launchdarkly-eventsource": "^1.4.4",
     "mustache": "^4.2.0",
-    "uuid": "^11.0.3"
+    "uuid": "^14.0.1"
   },
   "scripts": {
     "test": "mocha",
