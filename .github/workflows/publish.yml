@@ -1,21 +1,33 @@
 name: Publish to NPM
+
+# Publish is started on release creation in the UI
 on:
   release:
     types: [created]
+  workflow_dispatch:
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
-          node-version: '18.x'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false  # never use caching in release builds
       - name: Install dependencies 🔧
-        run: npm install
+        run: npm ci
+      - name: Build project 🏗️
+        run: npm run build --if-present
+      - name: Run tests 🧪
+        run: npm test
       - name: Publish package on NPM 📦
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --dry-run
+
