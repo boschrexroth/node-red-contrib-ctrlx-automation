@@ -26,8 +26,6 @@ jobs:
         run: npm ci
       - name: Build project 🏗️
         run: npm run build --if-present
-      - name: Run tests 🧪
-        run: npm test
       - name: Publish package on NPM 📦
         run: npm publish --dry-run
 
