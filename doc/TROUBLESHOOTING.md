@@ -10,7 +10,16 @@ Due to a major functional enhancement and the new subscription feature it is nec
 
 This error occurs, if the node you want to write to has a different data type, than the `msg.payload` that you provide and the App which owns the Data Layer node can not automatically convert the value.
 
-In this case it is also not possible to write the value with the payload setting of `value only`. The only chance is to set the payload setting to `value + type (json)` and to provide a json object with `value` and `type` attribute in `msg.payload`. In order to find out which type is expected by the node you can query the documentation of the specific Data Layer node or you may perform a `READ` request on the same node to find out what the returned data type is. Usually, the same data type is expected on a `WRITE` request.
+In this case, change the payload setting from `value only` to `value + type (json)` and provide a json object with `value` and `type` attribute in `msg.payload` like: 
+
+```JSON
+msg.payload = {
+  "type": "int32",
+  "value": 42
+};
+```
+
+In order to find out which type is expected by the node, you can query the documentation of the specific Data Layer node or you execute a `READ` request on the same node to find out what the returned data type is. Usually, the same data type is expected on a `WRITE` request. See also [here](./DATATYPES.md) for all available Data Types.
 
 Example for writing a DWORD variable of the PLC app:
 
